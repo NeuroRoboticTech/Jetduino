@@ -1,22 +1,22 @@
 #include <Wire.h>
 #include "MMA7660.h"
 #include "DS1307.h"
-#include "DHT.h"
+//#include "DHT.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "ChainableLED.h"
-#include "IRSendRev.h"
-#include "Encoder.h"
-#include "TimerOne.h"
+//#include "IRSendRev.h"
+//#include "Encoder.h"
+//#include "TimerOne.h"
 
 MMA7660 acc;
-DS1307 clock;
-DHT dht;
+//DS1307 clock;
+//DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];   // 7 instances for D2-D8
 
-#define SLAVE_ADDRESS 0x04
+#define SLAVE_ADDRESS 0x03
 
 #define dust_sensor_read_cmd    10
 #define dust_sensor_en_cmd		14
@@ -31,7 +31,7 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define flow_dis_cmd       		13
 
 int cmd[5];
-int index=0;
+int idx=0;
 int flag=0;
 int i;
 byte val=0,b[21],float_array[4],dht_b[21];
@@ -67,28 +67,32 @@ byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt
 
 void setup()
 {
-    // Serial.begin(38400);         // start serial for output
+    Serial.begin(57600);         // start serial for output
+    
     Wire.begin(SLAVE_ADDRESS);
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-	attachInterrupt(0,readPulseDust,CHANGE);
+	  //attachInterrupt(0,readPulseDust,CHANGE);
+
+    Serial.println("Finished Setup");
 }
 int pin;
 int j;
 void loop()
 {
   long dur,RangeCm;
-  if(index==4)
+  if(idx==4)
   {
     flag=1;
     //IR reciever pin set command
-    if(cmd[0]==22)
-       IR.Init(cmd[1]);
-    
+    if(cmd[0]==22) 
+    {
+       //IR.Init(cmd[1]);
+    }    
     //Grove IR recieve command
     else if(cmd[0]==21)
-    {
+    {/*
         if(IR.IsDta())
         {
             int length= IR.Recv(dta);
@@ -96,6 +100,7 @@ void loop()
             for(i=0;i<20;i++) 
                 b[i+1]=dta[i];
         }
+        */
     }
     
     //Digital Read
@@ -112,6 +117,11 @@ void loop()
       aRead=analogRead(cmd[1]);
       b[1]=aRead/256;
       b[2]=aRead%256;
+
+      Serial.print("Analog Read. Pin: ");
+      Serial.print(cmd[1]);
+      Serial.print(", Value: ");
+      Serial.println(aRead);
     }
 
     //Set up Analog Write
@@ -120,8 +130,13 @@ void loop()
 
     //Set up pinMode
     else if(cmd[0]==5)
+    {
       pinMode(cmd[1],cmd[2]);
-
+      Serial.print("Set pin mode. Pin: ");
+      Serial.print(cmd[1]);
+      Serial.print(", Mode: ");
+      Serial.println(cmd[2]);
+    }
     //Ultrasonic Read
     else if(cmd[0]==7)
     {
@@ -162,7 +177,7 @@ void loop()
     }
     //RTC tine read
     else if(cmd[0]==30)
-    {
+    {/*
       if(clkFlag==0)
       {
         clock.begin();
@@ -182,13 +197,14 @@ void loop()
       b[6]=clock.year;
       b[7]=clock.dayOfMonth;
       b[8]=clock.dayOfWeek;
+      */
     }
     //Grove temp and humidity sensor pro
     //40- Temperature
     else if(cmd[0]==40)
     {
 		if(run_once)
-		{
+		{/*
 			if(cmd[2]==0)
 			dht.begin(cmd[1],DHT11);
 			else if(cmd[2]==1)
@@ -208,6 +224,7 @@ void loop()
 			for(j=4;j<8;j++)
 			dht_b[j+1]=b2[j-4];
 			run_once=0;
+     */
 		}
     }
 
@@ -568,14 +585,14 @@ void loop()
 	}
 	else if(cmd[0]==encoder_en_cmd)
 	{
-		encoder.Timer_init(); 
-		enc_run_bk=1;
-		cmd[0]=0;
+		//encoder.Timer_init(); 
+		//enc_run_bk=1;
+		//cmd[0]=0;
 	}
 	else if(cmd[0]==encoder_dis_cmd)
 	{
-		encoder.Timer_disable();
-		enc_run_bk=0;
+		//encoder.Timer_disable();
+		//enc_run_bk=0;
 	}
 	else if(cmd[0]==flow_en_cmd)
 	{
@@ -606,7 +623,7 @@ void loop()
     }
 
     if(enc_run_bk)
-    {
+    {/*
         if (encoder.rotate_flag ==1)
         {
             if (encoder.direct==1)
@@ -627,6 +644,7 @@ void loop()
             }
             encoder.rotate_flag =0;
         }
+        */
     }
 
     if(flow_run_bk)
@@ -650,20 +668,31 @@ void receiveData(int byteCount)
       if(Wire.available()==4)
       {
         flag=0; 
-        index=0;
-		run_once=1;
+        idx=0;
+		    run_once=1;
       }
-        cmd[index++] = Wire.read();
+        cmd[idx++] = Wire.read();
     }
 }
 
 // callback for sending data
 void sendData()
 {
+  Serial.println("sendData");
+  
   if(cmd[0] == 1)
     Wire.write(val);
   if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
+  {
     Wire.write(b, 3);
+
+    Serial.print("Sending data 3,7,56: ");
+    Serial.print(b[0]);
+    Serial.print(", ");
+    Serial.print(b[1]);
+    Serial.print(", ");
+    Serial.println(b[2]);
+  }
   if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
   if(cmd[0] == 30) 
