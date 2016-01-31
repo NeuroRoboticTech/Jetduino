@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 #
-# GrovePi Python library
-# v1.2.2
+# Jetduino Python library
+# v1.0.0
 #
-# This file provides the basic functions for using the GrovePi
+# This file provides the basic functions for using the Jetduino
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -16,6 +16,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,29 +43,29 @@ THE SOFTWARE.
 # Initial Date: 13 Feb 2014
 # Last Updated: 01 June 2015
 # http://www.dexterindustries.com/
+# David Cofer
+# Last Updated: 31 Jan 2016
+# http://www.NeuroRoboticTech.com/
 
 import smbus
 import time
 import math
-import RPi.GPIO as GPIO
 import struct
 import sys
 
 debug =0
 
-if sys.version_info<(3,0):
-	p_version=2
-else:
-	p_version=3
+#The Jetduino should always use SMBus 1 for GEN2_I2C
+p_version=3
 
-rev = GPIO.RPI_REVISION
+rev = 3
 if rev == 2 or rev == 3:
 	bus = smbus.SMBus(1)
 else:
 	bus = smbus.SMBus(0)
 
 # I2C Address of Arduino
-address = 0x04
+address = 0x03
 
 # Command Format
 # digitalRead() command format header
@@ -211,12 +214,17 @@ def pinMode(pin, mode):
 
 # Read analog value from Pin
 def analogRead(pin):
-	bus.write_i2c_block_data(address, 1, aRead_cmd + [pin, unused, unused])
-	time.sleep(.1)
+	#print ("address %d" % address)
+	#bus.write_i2c_block_data(address, 1, aRead_cmd + [pin, unused, unused])
+	#time.sleep(.1)
+	print ("Reading address")
 	bus.read_byte(address)
+	print ("Reading block")
 	number = bus.read_i2c_block_data(address, 1)
-	time.sleep(.1)
-	return number[1] * 256 + number[2]
+	#print ("Read values")
+	#time.sleep(.1)
+	return 0
+	#return number[1] * 256 + number[2]
 
 
 # Write PWM
@@ -467,14 +475,14 @@ def chainableRgbLed_test(pin, numLeds, testColor):
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by pattern
 # pattern: (0-3) 0 = this led only, 1 all leds except this led, 2 this led and all leds inwards, 3 this led and all leds outwards
-# whichLed: index of led you wish to set counting outwards from the GrovePi, 0 = led closest to the GrovePi
+# whichLed: index of led you wish to set counting outwards from the jetduino, 0 = led closest to the jetduino
 def chainableRgbLed_pattern(pin, pattern, whichLed):
 	write_i2c_block(address, chainableRgbLedSetPattern_cmd + [pin, pattern, whichLed])
 	time.sleep(.05)
 	return 1
 
 # Grove Chainable RGB LED - set one or more leds to the stored color by modulo
-# offset: index of led you wish to start at, 0 = led closest to the GrovePi, counting outwards
+# offset: index of led you wish to start at, 0 = led closest to the jetduino, counting outwards
 # divisor: when 1 (default) sets stored color on all leds >= offset, when 2 sets every 2nd led >= offset and so on
 def chainableRgbLed_modulo(pin, offset, divisor):
 	write_i2c_block(address, chainableRgbLedSetModulo_cmd + [pin, offset, divisor])
@@ -483,7 +491,7 @@ def chainableRgbLed_modulo(pin, offset, divisor):
 
 # Grove Chainable RGB LED - sets leds similar to a bar graph, reversible
 # level: (0-10) the number of leds you wish to set to the stored color
-# reversible (0-1) when 0 counting outwards from GrovePi, 0 = led closest to the GrovePi, otherwise counting inwards
+# reversible (0-1) when 0 counting outwards from jetduino, 0 = led closest to the jetduino, otherwise counting inwards
 def chainableRgbLed_setLevel(pin, level, reverse):
 	write_i2c_block(address, chainableRgbLedSetLevel_cmd + [pin, level, reverse])
 	time.sleep(.05)
