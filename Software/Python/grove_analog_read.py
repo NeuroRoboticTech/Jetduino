@@ -39,6 +39,8 @@ THE SOFTWARE.
 import time
 import jetduino
 
+#You can find the pin mappings for the Due in this file on windows:
+#AppData\Roaming\Arduino15\packages\arduino\hardware\sam\1.6.4\variants\arduino_due_x\variant.h
 #Sensor connected to A0 Port 
 sensor = 54		# Pin 54 is A0 Port.
 #jetduino.pinMode(sensor,"INPUT")
