@@ -46,16 +46,20 @@ FILE(GLOB JetduinoHeaders *.h)
 install(FILES ${JetduinoHeaders} DESTINATION include/Jetduino)
 
 add_executable (jetduino_analog_read
-                jetduino_analog_read.c)
+                jetduino_analog_read.c
+				jetduino.c)
 
 add_executable (jetduino_analog_write
-                jetduino_analog_write.c)
+                jetduino_analog_write.c
+				jetduino.c)
 
 add_executable (jetduino_digital_read
-                jetduino_digital_read.c)
+                jetduino_digital_read.c
+				jetduino.c)
 
 add_executable (jetduino_digital_write
-                jetduino_digital_write.c)
+                jetduino_digital_write.c
+				jetduino.c)
                 
 # Platform specific link libraries.
 if(WIN32)
