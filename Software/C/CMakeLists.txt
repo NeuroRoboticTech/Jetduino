@@ -38,29 +38,30 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-### Build Options ##############################################################
-# Setup any build options.
-option (BUILD_TEST "Build the unit test for this project." ON)
-
-### Testing Settings ###########################################################
-# Enable CTest.
-enable_testing ()
-
-# Add directories for unit testing.
-if (BUILD_TEST)
-  # Add the local project dependency include directories.
-  #include_directories (dep/FakeIt/include)
-  #include_directories (dep/FakeIt/config/tpunit)
-  #include_directories (dep/tpunitpp)
-endif()
 
 ### Add Sources ################################################################
 # Add the base project directory.
 FILE(GLOB JetduinoHeaders *.h)
-FILE(GLOB JetduinoSource *.cpp)
 
 install(FILES ${JetduinoHeaders} DESTINATION include/Jetduino)
 
-add_executable (Jeduino
-                ${JetduinoSource})
+add_executable (jetduino_analog_read
+                jetduino_analog_read.c)
+
+add_executable (jetduino_analog_write
+                jetduino_analog_write.c)
+
+add_executable (jetduino_digital_read
+                jetduino_digital_read.c)
+
+add_executable (jetduino_digital_write
+                jetduino_digital_write.c)
+                
+# Platform specific link libraries.
+if(WIN32)
+  set (LIB "ws2_32")
+  add_definitions(-D_WIN32_WINNT=0x0501)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+endif()
+                
                     
