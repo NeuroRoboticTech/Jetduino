@@ -1,47 +1,44 @@
-## **GrovePi: The Raspberry Pi Meets Grove Sensors**
+## **Jetduino: The Jetson Embedded Supercomputer Meets Grove Sensors**
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.  Create your Internet of Things devices and inventions without the need for soldering!
-![Picture](GrovePi_Plus_By_Dexter_Industries_For_the_Raspberry_Pi.JPG)
+Jetduino is an open source platform for connecting Grove Sensors to the Jetson TK1 supercomputers.  Create your own intelligent robot or inventions without the need for soldering!
 
-There are over 2 million Raspberry Pi in the wild and people are using it for some awesome projects.  From teaching kids to code to cluster computing, the Raspberry Pi is taking over the computing world.  We believe combining the power of code with easy to use sensors and devices will be revolutionary.
+We brought Grove and the Jetson in a simple and affordable way. Grove sensors allow you to interact and monitor the world. The Jetson lets you store and process data in way that has never been possible for before for embedded systems. Its 192 CUDA cores makes it possible to perform onboard visual proceesing, deep neural network (DNN) control systems, or biologically realistic neural nets for intelligent and adaptive robots. The Jetduino brings both Grove Sensors and the popular Jetson TK1 together in a simple, elegant, and open source design. 
 
-We brought Grove and Raspberry Pi together in a simple and affordable way. Grove sensors allow you to interact and monitor the world. Raspberry Pi lets you store and process data, and bring the real world to the Raspberry Pi and the web.  
-The GrovePi brings both Grove Sensors and the popular Raspberry Pi together in a simple, elegant, and open source design.
+Another awesome feature of the Jetduino is that it also combines the Arduino Microcontroller and the DynamixShield. This allows you to attach an Arduino Due directly into the DynamixShield section of the Jetduino. The DynamixShield is a shield of for the Arduino Due that level shifts all of its signals, and provides Grove ports for the Due. It also has a controller for interfacing with Dynamixel AX/MX smart servos. This makes it very easy to setup the Jetson to do the number crunching for the "Brains" of your robot, while allowing the Due to handle the low level sensor and motor interactions, while communictating with the Jetson.
 
 ### How Does it Work?
-The GrovePi board slips over the Raspberry Pi.  Connect the Grove Sensors to the GrovePi board.  Upload your program.  Begin taking in the worlds data!
+The Jetduino board is the same size as the Jetson and it is mounted above or below it. Because the Jetson TK1 uses a female 2mm connector on its board, an interface connector was required. This connector ships with the Jetduino. It plugs into the Jetson and a normal Raspberry Pi GPIO ribbon cable is used to connect the Jetduino to the Jetson. Next, connect your Grove sensor. Upload your program. Begin taking in the worlds data!
 
-### Raspberry Pi Compatibility
-The GrovePi is compatible with the Raspberry Pi models A, A+, B, B+, and 2.
+Most of the Grove interface scripts found in the Jetduino library are modified versions of GrovePi code. GrovePi is a Grove board used for the Raspberry Pi. There are only minor modifications required to use those scripts and libraries on the Jetson. If there is a Grove module you would like to use that is not yet in the Jetduino library you will probably be able to find it in the GrovePi library and modify it. You can find the GrovePi library here: [https://github.com/DexterInd/GrovePi](https://github.com/DexterInd/GrovePi)
+
+### Jetson Compatibility
+The Jetduino is compatible with the Jetson TK1 and the Arduino Due. If there is enough demand for this, then it is possible new versions for the Jetson TX1 and Geniuno 101 could be built.
 
 ### Getting Started
-Getting started is easy. Check out our Getting Started With GrovePi Guide [here](http://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/). 
+Getting started is easy. Check out our Getting Started With Jetduino Guide [here](http://www.NeuroRoboticTech.com/Projects/Jetduino/get-started-with-the-Jetduino/). 
 We have an extensive library that covers most Grove sensors. You can find it on the Github repo.  You won’t need to hack much at all with our library: get started coding in Python and C now! 
 
 ### Want to use a sensor not in the library yet?  
-Ask us in the [forums](http://www.dexterindustries.com/forum/?forum=grovepi).  Want to use the GrovePi in a language not currently supported? [Ask and we will help](http://www.dexterindustries.com/forum/?forum=grovepi).
+Ask us in the [forums](http://neurorobotictech.com/Community/Forum). Want to use the Jetduino in a language not currently supported? [Ask and we will help](http://neurorobotictech.com/Community/Forum).
 
-### Programming the GrovePi
-The GrovePi can be programmed in Python, C, C#, Go, and NodeJS on the Raspberry Pi.  Simply start with one of our [example projects](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/) or [example code](https://github.com/DexterInd/GrovePi/tree/master/Software).  
-The GrovePi uses an Arduino to interface between the Raspberry Pi and the Grove Sensors, and comes programmed with a standard firmware.  The firmware can be rewritten from the Raspberry Pi.  
+### Programming the Jetduino
+The Jetduino can be programmed in Python, C, and C++ on the Jetson.  Simply start with one of our [example projects](http://www.NeuroRoboticTech.com/Projects/Jetduino/projects-for-the-Jetson/) or [example code](https://github.com/NeuroRoboticTech/Jetduino).  
 
 ### Getting Help
-Need help? We [have a forum here where you can ask questions or make suggestions](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/).
-
-### Getting Ideas
-Need an idea to get started?  [We have a few project examples to get your creative juices flowing](http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/).
+Need help? We [have a forum here where you can ask questions or make suggestions](http://neurorobotictech.com/Community/Forum).
 
 ### Getting Into It
 Want to hack it open or make your own from scratch? With full hardware and software designs, you can remix and duplicate to your hearts content.
 
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
+See more at the [Jetduino Site](http://NeuroRoboticTech.com/Projects/Jetduino/)
 
 ## License
 
 The MIT License (MIT)
 
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

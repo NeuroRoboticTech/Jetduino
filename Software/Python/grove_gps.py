@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
+# Jetduino Example for using the Grove GPS Module http://www.seeedstudio.com/depot/Grove-GPS-p-959.html?cPath=25_130
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,19 +41,16 @@ THE SOFTWARE.
 # Author     Date      		Comments
 # Karan      21 Aug 14 		Initial Authoring
 # Karan		 10 June 15		Updated the code to reflect the decimal GPS coordinates (contributed by rschmidt on the DI forums: http://www.dexterindustries.com/forum/?topic=gps-example-questions/#post-5668)
+# David Cofer 20 Jan 16		Modified the code to work with the Jetson TK1
+
 import serial, time
 import smbus
 import math
-import RPi.GPIO as GPIO
 import struct
 import sys
-import ir_receiver_check
-
-if ir_receiver_check.check_ir():
-	print "Disable IR receiver before continuing"
-	exit()
 	
-ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 0)	#Open the serial port at 9600 baud
+#ser = serial.Serial('/dev/ttyTHS0',  9600, timeout = 0)	#Open the UART1 serial port at 9600 baud
+ser = serial.Serial('/dev/ttyTHS1',  9600, timeout = 0) #Open the UART2 serial port at 9600 baud
 ser.flush()
 
 class GPS:
@@ -63,6 +63,7 @@ class GPS:
 	def read(self):	
 		while True:
 			GPS.inp=ser.readline()
+			#print ("GPS In: ", GPS.inp)
 			if GPS.inp[:6] =='$GPGGA': # GGA data , packet 1, has all the data we need
 				break
 			time.sleep(0.1)     #without the cmd program will crach
@@ -93,8 +94,8 @@ class GPS:
 		return degrees + d
 		
 g=GPS()
-f=open("gps_data.csv",'w')	#Open file to log the data
-f.write("name,latitude,longitude\n")	#Write the header to the top of the file
+#f=open("gps_data.csv",'w')	#Open file to log the data
+#f.write("name,latitude,longitude\n")	#Write the header to the top of the file
 ind=0
 while True:
 	try:
@@ -102,22 +103,22 @@ while True:
 		[t,fix,sats,alt,lat,lat_ns,long,long_ew]=g.vals()	#Get the individial values
 		
 		# Convert to decimal degrees
-		lat = g.decimal_degrees(float(lat))
-		if lat_ns == "S":
-			lat = -lat
+		#lat = g.decimal_degrees(float(lat))
+		#if lat_ns == "S":
+		#	lat = -lat
 
-		long = g.decimal_degrees(float(long))
-		if long_ew == "W":
-			long = -long
+		#long = g.decimal_degrees(float(long))
+		#if long_ew == "W":
+		#	long = -long
 			
 		print ("Time:",t,"Fix status:",fix,"Sats in view:",sats,"Altitude",alt,"Lat:",lat,lat_ns,"Long:",long,long_ew)
-		s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
-		f.write(s)	#Save to file
+		#s=str(t)+","+str(float(lat)/100)+","+str(float(long)/100)+"\n"	
+		#f.write(s)	#Save to file
 		time.sleep(2)
 	except IndexError:
 		print ("Unable to read")
 	except KeyboardInterrupt:
-		f.close()
+		#f.close()
 		print ("Exiting")
 		sys.exit(0)
 	
