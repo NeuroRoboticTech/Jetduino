@@ -1,5 +1,5 @@
 //GrovePi Example for using the digital write command
-#include "grovepi.h"
+#include "jetduino.h"
 //gcc grovepi_digital_write.c grovepi.c -Wall
 int main(void)
 {		

@@ -1,5 +1,5 @@
 //GrovePi Example for using the analog write 
-#include "grovepi.h"
+#include "jetduino.h"
 //gcc grovepi_analog_write.c grovepi.c -Wall
 int main(void)
 {		
