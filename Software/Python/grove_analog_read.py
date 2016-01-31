@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the analog read command to read analog sensor values
+# Jetduino Example for using the analog read command to read analog sensor values
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,14 +37,14 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 #Sensor connected to A0 Port 
-sensor = 14		# Pin 14 is A0 Port.
-grovepi.pinMode(sensor,"INPUT")
+sensor = 54		# Pin 54 is A0 Port.
+#jetduino.pinMode(sensor,"INPUT")
 while True:
     try:
-        sensor_value = grovepi.analogRead(sensor)
+        sensor_value = jetduino.analogRead(sensor)
 
         print ("sensor_value =", sensor_value)
         time.sleep(.5)
