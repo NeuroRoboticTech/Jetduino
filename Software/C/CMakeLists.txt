@@ -6,10 +6,6 @@ cmake_minimum_required (VERSION 2.8)
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} 
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-### Project Settings ###########################################################
-# Set the project name.
-project (Jetduino)
-
 ### Platform Settings ##########################################################
 message(STATUS ${CMAKE_GENERATOR})
 
@@ -38,12 +34,22 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+                
+# Platform specific link libraries.
+if(WIN32)
+  set (LIB "ws2_32")
+  add_definitions(-D_WIN32_WINNT=0x0501)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+endif()
 
 ### Add Sources ################################################################
 # Add the base project directory.
 FILE(GLOB JetduinoHeaders *.h)
 
 install(FILES ${JetduinoHeaders} DESTINATION include/Jetduino)
+
+### Project Settings ###########################################################
+project (jetduino)
 
 add_executable (jetduino_analog_read
                 jetduino_analog_read.c
@@ -60,12 +66,5 @@ add_executable (jetduino_digital_read
 add_executable (jetduino_digital_write
                 jetduino_digital_write.c
 				jetduino.c)
-                
-# Platform specific link libraries.
-if(WIN32)
-  set (LIB "ws2_32")
-  add_definitions(-D_WIN32_WINNT=0x0501)
-  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-endif()
                 
                     

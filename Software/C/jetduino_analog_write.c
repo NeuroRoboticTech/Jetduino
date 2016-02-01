@@ -1,23 +1,23 @@
-//GrovePi Example for using the analog write 
+//jetduino Example for using the analog write
 #include "jetduino.h"
-//gcc grovepi_analog_write.c grovepi.c -Wall
+//gcc jetduino_analog_write.c jetduino.c -Wall
 int main(void)
-{		
+{
 	int i;
-	
-	//Exit on failure to start communications with the GrovePi
+
+	//Exit on failure to start communications with the jetduino
 	if(init()==-1)
 		exit(1);
-	
+
 	while(1)
 	{
-		for(i=0;i<256;i++)
+		for(i=0;i<255;i++)
 		{
 			printf("%d\n", i);
 			//Write the PWM value
-			analogWrite(3,i);
+			analogWrite(4,i);
 			//Sleep for 10ms
-			pi_sleep(10);
+			jet_sleep(50);
 		}
 	}
    	return 1;

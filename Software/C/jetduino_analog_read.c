@@ -1,11 +1,11 @@
-//GrovePi Example for using the analog read
+//Jetduino Example for using the analog read
 #include "jetduino.h"
 
 int main(void)
 {
 	int adata;
 
-	//Exit on failure to start communications with the GrovePi
+	//Exit on failure to start communications with the Jetduino
 	if(init()==-1)
 		exit(1);
 
