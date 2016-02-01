@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Electromagnet (http://www.seeedstudio.com/wiki/Grove_-_Electromagnet)
+# Jetduino Example for using the Grove Electromagnet (http://www.seeedstudio.com/wiki/Grove_-_Electromagnet)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 
 '''
@@ -14,6 +14,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +38,7 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # The electromagnet can hold a 1KG weight
 
@@ -43,23 +46,23 @@ import grovepi
 # SIG,NC,VCC,GND
 electromagnet = 4
 
-grovepi.pinMode(electromagnet,"OUTPUT")
+jetduino.pinMode(electromagnet,"OUTPUT")
 time.sleep(1)
 
 while True:
     try:
         # Switch on electromagnet
-        grovepi.digitalWrite(electromagnet,1)
+        jetduino.digitalWrite(electromagnet,1)
         print ("on")
         time.sleep(2)
 
         # Switch off electromagnet
-        grovepi.digitalWrite(electromagnet,0)
+        jetduino.digitalWrite(electromagnet,0)
         print ("off")
         time.sleep(2)
 
     except KeyboardInterrupt:
-        grovepi.digitalWrite(electromagnet,0)
+        jetduino.digitalWrite(electromagnet,0)
         break
     except IOError:
         print ("Error")

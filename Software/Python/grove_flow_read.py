@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove 1/4'' Flow Sensor(http://www.seeedstudio.com/depot/G14-Water-Flow-Sensor-p-1345.html) with the GrovePi
+# Jetduino Example for using the Grove 1/4'' Flow Sensor(http://www.seeedstudio.com/depot/G14-Water-Flow-Sensor-p-1345.html) with the GrovePi
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +38,9 @@ THE SOFTWARE.
 
 # USAGE
 #
-# Connect the Flow meter to Port 2 on the GrovePi. The flow meter only works on that port
+# Connect the Flow meter to Port 2 on the Jetduino. The flow meter only works on that port
 
-# You can send 'run_in_bk=1' as a parameter, e.g. grovepi.flowRead(run_in_bk=1) to run the flow meter code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the flow meter read running in the background
+# You can send 'run_in_bk=1' as a parameter, e.g. jetduino.flowRead(run_in_bk=1) to run the flow meter code in the background on the GrovePi. This allows you to use other functions such as digitalRead to run with the flow meter read running in the background
 #
 # the fist byte is 1 for a new value and 0 for old values
 # second byte is flow rate in L/hour
@@ -45,16 +48,16 @@ THE SOFTWARE.
 # Since the flow meter uses interrupts, it is better to disable it once you are done using it
 # The flow sensor readings are updated once every 2 seconds on the firmware
 import time
-import grovepi
+import jetduino
 
 import atexit
-atexit.register(grovepi.flowDisable())
+atexit.register(jetduino.flowDisable())
 
 print "Reading from the Flow meter"
-grovepi.flowEnable()
+jetduino.flowEnable()
 while True:
     try:
-		[new_val,flow_val] = grovepi.flowRead()
+		[new_val,flow_val] = jetduino.flowRead()
 		if new_val:
 			print flow_val
 		time.sleep(.5) 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Library for using the Grove Compass module HCM5883 (http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Compass-p-759.html)
+# Jetduino Library for using the Grove Compass module HCM5883 (http://www.seeedstudio.com/depot/Grove-3Axis-Digital-Compass-p-759.html)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +37,9 @@ THE SOFTWARE.
 '''               
 # History
 # ------------------------------------------------
-# Author     Date      		Comments
-# Karan      22 July 14  	Initial Authoring
+# Author      Date      		Comments
+# Karan       22 July 14  	Initial Authoring
+# David Cofer 22 July 14  	Modified for use with the Jetduino
 # 	
 # NOTE:		                                                              
 # Refer to the datasheet to add additional functionality https://www.seeedstudio.com/wiki/images/4/42/HMC5883.pdf
@@ -43,10 +47,10 @@ THE SOFTWARE.
 import smbus
 import time
 import math
-import RPi.GPIO as GPIO
 import struct
 
-rev = GPIO.RPI_REVISION
+#The Jetduino should always use SMBus 1 for GEN2_I2C
+rev=3
 if rev == 2 or rev == 3:
     bus = smbus.SMBus(1)
 else:

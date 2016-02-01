@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove MOSFET (http://www.seeedstudio.com/wiki/Grove_-_MOSFET)
+# Jetduino Example for using the Grove MOSFET (http://www.seeedstudio.com/wiki/Grove_-_MOSFET)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,34 +42,34 @@ THE SOFTWARE.
 # 	One side for power source and the other side for the device you want to control.
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove MOSFET to analog port D6
 # SIG,NC,VCC,GND
 mosfet = 6
 
-grovepi.pinMode(mosfet,"OUTPUT")
+jetduino.pinMode(mosfet,"OUTPUT")
 time.sleep(1)
 
 while True:
     try:
         # Full speed
-        grovepi.analogWrite(mosfet,255)
+        jetduino.analogWrite(mosfet,255)
         print ("full speed")
         time.sleep(2)
 
         # Half speed
-        grovepi.analogWrite(mosfet,128)
+        jetduino.analogWrite(mosfet,128)
         print ("half speed")
         time.sleep(2)
 
         # Off
-        grovepi.analogWrite(mosfet,0)
+        jetduino.analogWrite(mosfet,0)
         print ("off")
         time.sleep(2)
 
     except KeyboardInterrupt:
-        grovepi.analogWrite(mosfet,0)
+        jetduino.analogWrite(mosfet,0)
         break
     except IOError:
         print ("Error")

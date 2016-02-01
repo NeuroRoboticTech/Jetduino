@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove PH Sensor (http://www.seeedstudio.com/wiki/Grove_-_PH_Sensor)
+# Jetduino Example for using the Grove PH Sensor (http://www.seeedstudio.com/wiki/Grove_-_PH_Sensor)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +36,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove PH Sensor to analog port A0
 # SIG,NC,VCC,GND
 sensor = 0
 
-grovepi.pinMode(sensor,"INPUT")
+jetduino.pinMode(sensor,"INPUT")
 time.sleep(1)
 
 # Reference voltage of ADC is 5v
@@ -48,7 +51,7 @@ adc_ref = 5
 while True:
     try:
         # Read sensor value
-        sensor_value = grovepi.analogRead(sensor)
+        sensor_value = jetduino.analogRead(sensor)
 
         # Calculate PH
         ph = 7 - 1000 * (float)(sensor_value) * adc_ref / 59.16 / 1023

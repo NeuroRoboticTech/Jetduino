@@ -2,9 +2,9 @@
 #
 # GrovePi Example for using the Grove Buzzer (http://www.seeedstudio.com/wiki/Grove_-_Buzzer)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,28 +37,28 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Buzzer to digital port D8
 # SIG,NC,VCC,GND
 buzzer = 8
 
-grovepi.pinMode(buzzer,"OUTPUT")
+jetduino.pinMode(buzzer,"OUTPUT")
 
 while True:
     try:
         # Buzz for 1 second
-        grovepi.digitalWrite(buzzer,1)
+        jetduino.digitalWrite(buzzer,1)
         print ('start')
         time.sleep(1)
 
         # Stop buzzing for 1 second and repeat
-        grovepi.digitalWrite(buzzer,0)
+        jetduino.digitalWrite(buzzer,0)
         print ('stop')
         time.sleep(1)
 
     except KeyboardInterrupt:
-        grovepi.digitalWrite(buzzer,0)
+        jetduino.digitalWrite(buzzer,0)
         break
     except IOError:
         print ("Error")

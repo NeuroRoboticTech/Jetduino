@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove - Infrared Receiver (http://www.seeedstudio.com/depot/Grove-Infrared-Receiver-p-994.html)
+# Jetduino Example for using the Grove - Infrared Receiver (http://www.seeedstudio.com/depot/Grove-Infrared-Receiver-p-994.html)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,12 +39,12 @@ THE SOFTWARE.
 # NOTE: 
 #		Connect the IR sensor to any port. In the code use the pin as port+1. So if you are connecting the sensor to port 7, use "ir_recv_pin(8)"
 import time
-import grovepi
+import jetduino
 
-grovepi.ir_recv_pin(9)
+jetduino.ir_recv_pin(9)
 print ("Press any button on the remote to see the data")
 while True:
-	ir_data_back=grovepi.ir_read_signal()
+	ir_data_back=jetduino.ir_read_signal()
 	if ir_data_back[0]==-1:		#IO Error
 		pass
 	elif ir_data_back[0]==0:	#Old signal

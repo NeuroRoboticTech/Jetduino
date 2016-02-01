@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for checking the firmware for the GrovePi
+# Jetduino Example for checking the firmware for the Jetduino
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# Jetduino Example for using the Grove Button (http://www.seeedstudio.com/wiki/Grove_-_Button)
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
+#
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +15,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,10 +39,10 @@ THE SOFTWARE.
 '''
 #
 # NOTE: If you get a version of 255.255.255, they try running the script again, if the issue still persists then you are using an old deprecated firmware
-import grovepi
+import jetduino
 
 try:
-    print ("GrovePi has firmware version:", grovepi.version())
+    print ("Jetduino has firmware version:", jetduino.version())
 
 except KeyboardInterrupt:
     print ("KeyboardInterrupt")

@@ -37,7 +37,7 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Real Time Clock to any I2C port eg. I2C-1
 # Can be found at I2C address 0x68
@@ -45,7 +45,7 @@ import grovepi
 
 while True:
     try:
-        print (grovepi.rtc_getTime())
+        print (jetduino.rtc_getTime())
         time.sleep(.5)
 
     except IOError:

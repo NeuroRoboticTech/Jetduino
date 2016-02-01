@@ -4,8 +4,10 @@
 # http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html
 # Karan Nayan
 # Initial Date: 5 Mar 2014
-# Last Updated: 5 Mar 2014
+# David Cofer - Modified to work on the Jetson
+# Last Updated: 30 Jan 2016
 # http://www.dexterindustries.com/
+# http://www.NeuroRoboticTech.com/
 #
 # Based on the Arduino library "SeeedGrayOLED.cpp - SSD1327 Gray OLED Driver Library"
 # Seeed Technology Inc.
@@ -19,6 +21,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

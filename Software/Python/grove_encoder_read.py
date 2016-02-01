@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Encoder(http://www.seeedstudio.com/depot/Grove-Encoder-p-1352.html) with the GrovePi
+# Jetduino Example for using the Grove Encoder(http://www.seeedstudio.com/depot/Grove-Encoder-p-1352.html) with the GrovePi
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,16 +43,16 @@ THE SOFTWARE.
 # second byte is encoder positon from 1 to 24
 
 import time
-import grovepi
+import jetduino
 import atexit
 
-atexit.register(grovepi.encoder_dis)
+atexit.register(jetduino.encoder_dis)
 
 print "Reading from the encoder"
-grovepi.encoder_en()
+jetduino.encoder_en()
 while True:
     try:
-		[new_val,encoder_val] = grovepi.encoderRead()
+		[new_val,encoder_val] = jetduino.encoderRead()
 		if new_val:
 			print encoder_val
 		time.sleep(.5) 

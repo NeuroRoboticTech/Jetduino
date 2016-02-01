@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Air Quality Sensor (http://www.seeedstudio.com/wiki/Grove_-_Air_Quality_Sensor)
+# Jetduino Example for using the Grove Air Quality Sensor (http://www.seeedstudio.com/wiki/Grove_-_Air_Quality_Sensor)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 
 '''
@@ -14,6 +14,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,18 +40,18 @@ THE SOFTWARE.
 # NOTE: # Wait 2 minutes for the sensor to heat-up
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Air Quality Sensor to analog port A0
 # SIG,NC,VCC,GND
 air_sensor = 0
 
-grovepi.pinMode(air_sensor,"INPUT")
+jetduino.pinMode(air_sensor,"INPUT")
 
 while True:
     try:
         # Get sensor value
-        sensor_value = grovepi.analogRead(air_sensor)
+        sensor_value = jetduino.analogRead(air_sensor)
 
         if sensor_value > 700:
             print ("High pollution")

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Electricity Sensor (http://www.seeedstudio.com/wiki/Grove_-_Electricity_Sensor)
+# Jetduino Example for using the Grove Electricity Sensor (http://www.seeedstudio.com/wiki/Grove_-_Electricity_Sensor)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,13 +37,13 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Electricity Sensor to analog port A0
 # SIG,NC,NC,GND
 sensor = 0
 
-grovepi.pinMode(sensor,"INPUT")
+jetduino.pinMode(sensor,"INPUT")
 
 # Vcc of the grove interface is normally 5v
 grove_vcc = 5
@@ -48,7 +51,7 @@ grove_vcc = 5
 while True:
     try:
         # Get sensor value
-        sensor_value = grovepi.analogRead(sensor)
+        sensor_value = jetduino.analogRead(sensor)
 
         # Calculate amplitude current (mA)
         amplitude_current = (float)(sensor_value / 1024 * grove_vcc / 800 * 2000000)

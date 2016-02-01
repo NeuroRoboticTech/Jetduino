@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove NFC Tag module (http://www.seeedstudio.com/wiki/Grove_%EF%BC%8D_NFC)
+# Jetduino Example for using the Grove NFC Tag module (http://www.seeedstudio.com/wiki/Grove_%EF%BC%8D_NFC)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,13 +41,12 @@ THE SOFTWARE.
 #	read the datasheet though
 
 import time,sys
-import RPi.GPIO as GPIO
 import smbus
 
 NFC_ADDR = 0x53
 
-# use the bus that matches your raspi version
-rev = GPIO.RPI_REVISION
+# Jetduino is always version 3
+rev = 3
 if rev == 2 or rev == 3:
     bus = smbus.SMBus(1)
 else:

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Infrared Reflective Sensor (http://www.seeedstudio.com/wiki/Grove_-_Infrared_Reflective_Sensor)
+# Jetduino Example for using the Grove Infrared Reflective Sensor (http://www.seeedstudio.com/wiki/Grove_-_Infrared_Reflective_Sensor)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,18 +47,18 @@ THE SOFTWARE.
 # 	If not, adjust the potentiometer again
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Infrared Reflective Sensor to digital port D4
 # SIG,NC,VCC,GND
 sensor = 4
 
-grovepi.pinMode(sensor,"INPUT")
+jetduino.pinMode(sensor,"INPUT")
 
 while True:
     try:
         # Sensor returns HIGH on a black surface and LOW on a white surface
-        if grovepi.digitalRead(sensor) == 1:
+        if jetduino.digitalRead(sensor) == 1:
             print ("black surface detected")
         else:
             print ("white surface detected")
