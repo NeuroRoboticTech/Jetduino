@@ -1,11 +1,18 @@
-GrovePi C library
+Jetduino C library
 v0.1
 
-This library provides the basic functions for using the GrovePi in C.
+This library provides the basic functions for using the Jetduino in C.
 
 To compile use:
 gcc programe_name.c grovepi.c -Wall
 e.g.: gcc grovepi_analog_read.c grovepi.c -Wall
+
+or
+
+mkdir build
+cd build
+cmake ..
+make
 
 and then run the executable:
 ./a.out
@@ -17,6 +24,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

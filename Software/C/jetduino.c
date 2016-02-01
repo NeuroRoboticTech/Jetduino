@@ -1,16 +1,17 @@
-// GrovePi C library
+// jetduino C library
 // v0.1
 //
-// This library provides the basic functions for using the GrovePi in C
+// This library provides the basic functions for using the jetduino in C
 //
-// The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
-//
-// Have a question about this example?  Ask on the forums here: http://www.dexterindustries.com/forum/?forum=grovepi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
+#
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 //
 // 	History
 // 	------------------------------------------------
 // 	Author		Date      		Comments
 //	Karan		28 Dec 15		Initial Authoring
+//	David COfer	31 Jan 16		Converted to use for Jetduino
 
 /*
 License
@@ -19,6 +20,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -79,19 +83,19 @@ int write_block(char cmd,char v1,char v2,char v3)
 
     // if (i2c_smbus_write_i2c_block_data(fd,1,4,w_buf) != 5)
     // {
-        // printf("Error writing to GrovePi\n");
+        // printf("Error writing to Jetduino\n");
         // return -1;
     // }
     return 1;
 }
 
-//write a byte to the GrovePi
+//write a byte to the Jetduino
 int write_byte(char b)
 {
     w_buf[0]=b;
     if ((write(fd, w_buf, 1)) != 1)
     {
-        printf("Error writing to GrovePi\n");
+        printf("Error writing to Jetduino\n");
         return -1;
     }
     return 1;
@@ -106,7 +110,7 @@ char read_byte(void)
 	if (dbg)
 		printf("rbt: %d\n",r_buf[0]);
 	// if (read(fd, r_buf, reg_size) != reg_size) {
-		// printf("Unable to read from GrovePi\n");
+		// printf("Unable to read from Jetduino\n");
 		// //exit(1);
         // return -1;
 	// }
@@ -114,7 +118,7 @@ char read_byte(void)
     return r_buf[0];
 }
 
-//Read a block of data from the GrovePi
+//Read a block of data from the Jetduino
 char read_block(int size)
 {
     int ret;
@@ -125,7 +129,7 @@ char read_block(int size)
 	}
 
 	 if (ret != size) {
-		 printf("Unable to read from GrovePi\n");
+		 printf("Unable to read from Jetduino\n");
          return -1;
 	 }
 
@@ -142,7 +146,7 @@ int analogRead(int pin)
 {
 	int data;
 	write_block(aRead_cmd,pin,0,0);
-	usleep(10000);
+	usleep(1000);
 	read_block(3);
 	data=r_buf[1]* 256 + r_buf[2];
 	if (data==65535)
