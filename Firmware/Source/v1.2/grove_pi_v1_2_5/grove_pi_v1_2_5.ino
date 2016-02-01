@@ -105,8 +105,14 @@ void loop()
     
     //Digital Read
     else if(cmd[0]==1)
+    {
       val=digitalRead(cmd[1]);
 
+      //Serial.print("Digital Read. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", Value: ");
+      //Serial.println(val);
+    }
     //Digital Write
     else if(cmd[0]==2)
       digitalWrite(cmd[1],cmd[2]);
@@ -118,24 +124,35 @@ void loop()
       b[1]=aRead/256;
       b[2]=aRead%256;
 
-      Serial.print("Analog Read. Pin: ");
-      Serial.print(cmd[1]);
-      Serial.print(", Value: ");
-      Serial.println(aRead);
+      //Serial.print("Analog Read. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", Value: ");
+      //Serial.println(aRead);
     }
 
     //Set up Analog Write
     else if(cmd[0]==4)
-      analogWrite(cmd[1],cmd[2]);
+    {
+      if(run_once)
+      {
+        analogWrite(cmd[1],cmd[2]);
 
+        //Serial.print("Analog Write. Pin: ");
+        //Serial.print(cmd[1]);
+        //Serial.print(", Value: ");
+        //Serial.println(cmd[2]);
+        run_once = false;
+      }
+    }
     //Set up pinMode
     else if(cmd[0]==5)
     {
       pinMode(cmd[1],cmd[2]);
-      Serial.print("Set pin mode. Pin: ");
-      Serial.print(cmd[1]);
-      Serial.print(", Mode: ");
-      Serial.println(cmd[2]);
+      
+      //Serial.print("Set pin mode. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", Mode: ");
+      //Serial.println(cmd[2]);
     }
     //Ultrasonic Read
     else if(cmd[0]==7)
@@ -678,7 +695,7 @@ void receiveData(int byteCount)
 // callback for sending data
 void sendData()
 {
-  Serial.println("sendData");
+  //Serial.println("sendData");
   
   if(cmd[0] == 1)
     Wire.write(val);
@@ -686,12 +703,12 @@ void sendData()
   {
     Wire.write(b, 3);
 
-    Serial.print("Sending data 3,7,56: ");
-    Serial.print(b[0]);
-    Serial.print(", ");
-    Serial.print(b[1]);
-    Serial.print(", ");
-    Serial.println(b[2]);
+    //Serial.print("Sending data 3,7,56: ");
+    //Serial.print(b[0]);
+    //Serial.print(", ");
+    //Serial.print(b[1]);
+    //Serial.print(", ");
+    //Serial.println(b[2]);
   }
   if(cmd[0] == 8 || cmd[0] == 20)
     Wire.write(b, 4);
