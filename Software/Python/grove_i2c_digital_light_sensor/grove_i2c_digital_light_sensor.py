@@ -76,7 +76,6 @@
 import time
 import smbus
 from Adafruit_I2C import Adafruit_I2C
-import RPi.GPIO as GPIO
 #import grovepi
 from smbus import SMBus
 
@@ -114,7 +113,7 @@ global _LUX
 
 
 # bus parameters
-rev = GPIO.RPI_REVISION
+rev = 3
 if rev == 2 or rev == 3:
     I2C_SMBUS = smbus.SMBus(1)
 else:

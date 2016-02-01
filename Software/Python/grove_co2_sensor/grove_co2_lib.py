@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-########################################################################               # GrovePi Library for using the Grove - CO2 Sensor(http://www.seeedstudio.com/depot/Grove-CO2-Sensor-p-1863.html)
+########################################################################               # Jetduino Library for using the Grove - CO2 Sensor(http://www.seeedstudio.com/depot/Grove-CO2-Sensor-p-1863.html)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this library?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #         
 #
 # NOTES:                                      
@@ -16,6 +16,7 @@
 # Author     		Date      		Comments
 # Doms Genoud      	13 Apr 15 		Initial Authoring
 # Karan				07 Jan 16		Code cleanup and added to main Github repo
+# Cofer             01 Feb 16       Modified for use on the Jetduino
 # 			                                                         
 # These files have been made available online through a Creative Commons Attribution-ShareAlike 3.0  license.
 # (http://creativecommons.org/licenses/by-sa/3.0/)           
@@ -25,7 +26,8 @@
 import serial, time
 import struct
 
-ser = serial.Serial('/dev/ttyAMA0',  9600)	#Open the serial port at 9600 baud
+#ser = serial.Serial('/dev/ttyTHS0',  9600)	#Open the UART1 serial port at 9600 baud
+ser = serial.Serial('/dev/ttyTHS1',  9600) #Open the UART2 serial port at 9600 baud
 
 class CO2:
 #inspired from c code of http://www.seeedstudio.com/wiki/Grove_-_CO2_Sensor

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Dust sensor(http://www.seeedstudio.com/depot/Grove-Dust-Sensor-p-1050.html) with the GrovePi
+# Jetduino Example for using the Grove Dust sensor(http://www.seeedstudio.com/depot/Grove-Dust-Sensor-p-1050.html) with the GrovePi
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,20 +37,20 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 import atexit
 
-atexit.register(grovepi.dust_sensor_dis)
+atexit.register(jetduino.dust_sensor_dis)
 
-grovepi.dust_sensor_en()
+jetduino.dust_sensor_en()
 
 while True:
     try:
-		[new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
-		[temp,humidity] = grovepi.dht(4,1)
-		a0 = grovepi.analogRead(0)
-		a1 = grovepi.analogRead(1)
-		a2 = grovepi.analogRead(2)
+		[new_val,lowpulseoccupancy] = jetduino.dustSensorRead()
+		[temp,humidity] = jetduino.dht(4,1)
+		a0 = jetduino.analogRead(0)
+		a1 = jetduino.analogRead(1)
+		a2 = jetduino.analogRead(2)
 		print new_val,lowpulseoccupancy,"temp =", temp, " humidity =", humidity,"a0",a0,"a1",a1,"a2",a2
 
     except:
