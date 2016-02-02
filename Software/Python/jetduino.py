@@ -52,22 +52,30 @@ import time
 import math
 import struct
 import sys
-import pin_mappings
+import pins
 from sysfs.gpio import Controller, OUTPUT, INPUT, RISING
 
 debug =0
 
 #The Jetduino should always use SMBus 1 for GEN2_I2C
 p_version=3
-
-rev = 3
-if rev == 2 or rev == 3:
-	bus = smbus.SMBus(1)
-else:
-	bus = smbus.SMBus(0)
+bus = smbus.SMBus(1) #GEN2_I2C
 
 # I2C Address of Arduino
 address = 0x03
+
+#Make the jetson pins available for use.
+Controller.available_pins = [pins.JET_PH1, 
+	pins.JET_PK1, 
+	pins.JET_PK2, 
+	pins.JET_PK4, 
+	pins.JET_PU0, 
+	pins.JET_PU1, 
+	pins.JET_PU2, 
+	pins.JET_PU3, 
+	pins.JET_PU4, 
+	pins.JET_PU5, 
+	pins.JET_PU6]
 
 # Command Format
 # digitalRead() command format header
@@ -160,6 +168,8 @@ flow_en_cmd=[18]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
+global jet_pin
+
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
 
@@ -193,26 +203,49 @@ def read_i2c_block(address):
 
 # Arduino Digital Read
 def digitalRead(pin):
-
-	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
-	time.sleep(.1)
-	n = read_i2c_byte(address)
-	return n
+	if pin < 54:
+		write_i2c_block(address, dRead_cmd + [pin, unused, unused])
+		time.sleep(.1)
+		n = read_i2c_byte(address)
+		return n
+	else:
+		if jet_pin[pin] is not None:
+			n = jet_pin[pin].read()		
+			return n
+		else:
+			print ("You must first set the pinmode for a jetson GPIO pin.")
+			return -1
 
 # Arduino Digital Write
 def digitalWrite(pin, value):
-	write_i2c_block(address, dWrite_cmd + [pin, value, unused])
-	return 1
-
+	if pin < 54:
+		write_i2c_block(address, dWrite_cmd + [pin, value, unused])
+		return 1
+	else:
+		if jet_pin[pin] is not None:
+			if value > 0:
+				jet_pin[pin].set()
+			else:
+				jet_pin[pin].reset()		
+		else:
+			print ("You must first set the pinmode for a jetson GPIO pin.")
 
 # Setting Up Pin mode on Arduino
 def pinMode(pin, mode):
-	if mode == "OUTPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 1, unused])
-	elif mode == "INPUT":
-		write_i2c_block(address, pMode_cmd + [pin, 0, unused])
-	return 1
-
+	if pin < 54:
+		#Set pin mode for Arduino pins
+		if mode == "OUTPUT":
+			write_i2c_block(address, pMode_cmd + [pin, 1, unused])
+		elif mode == "INPUT":
+			write_i2c_block(address, pMode_cmd + [pin, 0, unused])
+		return 1
+	else:
+		#Set pin mode for Jetson GPIO pins
+		if mode == "OUTPUT":
+			jet_pin[pin] = Controller.alloc_pin(pin, OUTPUT)
+		elif mode == "INPUT":
+			jet_pin[pin] = Controller.alloc_pin(pin, INPUT)
+		return 1	
 
 # Read analog value from Pin
 def analogRead(pin):
