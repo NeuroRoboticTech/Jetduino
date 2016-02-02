@@ -52,6 +52,8 @@ import time
 import math
 import struct
 import sys
+import pin_mappings
+from sysfs.gpio import Controller, OUTPUT, INPUT, RISING
 
 debug =0
 
@@ -161,7 +163,6 @@ unused = 0
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
 
-
 # Write I2C block
 def write_i2c_block(address, block):
 	try:
@@ -192,6 +193,7 @@ def read_i2c_block(address):
 
 # Arduino Digital Read
 def digitalRead(pin):
+
 	write_i2c_block(address, dRead_cmd + [pin, unused, unused])
 	time.sleep(.1)
 	n = read_i2c_byte(address)
