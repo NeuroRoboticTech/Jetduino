@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 #
-# GrovePi library for the basic functions of Grove 96x96 OLED (http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html)
+# Jetduino library for the basic functions of Grove 96x96 OLED (http://www.seeedstudio.com/depot/Grove-OLED-Display-096-p-824.html)
 # v1.0
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 # LICENSE: 
 # These files have been made available online through a [Creative Commons Attribution-ShareAlike 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.
 #
 # Karan Nayan
+# David Cofer
 # Initial Date: 5 Mar 2014
-# Last Updated: 5 Mar 2014
+# Last Updated: 1 Feb 2016
 #
 # Based on the Arduino library "SeeedGrayOLED.cpp - SSD1327 Gray OLED Driver Library"
 # Seeed Technology Inc.
@@ -25,6 +26,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,14 +52,12 @@ THE SOFTWARE.
 import smbus
 import time
 import math
-import RPi.GPIO as GPIO
 import struct
 
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
+
 grayH= 0xF0
 grayL= 0x0F
 

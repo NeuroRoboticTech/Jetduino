@@ -42,12 +42,9 @@ THE SOFTWARE.
 import time,sys
 import smbus
 
-# use the bus that matches your raspi version
-rev = 3
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
 
 class grove_fingerclip_heart_sensor:
 	address = 0x50

@@ -47,12 +47,9 @@ THE SOFTWARE.
 import smbus
 import time
 
-
-rev = 3
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
 
 HP20X_I2C_DEV_ID = 0x76     # Barometer device address
 
