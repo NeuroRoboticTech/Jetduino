@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove - LCD RGB Backlight (http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
+# Jetduino Example for using the Grove - LCD RGB Backlight (http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,19 +42,15 @@ THE SOFTWARE.
 # 	Doesn't support anything clever, cursors or anything
 
 import time,sys
-import RPi.GPIO as GPIO
 import smbus
 
 # this device has two I2C addresses
 DISPLAY_RGB_ADDR = 0x62
 DISPLAY_TEXT_ADDR = 0x3e
 
-# use the bus that matches your raspi version
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
 
 # set backlight to (R,G,B) (values from 0..255 for each)
 def setRGB(r,g,b):

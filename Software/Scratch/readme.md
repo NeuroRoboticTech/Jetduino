@@ -1,9 +1,9 @@
-# Program the GrovePi in Scratch
+# Program the Jetduino in Scratch
 
-You can program the GrovePi in Scratch.  This repo contains support programs and example programs to help you program the [GrovePi](http://www.dexterindustries.com/GrovePi) in Scratch.
+You can program the Jetduino in Scratch.  This repo contains support programs and example programs to help you program the [Jetduino](http://www.NeuroRoboticTech.com/Projects/Jetduino ) in Scratch.
 
 ## Getting Started Examples
-Please see our Examples folder for examples on how to get started with programming the GrovePi in Scratch!
+Please see our Examples folder for examples on how to get started with programming the Jetduino in Scratch!
 
 Here are a list of example commands.
 ![Scratch Functions](scratch_functions.png "Overview of functions in Scratch.")
@@ -16,6 +16,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
