@@ -45,7 +45,10 @@ import jetduino
 
 # Connect the Grove Sound Sensor to analog port A0
 # SIG,NC,VCC,GND
-sound_sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+sound_sensor = 54		# Pin 54 is A0 Port.
 
 # Connect the Grove LED to digital port D5
 # SIG,NC,VCC,GND

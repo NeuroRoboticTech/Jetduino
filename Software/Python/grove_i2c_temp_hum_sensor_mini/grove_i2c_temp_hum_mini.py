@@ -43,8 +43,8 @@ import time,sys
 import smbus
 
 debug = 0
-bus = smbus.SMBus(0) #GEN1_I2C
-#bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
 #bus = smbus.SMBus(4) #PWR_I2C
 
 class th02:

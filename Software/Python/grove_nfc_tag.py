@@ -45,12 +45,9 @@ import smbus
 
 NFC_ADDR = 0x53
 
-# Jetduino is always version 3
-rev = 3
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
     
 # read data from the NFC tag EEPROM (length bytes)
 def readNFCData(addr,length):

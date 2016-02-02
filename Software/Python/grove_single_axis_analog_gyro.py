@@ -41,7 +41,10 @@ import jetduino
 
 # Connect the Grove Single Axis Analog Gyro to analog port A0
 # SIG,NC,VCC,GND
-sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+sensor = 54		# Pin 54 is A0 Port.
 
 jetduino.pinMode(sensor,"INPUT")
 

@@ -42,7 +42,10 @@ import jetduino
 
 # Connect the Grove Slide Potentiometer to analog port A0
 # OUT,LED,VCC,GND
-slide = 0   # pin 1 (yellow wire)
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+slide = 54		# Pin 54 is A0 Port.
 
 # The device has an onboard LED accessible as pin 2 on port A0
 # OUT,LED,VCC,GND

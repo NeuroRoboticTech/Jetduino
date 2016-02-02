@@ -51,8 +51,12 @@ import jetduino
 
 # Uses two pins - one for the X axis and one for the Y axis
 # This configuration means you are using port A0
-xPin = 0
-yPin = 1
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+xPin = 54		# Pin 54 is A0 Port.
+yPin = 56
+
 jetduino.pinMode(xPin,"INPUT")
 jetduino.pinMode(yPin,"INPUT")
 
