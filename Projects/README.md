@@ -1,27 +1,27 @@
-## **GrovePi Projects Readme**
+## **Jetduino Projects Readme**
 
 
-- **Advanced_RGB_LCD_TempAndHumidity**: Changes the color of the RGB color LCD depending on the temperature. (Works with the GrovePi starter kit)
+- **Advanced_RGB_LCD_TempAndHumidity**: Changes the color of the RGB color LCD depending on the temperature. (Works with the Jetduino starter kit)
 
-- **Button_And_Buzzer**: The buzzer makes a sound when the button is pressed. (Works with the GrovePi starter kit)
+- **Button_And_Buzzer**: The buzzer makes a sound when the button is pressed. (Works with the Jetduino starter kit)
 
 - **home_temp_humi_display**: Shows the temperature and humidity on Grove I2C OLED.
 
-- **Home_Weather_Display**: Shows the temperature and humidity on Grove RGB LCD. (Works with the GrovePi starter kit)
+- **Home_Weather_Display**: Shows the temperature and humidity on Grove RGB LCD. (Works with the Jetduino starter kit)
 
-- **IOT**: Plots the data from various grove sensors on Xively. (Works with the GrovePi starter kit)
+- **IOT**: Plots the data from various grove sensors on Xively. (Works with the Jetduino starter kit)
 
-- **LED Fade**: Changed the brightness of a LED from the value read from a potentiometer.(Works with the GrovePi starter kit)
+- **LED Fade**: Changed the brightness of a LED from the value read from a potentiometer.(Works with the Jetduino starter kit)
 
 - **OLED_Weather Display**: Fetch the live weather data from the internet and print on the OLED display
 
 - **OLED_Weather Station**: Get weather data from the internet and the DHT sensor and print on the OLED
 
-- **Open_Wifi_Finder**: Finds open WiFi networks and prints on the Grove RGB LCD. (Works with the GrovePi starter kit)
+- **Open_Wifi_Finder**: Finds open WiFi networks and prints on the Grove RGB LCD. (Works with the Jetduino starter kit)
 
-- **rain_notifier**: Get rain data from the internet and blink a LED if it'g going to rain. (Works with the GrovePi starter kit)
+- **rain_notifier**: Get rain data from the internet and blink a LED if it'g going to rain. (Works with the Jetduino starter kit)
 
-- **Sensor_Twitter_Feed**: Get Sensor data from GrovePi sensors and post the data on twitter. (Works with the GrovePi starter kit)
+- **Sensor_Twitter_Feed**: Get Sensor data from Jetduino sensors and post the data on twitter. (Works with the Jetduino starter kit)
 
 - **tilt_buzzer**: Turn the buzzer on/off deping on the values read from the accelerometer
 
@@ -31,7 +31,7 @@
 
 - **CO2_sensor**: Read the data from the CO2 Sensor and print it in the terminal
 
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
+See more at the [Jetduino Site](http://www.NeuroRoboticTech.com/Projects/Jetduino)
 
 ## License
 .
@@ -39,6 +39,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
