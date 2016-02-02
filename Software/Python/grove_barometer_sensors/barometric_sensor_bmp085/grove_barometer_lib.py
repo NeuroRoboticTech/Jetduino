@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # #######################################################################
-# This library is for using the Grove Barometer module with he GrovePi
-# http://www.dexterindustries.com/GrovePi/
+# This library is for using the Grove Barometer module with the Jetduino
+# http://www.NeuroRoboticTech.com/Projects/Jetduino
 # Barometer module: http://www.seeedstudio.com/depot/Grove-Barometer-HighAccuracy-p-1865.html
 #
 # History
@@ -9,6 +9,7 @@
 # Author    Date      		Comments
 # Bill      26.07.2014   	Initial Port to Python
 # Guruth    29.08.2014      Clean up and put to usable libary
+# Cofer     01.02.2016      Modified for use with the Jetduino
 #
 # Re-written from: https://github.com/Seeed-Studio/Grove_Barometer_HP20x
 # Refer to the datasheet to add additional functionality http://www.seeedstudio.com/wiki/images/d/d8/HP206C_Datasheet.pdf
@@ -20,6 +21,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,14 +46,10 @@ THE SOFTWARE.
 
 import smbus
 import time
-import RPi.GPIO as GPIO
 
-
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
 
 HP20X_I2C_DEV_ID = 0x76     # Barometer device address
 

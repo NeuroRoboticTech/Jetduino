@@ -1,10 +1,10 @@
 #!/usr/bin/python #!/usr/bin/env python
 #
-# GrovePi Python Setup
+# Jetduino Python Setup
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,13 +35,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-# To install the GrovePi library systemwide, use: sudo python setup.py install
+# To install the Jetduino library systemwide, use: sudo python setup.py install
 import setuptools
 setuptools.setup(
-	name="grovepi",
-	description="Drivers and examples for using the GrovePi in Python",
-	author="Dexter Industries",
-	url="http://www.dexterindustries.com/GrovePi/",
-	py_modules=['grovepi'],
+	name="jetduino",
+	description="Drivers and examples for using the Jetduino in Python",
+	author="NeuroRobotic Technologies",
+	url="http://www.NeuroRoboticTech.com/Projects/Jetduino/",
+	py_modules=['jetduino'],
 	#install_requires=open('requirements.txt').readlines(),
 )

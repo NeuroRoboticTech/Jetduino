@@ -42,7 +42,10 @@ import jetduino
 
 # Connect the Grove 80cm Infrared Proximity Sensor to analog port A0
 # SIG,NC,VCC,GND
-sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+sensor = 54		# Pin 54 is A0 Port.
 
 jetduino.pinMode(sensor,"INPUT")
 time.sleep(1)

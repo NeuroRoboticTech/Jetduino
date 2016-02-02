@@ -1,11 +1,11 @@
-Scratch examples for GrovePi
+Scratch examples for Jetduino
 ============================
 
-These are simple examples meant to illustrate how you can access GrovePi features through Scratch. 
+These are simple examples meant to illustrate how you can access Jetduino features through Scratch. 
 
 ## 1. Simple LED: led_on_port_7 :
 
-Plug any GrovePi LED onto Port 7 and run this Scratch script.
+Plug any Jetduino LED onto Port 7 and run this Scratch script.
 
 Click on the LED (on the screen) to control the physical LED
 

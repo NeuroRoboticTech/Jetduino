@@ -76,7 +76,6 @@
 import time
 import smbus
 from Adafruit_I2C import Adafruit_I2C
-import RPi.GPIO as GPIO
 #import grovepi
 from smbus import SMBus
 
@@ -114,11 +113,9 @@ global _LUX
 
 
 # bus parameters
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    I2C_SMBUS = smbus.SMBus(1)
-else:
-    I2C_SMBUS = smbus.SMBus(0)
+#I2C_SMBUS = smbus.SMBus(0) #GEN1_I2C
+I2C_SMBUS = smbus.SMBus(1) #GEN2_I2C
+#I2C_SMBUS = smbus.SMBus(4) #PWR_I2C
 
 # Default I2C address
 I2C_ADDRESS = 0x29

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Sound Sensor and the Grove LED
+# Jetduino Example for using the Grove Sound Sensor and the Grove LED
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
 # Modules:
 #	 http://www.seeedstudio.com/wiki/Grove_-_Sound_Sensor
 #	 http://www.seeedstudio.com/wiki/Grove_-_LED_Socket_Kit
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -17,6 +17,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,18 +41,21 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Sound Sensor to analog port A0
 # SIG,NC,VCC,GND
-sound_sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+sound_sensor = 54		# Pin 54 is A0 Port.
 
 # Connect the Grove LED to digital port D5
 # SIG,NC,VCC,GND
 led = 5
 
-grovepi.pinMode(sound_sensor,"INPUT")
-grovepi.pinMode(led,"OUTPUT")
+jetduino.pinMode(sound_sensor,"INPUT")
+jetduino.pinMode(led,"OUTPUT")
 
 # The threshold to turn the led on 400.00 * 5 / 1024 = 1.95v
 threshold_value = 400
@@ -57,13 +63,13 @@ threshold_value = 400
 while True:
     try:
         # Read the sound level
-        sensor_value = grovepi.analogRead(sound_sensor)
+        sensor_value = jetduino.analogRead(sound_sensor)
 
         # If loud, illuminate LED, otherwise dim
         if sensor_value > threshold_value:
-            grovepi.digitalWrite(led,1)
+            jetduino.digitalWrite(led,1)
         else:
-            grovepi.digitalWrite(led,0)
+            jetduino.digitalWrite(led,0)
 
         print ("sensor_value =", sensor_value)
         time.sleep(.5)

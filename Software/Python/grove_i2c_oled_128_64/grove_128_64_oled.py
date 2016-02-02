@@ -54,8 +54,8 @@ import time
 import math
 import struct
 
-bus = smbus.SMBus(0) #GEN1_I2C
-#bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
 #bus = smbus.SMBus(4) #PWR_I2C
 
 address=0x3c

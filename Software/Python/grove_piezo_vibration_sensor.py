@@ -42,7 +42,10 @@ import jetduino
 
 # Connect the Grove Piezo Vibration Sensor to analog port A0
 # OUT,NC,VCC,GND
-piezo = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+piezo = 54		# Pin 54 is A0 Port.
 
 jetduino.pinMode(piezo,"INPUT")
 

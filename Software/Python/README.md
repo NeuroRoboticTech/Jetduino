@@ -1,10 +1,10 @@
-GrovePi
+Jetduino
 =======
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Jetduino is an open source platform for connecting Grove Sensors to the Jetson TK1 and TX1 embedded supercomputers.
 
-See more at the [GrovePi Site](http://dexterindustries.com/GrovePi/)
-[Dexter Industries](http://www.dexterindustries.com)
+See more at the [Jetduino Site](http://www.NeuroRoboticTech.com/Projects/Jetduino)
+[NeuroRobotic Technologies](http://www.NeuroRoboticTech.com)
 
 ## License
 
@@ -12,6 +12,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

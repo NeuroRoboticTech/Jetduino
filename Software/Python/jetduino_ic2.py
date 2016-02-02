@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-# GrovePi Basic I2C comms Example
+# Jetduino Basic I2C comms Example
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,14 +39,10 @@ THE SOFTWARE.
 import smbus
 import time
 import grovepi
-import RPi.GPIO as GPIO
 
-# use the bus that matches your raspi version
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
 
 # This is the address we setup in the Arduino Program
 address = 0x04
@@ -58,9 +57,9 @@ def readNumber():
     # number = bus.read_byte_data(address, 1)
     return number
 
-#grovepi.pinMode(7,"INPUT")
+#jetduino.pinMode(7,"INPUT")
 time.sleep(1)
 i=0
 while True:
-    print (grovepi.analogRead(0))
+    print (jetduino.analogRead(0))
     time.sleep(1)

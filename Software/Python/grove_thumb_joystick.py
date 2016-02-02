@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Thumb Joystick (http://www.seeedstudio.com/wiki/Grove_-_Thumb_Joystick)
+# Jetduino Example for using the Grove Thumb Joystick (http://www.seeedstudio.com/wiki/Grove_-_Thumb_Joystick)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +37,7 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Thumb Joystick to analog port A0
 
@@ -48,10 +51,14 @@ import grovepi
 
 # Uses two pins - one for the X axis and one for the Y axis
 # This configuration means you are using port A0
-xPin = 0
-yPin = 1
-grovepi.pinMode(xPin,"INPUT")
-grovepi.pinMode(yPin,"INPUT")
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+xPin = 54		# Pin 54 is A0 Port.
+yPin = 56
+
+jetduino.pinMode(xPin,"INPUT")
+jetduino.pinMode(yPin,"INPUT")
 
 # The Grove Thumb Joystick is an analog device that outputs analog signal ranging from 0 to 1023
 # The X and Y axes are two ~10k potentiometers and a momentary push button which shorts the x axis
@@ -72,8 +79,8 @@ grovepi.pinMode(yPin,"INPUT")
 while True:
     try:
         # Get X/Y coordinates
-        x = grovepi.analogRead(xPin)
-        y = grovepi.analogRead(yPin)
+        x = jetduino.analogRead(xPin)
+        y = jetduino.analogRead(yPin)
 
         # Calculate X/Y resistance
         Rx = (float)(1023 - x) * 10 / x

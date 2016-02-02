@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Slide Potentiometer (http://www.seeedstudio.com/wiki/Grove_-_Slide_Potentiometer)
+# Jetduino Example for using the Grove Slide Potentiometer (http://www.seeedstudio.com/wiki/Grove_-_Slide_Potentiometer)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 
 '''
@@ -14,6 +14,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,30 +38,33 @@ THE SOFTWARE.
 '''
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Slide Potentiometer to analog port A0
 # OUT,LED,VCC,GND
-slide = 0   # pin 1 (yellow wire)
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+slide = 54		# Pin 54 is A0 Port.
 
 # The device has an onboard LED accessible as pin 2 on port A0
 # OUT,LED,VCC,GND
 led = 1     # pin 2 (white wire)
 
-grovepi.pinMode(slide,"INPUT")
-grovepi.pinMode(led,"OUTPUT")
+jetduino.pinMode(slide,"INPUT")
+jetduino.pinMode(led,"OUTPUT")
 time.sleep(1)
 
 while True:
     try:
         # Read sensor value from potentiometer
-        sensor_value = grovepi.analogRead(slide)
+        sensor_value = jetduino.analogRead(slide)
 
         # Illuminate onboard LED
         if sensor_value > 500:
-            grovepi.digitalWrite(led,1)
+            jetduino.digitalWrite(led,1)
         else:
-            grovepi.digitalWrite(led,0)
+            jetduino.digitalWrite(led,0)
 
         print ("sensor_value =", sensor_value)
 

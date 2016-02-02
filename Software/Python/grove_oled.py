@@ -47,14 +47,12 @@ THE SOFTWARE.
 import smbus
 import time
 import math
-import RPi.GPIO as GPIO
 import struct
 
-rev = GPIO.RPI_REVISION
-if rev == 2 or rev == 3:
-    bus = smbus.SMBus(1)
-else:
-    bus = smbus.SMBus(0)
+#bus = smbus.SMBus(0) #GEN1_I2C
+bus = smbus.SMBus(1) #GEN2_I2C
+#bus = smbus.SMBus(4) #PWR_I2C
+
 grayH= 0xF0
 grayL= 0x0F
 

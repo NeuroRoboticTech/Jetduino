@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include "MMA7660.h"
 #include "DS1307.h"
-//#include "DHT.h"
+#include "DHT.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
 #include "ChainableLED.h"
@@ -10,8 +10,8 @@
 //#include "TimerOne.h"
 
 MMA7660 acc;
-//DS1307 clock;
-//DHT dht;
+DS1307 ds_clock;
+DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];   // 7 instances for D2-D8
@@ -73,7 +73,7 @@ void setup()
 
     Wire.onReceive(receiveData);
     Wire.onRequest(sendData);
-	  //attachInterrupt(0,readPulseDust,CHANGE);
+	  attachInterrupt(0,readPulseDust,CHANGE);
 
     Serial.println("Finished Setup");
 }
@@ -194,34 +194,33 @@ void loop()
     }
     //RTC tine read
     else if(cmd[0]==30)
-    {/*
+    {
       if(clkFlag==0)
       {
-        clock.begin();
+        ds_clock.begin();
         //Set time the first time
-        //clock.fillByYMD(2013,1,19);
-        //clock.fillByHMS(15,28,30);//15:28 30"
-        //clock.fillDayOfWeek(SAT);//Saturday
-        //clock.setTime();//write time to the RTC chip
+        //ds_clock.fillByYMD(2013,1,19);
+        //ds_clock.fillByHMS(15,28,30);//15:28 30"
+        //ds_clock.fillDayOfWeek(SAT);//Saturday
+        //ds_clock.setTime();//write time to the RTC chip
         clkFlag=1;
       }
-      clock.getTime();
-      b[1]=clock.hour;
-      b[2]=clock.minute;
-      b[3]=clock.second;
-      b[4]=clock.month;
-      b[5]=clock.dayOfMonth;
-      b[6]=clock.year;
-      b[7]=clock.dayOfMonth;
-      b[8]=clock.dayOfWeek;
-      */
+      ds_clock.getTime();
+      b[1]=ds_clock.hour;
+      b[2]=ds_clock.minute;
+      b[3]=ds_clock.second;
+      b[4]=ds_clock.month;
+      b[5]=ds_clock.dayOfMonth;
+      b[6]=ds_clock.year;
+      b[7]=ds_clock.dayOfMonth;
+      b[8]=ds_clock.dayOfWeek;
     }
     //Grove temp and humidity sensor pro
     //40- Temperature
     else if(cmd[0]==40)
     {
 		if(run_once)
-		{/*
+		{
 			if(cmd[2]==0)
 			dht.begin(cmd[1],DHT11);
 			else if(cmd[2]==1)
@@ -241,7 +240,6 @@ void loop()
 			for(j=4;j<8;j++)
 			dht_b[j+1]=b2[j-4];
 			run_once=0;
-     */
 		}
     }
 

@@ -56,7 +56,10 @@ import jetduino
 
 # Connect the Grove Gas Sensor to analog port A0
 # SIG,NC,VCC,GND
-gas_sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+gas_sensor = 54		# Pin 54 is A0 Port.
 
 jetduino.pinMode(gas_sensor,"INPUT")
 

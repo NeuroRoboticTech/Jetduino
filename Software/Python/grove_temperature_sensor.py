@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #
-# GrovePi Example for using the Grove Temperature Sensor (http://www.seeedstudio.com/wiki/Grove_-_Temperature_Sensor)
+# Jetduino Example for using the Grove Temperature Sensor (http://www.seeedstudio.com/wiki/Grove_-_Temperature_Sensor)
 #
-# The GrovePi connects the Raspberry Pi and Grove sensors.  You can learn more about GrovePi here:  http://www.dexterindustries.com/GrovePi
+# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
-# Have a question about this example?  Ask on the forums here:  http://www.dexterindustries.com/forum/?forum=grovepi
+# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 #
 '''
 ## License
@@ -13,6 +13,9 @@ The MIT License (MIT)
 
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
+
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,14 +42,14 @@ THE SOFTWARE.
 # 	There are 3 revisions 1.0, 1.1 and 1.2, each using a different model thermistor.
 # 	Each thermistor datasheet specifies a unique Nominal B-Constant which is used in the calculation forumla.
 #	
-# 	The second argument in the grovepi.temp() method defines which board version you have connected.
+# 	The second argument in the jetduino.temp() method defines which board version you have connected.
 # 	Defaults to '1.0'. eg.
-# 		temp = grovepi.temp(sensor)        # B value = 3975
-# 		temp = grovepi.temp(sensor,'1.1')  # B value = 4250
-# 		temp = grovepi.temp(sensor,'1.2')  # B value = 4250
+# 		temp = jetduino.temp(sensor)        # B value = 3975
+# 		temp = jetduino.temp(sensor,'1.1')  # B value = 4250
+# 		temp = jetduino.temp(sensor,'1.2')  # B value = 4250
 
 import time
-import grovepi
+import jetduino
 
 # Connect the Grove Temperature Sensor to analog port A0
 # SIG,NC,VCC,GND
@@ -54,7 +57,7 @@ sensor = 0
 
 while True:
     try:
-        temp = grovepi.temp(sensor,'1.1')
+        temp = jetduino.temp(sensor,'1.1')
         print ("temp =", temp)
         time.sleep(.5)
 

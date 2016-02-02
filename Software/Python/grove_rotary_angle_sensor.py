@@ -45,7 +45,10 @@ import jetduino
 
 # Connect the Grove Rotary Angle Sensor to analog port A0
 # SIG,NC,VCC,GND
-potentiometer = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65
+potentiometer = 54		# Pin 54 is A0 Port.
 
 # Connect the LED to digital port D5
 # SIG,NC,VCC,GND

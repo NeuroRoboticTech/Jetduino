@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 # USAGE
 #
-# Connect the grove encoder to D2 on the GrovePi.
+# Connect the grove encoder to D2 on the Jetduino.
 # the fist byte is 1 for a new value and 0 for old values
 # second byte is encoder positon from 1 to 24
 

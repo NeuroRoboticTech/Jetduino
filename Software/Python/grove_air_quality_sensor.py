@@ -44,7 +44,10 @@ import jetduino
 
 # Connect the Grove Air Quality Sensor to analog port A0
 # SIG,NC,VCC,GND
-air_sensor = 0
+
+#See Software/Readme.md for more pin details.
+#Sensor connected to A0 Port.  A0 => 54, A11 => 65 
+air_sensor = 54		# Pin 54 is A0 Port.
 
 jetduino.pinMode(air_sensor,"INPUT")
 
