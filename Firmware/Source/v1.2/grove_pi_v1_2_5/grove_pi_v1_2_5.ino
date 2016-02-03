@@ -8,6 +8,7 @@
 //#include "IRSendRev.h"
 //#include "Encoder.h"
 //#include "TimerOne.h"
+#include <Servo.h> 
 
 MMA7660 acc;
 DS1307 ds_clock;
@@ -16,19 +17,74 @@ Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
 ChainableLED rgbled[6];   // 7 instances for D2-D8
 
-#define SLAVE_ADDRESS 0x03
+#define SLAVE_ADDRESS 0x04
 
-#define dust_sensor_read_cmd    10
-#define dust_sensor_en_cmd		14
-#define dust_sensor_dis_cmd		15
+//Command Values
+#define CMD_DIGITAL_READ         1
+#define CMD_DIGITAL_WRITE        2
+#define CMD_ANALOG_READ          3
+#define CMD_ANALOG_WRITE         4
+#define CMD_PIN_MODE             5
 
-#define encoder_read_cmd        11
-#define encoder_en_cmd			16
-#define encoder_dis_cmd			17
+#define CMD_ULTRASONIC_READ      7
+#define CMD_FIRMWARE_VERSION     8
 
-#define flow_read_cmd           12
-#define flow_en_cmd				18
-#define flow_dis_cmd       		13
+#define CMD_DUST_SENSOR_READ     10
+#define CMD_ENCODER_READ         11
+#define CMD_FLOW_READ            12
+#define CMD_FLOW_DIS             13
+#define CMD_DUST_SENSOR_EN       14
+#define CMD_DUST_SENSOR_DIS      15
+#define CMD_ENCODER_EN           16
+#define CMD_ENCODER_DIS          17
+#define CMD_FLOW_EN              18
+
+#define CMD_ACCEl_XYZ_READ       20
+#define CMD_IR_RECV              21
+#define CMD_IR_RECV_PIN_SET      22
+
+#define CMD_RTC_TIME_READ        30
+
+#define CMD_SERVO_ATTACH         35
+#define CMD_SERVO_DETACH         35
+#define CMD_SERVO_WRITE          36
+#define CMD_SERVO_READ           37
+
+#define CMD_TEMP_HUMIDITY_READ   40
+
+#define CMD_LED_BAR_INIT         50
+#define CMD_LED_BAR_SET_GTOR     51
+#define CMD_LED_BAR_SET_LEVEL    52
+#define CMD_LED_BAR_SET_LED      53
+#define CMD_LED_BAR_TOGGLE_LED   54
+#define CMD_LED_BAR_SET_STATE    55
+#define CMD_LED_BAR_RET_STATE    56
+
+#define CMD_4D_INIT              70
+#define CMD_4D_SET_BRIGHT        71
+#define CMD_4D_VAL_W_ZERO        72
+#define CMD_4D_VAL_WO_ZERO       73
+#define CMD_4D_SET_DIGIT         74
+#define CMD_4D_SET_SEGMENT       75
+#define CMD_4D_SET_COLON         76
+#define CMD_4D_ANALOG_READ       77
+#define CMD_4D_DISPLAY_ON        78
+#define CMD_4D_DISPLAY_OFF       79
+
+#define CMD_CLED_STORE_COLOR     90
+#define CMD_CLED_INIT_CHAIN      91
+#define CMD_CLED_INIT_SET_TEST   92
+#define CMD_CLED_SET_PATTERN     93
+#define CMD_CLED_SET_MODULO      94
+#define CMD_CLED_SET_lEVEL       95
+
+//Servo pin numbers start at 2, but array starts at 0
+#define SERVO_PIN_OFFSET 2
+
+//Array of pointers to servos 
+//used for attaching with and controlling servos.
+Servo *servos[11];
+int servoRead = 0;
 
 int cmd[5];
 int idx=0;
@@ -65,6 +121,7 @@ int flow_run_bk=0;
 long flow_read_start;
 byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
 
+
 void setup()
 {
     Serial.begin(57600);         // start serial for output
@@ -86,12 +143,12 @@ void loop()
   {
     flag=1;
     //IR reciever pin set command
-    if(cmd[0]==22) 
+    if(cmd[0]==CMD_IR_RECV_PIN_SET) 
     {
        //IR.Init(cmd[1]);
     }    
     //Grove IR recieve command
-    else if(cmd[0]==21)
+    else if(cmd[0]==CMD_IR_RECV)
     {/*
         if(IR.IsDta())
         {
@@ -104,7 +161,7 @@ void loop()
     }
     
     //Digital Read
-    else if(cmd[0]==1)
+    else if(cmd[0]==CMD_DIGITAL_READ)
     {
       val=digitalRead(cmd[1]);
 
@@ -114,11 +171,11 @@ void loop()
       //Serial.println(val);
     }
     //Digital Write
-    else if(cmd[0]==2)
+    else if(cmd[0]==CMD_DIGITAL_WRITE)
       digitalWrite(cmd[1],cmd[2]);
 
     //Analog Read
-    else if(cmd[0]==3)
+    else if(cmd[0]==CMD_ANALOG_READ)
     {
       aRead=analogRead(cmd[1]);
       b[1]=aRead/256;
@@ -131,21 +188,18 @@ void loop()
     }
 
     //Set up Analog Write
-    else if(cmd[0]==4)
+    else if(cmd[0]==CMD_ANALOG_WRITE && run_once)
     {
-      if(run_once)
-      {
-        analogWrite(cmd[1],cmd[2]);
+      analogWrite(cmd[1],cmd[2]);
 
-        //Serial.print("Analog Write. Pin: ");
-        //Serial.print(cmd[1]);
-        //Serial.print(", Value: ");
-        //Serial.println(cmd[2]);
-        run_once = false;
-      }
+      //Serial.print("Analog Write. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", Value: ");
+      //Serial.println(cmd[2]);
+      run_once = false;
     }
     //Set up pinMode
-    else if(cmd[0]==5)
+    else if(cmd[0]==CMD_PIN_MODE)
     {
       pinMode(cmd[1],cmd[2]);
       
@@ -155,7 +209,7 @@ void loop()
       //Serial.println(cmd[2]);
     }
     //Ultrasonic Read
-    else if(cmd[0]==7)
+    else if(cmd[0]==CMD_ULTRASONIC_READ)
     {
       pin=cmd[1];
       pinMode(pin, OUTPUT);
@@ -173,14 +227,14 @@ void loop()
       //Serial.println(b[2]);
     }
     //Firmware version
-    else if(cmd[0]==8)
+    else if(cmd[0]==CMD_FIRMWARE_VERSION)
     {
       b[1] = 1;
       b[2] = 2;
       b[3] = 5;
     }
     //Accelerometer x,y,z, read
-    else if(cmd[0]==20)
+    else if(cmd[0]==CMD_ACCEl_XYZ_READ)
     {
       if(accFlag==0)
       {
@@ -193,7 +247,7 @@ void loop()
       b[3]=accv[2];
     }
     //RTC tine read
-    else if(cmd[0]==30)
+    else if(cmd[0]==CMD_RTC_TIME_READ)
     {
       if(clkFlag==0)
       {
@@ -215,9 +269,82 @@ void loop()
       b[7]=ds_clock.dayOfMonth;
       b[8]=ds_clock.dayOfWeek;
     }
+    else if(cmd[0]==CMD_SERVO_ATTACH && run_once)
+    {
+      //Servo pins on Due are offset by 2
+      int pin = cmd[1];
+      int pin_idx = pin-SERVO_PIN_OFFSET; 
+
+      Serial.print("Servo Attach. Pin: ");
+      Serial.println(pin);
+
+      if(servos[pin_idx] == nullptr) {
+        servos[pin_idx] = new Servo;
+      }
+
+      servos[pin_idx]->attach(pin);
+      run_once = false;
+    }
+    else if(cmd[0]==CMD_SERVO_DETACH && run_once)
+    {
+      //Servo pins on Due are offset by 2
+      int pin = cmd[1];
+      int pin_idx = pin-SERVO_PIN_OFFSET; 
+
+      Serial.print("Servo Detach. Pin: ");
+      Serial.println(pin);
+      
+      if(servos[pin_idx] != nullptr) {
+        servos[pin_idx]->detach();
+
+        //delete the servo
+        delete servos[pin_idx];
+        servos[pin_idx] = nullptr;
+      }
+
+      run_once = false;    
+    }
+    else if(cmd[0]==CMD_SERVO_WRITE && run_once)
+    {
+      //Servo pins on Due are offset by 2
+      int pin = cmd[1];
+      int pin_idx = pin-SERVO_PIN_OFFSET; 
+      int angle = (b[1] << 8) +b[2];
+
+      Serial.print("Servo Write. Pin: ");
+      Serial.print(pin);
+      Serial.print(", Angle: ");
+      Serial.println(angle);
+
+      if(servos[pin_idx] != nullptr) {
+        servos[pin_idx]->write(angle);
+      }
+
+      run_once = false;    
+    }
+    else if(cmd[0]==CMD_SERVO_READ && run_once)
+    {
+      //Servo pins on Due are offset by 2
+      int pin = cmd[1];
+      int pin_idx = pin-SERVO_PIN_OFFSET; 
+
+      Serial.print("Servo Read. Pin: ");
+      Serial.print(pin);
+
+      if(servos[pin_idx] != nullptr) {
+        servoRead = servos[pin_idx]->read();
+        b[1]=servoRead/256;
+        b[2]=servoRead%256;
+      }
+
+      Serial.print(", Angle: ");
+      Serial.println(servoRead);
+
+      run_once = false;    
+    }
     //Grove temp and humidity sensor pro
     //40- Temperature
-    else if(cmd[0]==40)
+    else if(cmd[0]==CMD_TEMP_HUMIDITY_READ)
     {
 		if(run_once)
 		{
@@ -258,7 +385,7 @@ void loop()
 
     // Initialise
     // [50, pin, orientation, unused]
-    else if(cmd[0] == 50)
+    else if(cmd[0] == CMD_LED_BAR_INIT)
     {
       // clock pin is always next to the data pin
       ledbar[cmd[1]-2].begin(cmd[1]+1, cmd[1], cmd[2]); // clock, data, orientation
@@ -267,7 +394,7 @@ void loop()
     // Change the orientation
     // Green to red, or red to green
     // [51, pin, greenToRed, unused]
-    else if(cmd[0] == 51 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_SET_GTOR && ledbar[cmd[1]-2].ready())
     {
       ledbar[cmd[1]-2].setGreenToRed(cmd[2]);
     }
@@ -276,7 +403,7 @@ void loop()
     // Level 0 means all leds off
     // Level 10 means all leds on
     // [52, pin, level, unused]
-    else if(cmd[0] == 52 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_SET_LEVEL && ledbar[cmd[1]-2].ready())
     {
       ledbar[cmd[1]-2].setLevel(cmd[2]);
     }
@@ -285,7 +412,7 @@ void loop()
     // led (1-10)
     // state (0=off, 1=on)
     // [53, pin, led, state]
-    else if(cmd[0] == 53 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_SET_LED && ledbar[cmd[1]-2].ready())
     {
       ledbar[cmd[1]-2].setLed(cmd[2], cmd[3]);
     }
@@ -293,7 +420,7 @@ void loop()
     // Toggle a single led
     // led (1-10)
     // [54, pin, led, unused]
-    else if(cmd[0] == 54 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_TOGGLE_LED && ledbar[cmd[1]-2].ready())
     {
       ledbar[cmd[1]-2].toggleLed(cmd[2]);
     }
@@ -306,14 +433,14 @@ void loop()
     //                       |        |
     //                       10       1
     // [55, pin, bits 1-8, bits 9-10]
-    else if(cmd[0] == 55 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_SET_STATE && ledbar[cmd[1]-2].ready())
     {
       ledbar[cmd[1]-2].setBits(cmd[2] ^ (cmd[3] << 8));
     }
 
     // Return the current state
     // [56, pin, unused, unused]
-    else if(cmd[0] == 56 && ledbar[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_LED_BAR_RET_STATE && ledbar[cmd[1]-2].ready())
     {
       unsigned int state = ledbar[cmd[1]-2].getBits();
       b[1] = state & 0xFF;
@@ -340,7 +467,7 @@ void loop()
 
     // initialise a 4 digit display
     // [70, pin, unused, unused]
-    else if(cmd[0] == 70)
+    else if(cmd[0] == CMD_4D_INIT)
     {
       // clock pin is always next to the data pin
       fourdigit[cmd[1]-2].begin(cmd[1], cmd[1]+1);  // clock, data
@@ -348,28 +475,28 @@ void loop()
 
     // set brightness
     // [71, pin, brightness, unused]
-    else if(cmd[0] == 71 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_BRIGHT && fourdigit[cmd[1]-2].ready())
     {
       fourdigit[cmd[1]-2].setBrightness(cmd[2]);  // setBrightness(brightness)
     }
 
     // show right aligned decimal value without leading zeros
     // [72, pin, bits 1-8, bits 9-16]
-    else if(cmd[0] == 72 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_VAL_W_ZERO && fourdigit[cmd[1]-2].ready())
     {
       fourdigit[cmd[1]-2].showNumberDec(cmd[2] ^ (cmd[3] << 8), false);  // showNumberDec(number, leading_zero)
     }
 
     // show right aligned decimal value with leading zeros
     // [73, pin, bits 1-8, bits 9-16]
-    else if(cmd[0] == 73 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_VAL_WO_ZERO && fourdigit[cmd[1]-2].ready())
     {
       fourdigit[cmd[1]-2].showNumberDec(cmd[2] ^ (cmd[3] << 8), true);  // showNumberDec(number, leading_zero)
     }
 
     // set individual digit
     // [74, pin, index, dec]
-    else if(cmd[0] == 74 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_DIGIT && fourdigit[cmd[1]-2].ready())
     {
       uint8_t data[] = {};
       data[0] = fourdigit[cmd[1]-2].encodeDigit(cmd[3]);  // encodeDigit(number)
@@ -378,7 +505,7 @@ void loop()
 
     // set individual segment
     // [75, pin, index, binary]
-    else if(cmd[0] == 75 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_SEGMENT && fourdigit[cmd[1]-2].ready())
     {
       // 0xFF = 0b11111111 = Colon,G,F,E,D,C,B,A
       // Colon only works on 2nd segment (index 1)
@@ -394,7 +521,7 @@ void loop()
 
     // set left and right with colon separator
     // [76, pin, left, right]
-    else if(cmd[0] == 76 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_COLON && fourdigit[cmd[1]-2].ready())
     {
       uint8_t data[] = {};
       // 1st segment
@@ -413,7 +540,7 @@ void loop()
 
     // analog read
     // [77, pin, analog pin, seconds]
-    else if(cmd[0] == 77 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_ANALOG_READ && fourdigit[cmd[1]-2].ready())
     {
       int pin = cmd[2];
       int reads = 4 * cmd[3];  // 1000/250 * cmd[3]
@@ -427,7 +554,7 @@ void loop()
 
     // display on
     // [78, pin, unused, unused]
-    else if(cmd[0] == 78 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_DISPLAY_ON && fourdigit[cmd[1]-2].ready())
     {
       uint8_t data[] = { 0xFF, 0xFF, 0xFF, 0xFF };
       fourdigit[cmd[1]-2].setSegments(data, 4, 0);  // setSegments(segments[], length, position)
@@ -435,7 +562,7 @@ void loop()
 
     // display off
     // [79, pin, unused, unused]
-    else if(cmd[0] == 79 && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_DISPLAY_OFF && fourdigit[cmd[1]-2].ready())
     {
       uint8_t data[] = { 0x00, 0x00, 0x00, 0x00 };
       fourdigit[cmd[1]-2].setSegments(data, 4, 0);  // setSegments(segments[], length, position)
@@ -457,7 +584,7 @@ void loop()
 
     // Store RGB color for later use
     // [90, red, green, blue]
-    else if(cmd[0] == 90)
+    else if(cmd[0] == CMD_CLED_STORE_COLOR)
     {
       rgb[0] = cmd[1];
       rgb[1] = cmd[2];
@@ -466,7 +593,7 @@ void loop()
 
     // Initialise a RGB LED chain
     // [91, pin, num leds, unused]
-    else if(cmd[0] == 91)
+    else if(cmd[0] == CMD_CLED_INIT_CHAIN)
     {
       rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);  // clock, data, num leds
     }
@@ -474,7 +601,7 @@ void loop()
     // Test colors, repeating red green blue
     // color code: 0 black (off), 1 blue, 2 green, 3 cyan, 4 red, 5 magenta, 6 yellow, 7 white
     // [92, pin, num leds, color code]
-    else if(cmd[0] == 92)
+    else if(cmd[0] == CMD_CLED_INIT_SET_TEST)
     {
       rgbled[cmd[1]-2].begin(cmd[1], cmd[1]+1, cmd[2]);
       
@@ -494,7 +621,7 @@ void loop()
     // pattern: 0 = this led only, 1 all leds except this led, 2 this led and all leds inwards, 3 this led and all leds outwards
     // which led: 0 = led closest to the GrovePi, 1 = second led counting outwards
     // [93, pin, pattern, which led]
-    else if(cmd[0] == 93)
+    else if(cmd[0] == CMD_CLED_SET_PATTERN)
     {
       if(cmd[2] == 0) {
         // set an individual led to the stored color
@@ -520,7 +647,7 @@ void loop()
     // led offset: 0 = led closest to the GrovePi, counting outwards
     // modulo divisor: when 1 (default) sets stored color on all leds >= offset, when 2 sets every 2nd led >= offset and so on
     // [94, pin, led offset, modulo divisor]
-    else if(cmd[0] == 94)
+    else if(cmd[0] == CMD_CLED_SET_MODULO)
     {
       // modulo divisor must be >= 1
       if(cmd[3] < 1) {
@@ -542,7 +669,7 @@ void loop()
     
     // Set level (0 to num leds), counting outwards from the GrovePi, 0 = all off, 1 = first led, reversible to count inwards
     // [95, pin, level, reverse]
-    else if(cmd[0] == 95)
+    else if(cmd[0] == CMD_CLED_SET_lEVEL)
     {
       // get the chain length
       byte num_leds = rgbled[cmd[1]-2].getNumLeds();
@@ -573,20 +700,20 @@ void loop()
         }
       }
     }
-    else if(cmd[0]==dust_sensor_en_cmd)
+    else if(cmd[0]==CMD_DUST_SENSOR_EN)
 	{
 		attachInterrupt(0,readPulseDust,CHANGE);
 		dust_run_bk=1;
 		starttime=millis();
 		cmd[0]=0;
 	}
-	else if(cmd[0]==dust_sensor_dis_cmd)
+	else if(cmd[0]==CMD_DUST_SENSOR_DIS)
 	{
 		detachInterrupt(0);
 		dust_run_bk=0;
 		cmd[0]=0;
 	}
-	else if(cmd[0]==dust_sensor_read_cmd)
+	else if(cmd[0]==CMD_DUST_SENSOR_READ)
 	{
 		if(run_once==1)
 		{
@@ -598,18 +725,18 @@ void loop()
 		run_once=0;
 		}
 	}
-	else if(cmd[0]==encoder_en_cmd)
+	else if(cmd[0]==CMD_ENCODER_EN)
 	{
 		//encoder.Timer_init(); 
 		//enc_run_bk=1;
 		//cmd[0]=0;
 	}
-	else if(cmd[0]==encoder_dis_cmd)
+	else if(cmd[0]==CMD_ENCODER_DIS)
 	{
 		//encoder.Timer_disable();
 		//enc_run_bk=0;
 	}
-	else if(cmd[0]==flow_en_cmd)
+	else if(cmd[0]==CMD_FLOW_EN)
 	{
 		pinMode(2, INPUT); 
 		attachInterrupt(0, rpm, RISING);
@@ -618,7 +745,7 @@ void loop()
 		flow_run_bk=1;
 		cmd[0]=0;
 	}
-	else if(cmd[0]==flow_dis_cmd)
+	else if(cmd[0]==CMD_FLOW_DIS)
     {
 		flow_run_bk=0;
         detachInterrupt(0);
@@ -695,9 +822,12 @@ void sendData()
 {
   //Serial.println("sendData");
   
-  if(cmd[0] == 1)
+  if(cmd[0] == CMD_DIGITAL_READ)
     Wire.write(val);
-  if(cmd[0] == 3 || cmd[0] == 7 || cmd[0] == 56)
+  if(cmd[0] == CMD_ANALOG_READ || 
+     cmd[0] == CMD_ULTRASONIC_READ || 
+     cmd[0] == CMD_LED_BAR_RET_STATE ||
+     cmd[0] == CMD_SERVO_READ)
   {
     Wire.write(b, 3);
 
@@ -708,37 +838,38 @@ void sendData()
     //Serial.print(", ");
     //Serial.println(b[2]);
   }
-  if(cmd[0] == 8 || cmd[0] == 20)
+  if(cmd[0] == CMD_FIRMWARE_VERSION || 
+     cmd[0] == CMD_ACCEl_XYZ_READ)
     Wire.write(b, 4);
-  if(cmd[0] == 30) 
+  if(cmd[0] == CMD_RTC_TIME_READ) 
     Wire.write(b, 9);
-  if(cmd[0] == 40) 
+  if(cmd[0] == CMD_TEMP_HUMIDITY_READ) 
     Wire.write(dht_b, 9);
   
-  if(cmd[0]==21)
+  if(cmd[0]==CMD_IR_RECV)
   {
-    Wire.write(b,21);     
+    Wire.write(b,CMD_IR_RECV);     
     b[0]=0;
   }
-  if(cmd[0]==dust_sensor_read_cmd)
+  if(cmd[0]==CMD_DUST_SENSOR_READ)
   {
     Wire.write(b,4);     
 	dust_latest=0;
 	cmd[0]=0;
   }
-  if(cmd[0]==encoder_read_cmd)
+  if(cmd[0]==CMD_ENCODER_READ)
   {
     Wire.write(enc_val,2);     
     enc_val[0]=0;
 	cmd[0]=0;
   }
-  if(cmd[0]==flow_read_cmd)
+  if(cmd[0]==CMD_FLOW_READ)
   {
     Wire.write(flow_val,3);     
     flow_val[0]=0;
 	cmd[0]=0;
   }
-  
+ 
 }
 
 //ISR for the flow sensor
