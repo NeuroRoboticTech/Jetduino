@@ -22,6 +22,12 @@ extern unsigned long reg_addr;
 #define aRead_cmd 	3
 #define aWrite_cmd 	4
 #define pMode_cmd	5
+
+#define servo_attach_cmd    35
+#define servo_detach_cmd    36
+#define servo_write_cmd     37
+#define servo_read_cmd      38
+
 //Initialize
 int init(void);
 //Write a register

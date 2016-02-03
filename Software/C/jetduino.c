@@ -3,9 +3,9 @@
 //
 // This library provides the basic functions for using the jetduino in C
 //
-# The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
-#
-# Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
+// The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
+//
+// Have a question about this example?  Ask on the forums here:  http://www.NeuroRoboticTech.com/Forum
 //
 // 	History
 // 	------------------------------------------------
@@ -21,8 +21,9 @@ The MIT License (MIT)
 GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
 Copyright (C) 2015  Dexter Industries
 
-Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +52,7 @@ int  address = 0x04;
 unsigned char w_buf[5],ptr,r_buf[32];
 unsigned long reg_addr=0;
 
-#define dbg 1
+#define dbg 0
 int init(void)
 {
 	if ((fd = open(fileName, O_RDWR)) < 0)
@@ -181,4 +182,39 @@ int digitalRead(int pin)
 int analogWrite(int pin,int value)
 {
 	return write_block(aWrite_cmd,pin,value,0);
+}
+
+int servoAttach(int pin)
+{
+	return write_block(servo_attach_cmd,pin,0,0);
+}
+
+int servoDetach(int pin)
+{
+	return write_block(servo_detach_cmd,pin,0,0);
+}
+
+int servoWrite(int pin, int angle)
+{
+     if (angle < 0 || angle > 360) {
+		 printf("Invalid angle specified  %d\\n", angle);
+         return -1;
+	 }
+
+    int byte1 = angle & 255;
+    int byte2 = angle >> 8;
+	return write_block(servo_write_cmd,pin,byte1,byte2);
+}
+
+// Read servo value from Pin
+int servoRead(int pin)
+{
+	int data;
+	write_block(servo_read_cmd,pin,0,0);
+	usleep(1000);
+	read_block(3);
+	data=r_buf[1]* 256 + r_buf[2];
+	if (data==65535)
+		return -1;
+	return data;
 }

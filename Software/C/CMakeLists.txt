@@ -66,5 +66,9 @@ add_executable (jetduino_digital_read
 add_executable (jetduino_digital_write
                 jetduino_digital_write.c
 				jetduino.c)
+
+add_executable (jetduino_standard_servo
+                jetduino_standard_servo.c
+				jetduino.c)
                 
                     
