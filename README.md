@@ -1,5 +1,5 @@
 ## **Jetduino: The Jetson Embedded Supercomputer Meets Grove Sensors**
-
+ 
 Jetduino is an open source platform for connecting Grove Sensors to the Jetson TK1 supercomputers.  Create your own intelligent robot or inventions without the need for soldering!
 
 We brought Grove and the Jetson in a simple and affordable way. Grove sensors allow you to interact and monitor the world. The Jetson lets you store and process data in way that has never been possible for before for embedded systems. Its 192 CUDA cores makes it possible to perform onboard visual proceesing, deep neural network (DNN) control systems, or biologically realistic neural nets for intelligent and adaptive robots. The Jetduino brings both Grove Sensors and the popular Jetson TK1 together in a simple, elegant, and open source design. 
