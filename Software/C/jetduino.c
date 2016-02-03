@@ -47,7 +47,7 @@ THE SOFTWARE.
 
 int fd;
 char *fileName = "/dev/i2c-1";
-int  address = 0x03;
+int  address = 0x04;
 unsigned char w_buf[5],ptr,r_buf[32];
 unsigned long reg_addr=0;
 
