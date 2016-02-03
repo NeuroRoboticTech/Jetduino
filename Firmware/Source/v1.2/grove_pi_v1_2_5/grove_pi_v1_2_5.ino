@@ -46,9 +46,9 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define CMD_RTC_TIME_READ        30
 
 #define CMD_SERVO_ATTACH         35
-#define CMD_SERVO_DETACH         35
-#define CMD_SERVO_WRITE          36
-#define CMD_SERVO_READ           37
+#define CMD_SERVO_DETACH         36
+#define CMD_SERVO_WRITE          37
+#define CMD_SERVO_READ           38
 
 #define CMD_TEMP_HUMIDITY_READ   40
 
@@ -275,8 +275,8 @@ void loop()
       int pin = cmd[1];
       int pin_idx = pin-SERVO_PIN_OFFSET; 
 
-      Serial.print("Servo Attach. Pin: ");
-      Serial.println(pin);
+      //Serial.print("Servo Attach. Pin: ");
+      //Serial.println(pin);
 
       if(servos[pin_idx] == nullptr) {
         servos[pin_idx] = new Servo;
@@ -291,8 +291,8 @@ void loop()
       int pin = cmd[1];
       int pin_idx = pin-SERVO_PIN_OFFSET; 
 
-      Serial.print("Servo Detach. Pin: ");
-      Serial.println(pin);
+      //Serial.print("Servo Detach. Pin: ");
+      //Serial.println(pin);
       
       if(servos[pin_idx] != nullptr) {
         servos[pin_idx]->detach();
@@ -309,12 +309,12 @@ void loop()
       //Servo pins on Due are offset by 2
       int pin = cmd[1];
       int pin_idx = pin-SERVO_PIN_OFFSET; 
-      int angle = (b[1] << 8) +b[2];
+      int angle = (cmd[3] << 8) + cmd[2];
 
-      Serial.print("Servo Write. Pin: ");
-      Serial.print(pin);
-      Serial.print(", Angle: ");
-      Serial.println(angle);
+      //Serial.print("Servo Write. Pin: ");
+      //Serial.print(pin);
+      //Serial.print(", Angle: ");
+      //Serial.println(angle);
 
       if(servos[pin_idx] != nullptr) {
         servos[pin_idx]->write(angle);
@@ -328,8 +328,8 @@ void loop()
       int pin = cmd[1];
       int pin_idx = pin-SERVO_PIN_OFFSET; 
 
-      Serial.print("Servo Read. Pin: ");
-      Serial.print(pin);
+      //Serial.print("Servo Read. Pin: ");
+      //Serial.print(pin);
 
       if(servos[pin_idx] != nullptr) {
         servoRead = servos[pin_idx]->read();
@@ -337,8 +337,8 @@ void loop()
         b[2]=servoRead%256;
       }
 
-      Serial.print(", Angle: ");
-      Serial.println(servoRead);
+      //Serial.print(", Angle: ");
+      //Serial.println(servoRead);
 
       run_once = false;    
     }
