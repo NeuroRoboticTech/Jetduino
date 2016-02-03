@@ -168,8 +168,6 @@ flow_en_cmd=[18]
 # This allows us to be more specific about which commands contain unused bytes
 unused = 0
 
-global jet_pin
-
 # Function declarations of the various functions used for encoding and sending
 # data from RPi to Arduino
 
@@ -209,8 +207,9 @@ def digitalRead(pin):
 		n = read_i2c_byte(address)
 		return n
 	else:
-		if jet_pin[pin] is not None:
-			n = jet_pin[pin].read()		
+		pin_name = "JET_" + str(pin)
+		if globals()[pin_name] is not None:
+			n = globals()[pin_name].read()		
 			return n
 		else:
 			print ("You must first set the pinmode for a jetson GPIO pin.")
@@ -222,11 +221,12 @@ def digitalWrite(pin, value):
 		write_i2c_block(address, dWrite_cmd + [pin, value, unused])
 		return 1
 	else:
-		if jet_pin[pin] is not None:
+		pin_name = "JET_" + str(pin)
+		if globals()[pin_name] is not None:
 			if value > 0:
-				jet_pin[pin].set()
+				globals()[pin_name].set()
 			else:
-				jet_pin[pin].reset()		
+				globals()[pin_name].reset()		
 		else:
 			print ("You must first set the pinmode for a jetson GPIO pin.")
 
@@ -240,11 +240,12 @@ def pinMode(pin, mode):
 			write_i2c_block(address, pMode_cmd + [pin, 0, unused])
 		return 1
 	else:
+		pin_name = "JET_" + str(pin)
 		#Set pin mode for Jetson GPIO pins
 		if mode == "OUTPUT":
-			jet_pin[pin] = Controller.alloc_pin(pin, OUTPUT)
+			globals()[pin_name] = Controller.alloc_pin(pin, OUTPUT)
 		elif mode == "INPUT":
-			jet_pin[pin] = Controller.alloc_pin(pin, INPUT)
+			globals()[pin_name] = Controller.alloc_pin(pin, INPUT)
 		return 1	
 
 # Read analog value from Pin
