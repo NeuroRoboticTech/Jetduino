@@ -231,7 +231,7 @@ void loop()
     {
       b[1] = 1;
       b[2] = 2;
-      b[3] = 5;
+      b[3] = 6;
     }
     //Accelerometer x,y,z, read
     else if(cmd[0]==CMD_ACCEl_XYZ_READ)

@@ -17,3 +17,6 @@ v 1.2.2
 22 Jan 2015
 	*Grove Chainable RGB LED added
 	*Ability to persist a RGB color in memory for later use
+
+ v 1.2.6
+    *Modified the GrovePi sketch for use with the Jetduino

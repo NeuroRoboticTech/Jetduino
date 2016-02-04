@@ -1,46 +1,24 @@
-GrovePi
+Jetduino
 =======
 
-GrovePi is an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Jetduino is an open source platform for connecting Grove Sensors to the Jetson embedded supercomputer.
 
 ## Compiling
-The best way to compile the firmware on the GrovePi is to use Ino.  You can see more about [ino](http://inotool.org).
-Make a new file directory, preferably on the Desktop or in the ~ directory. 
-Change directory into the new directory.
-run **ino init -t grovepi**
-
-Move the source code, including dependencies, into the /src directory that was automatically created.
-
-The hex files are located in the **.build/uno directory**.  Specifically it should generate a file called firmware.hex
-
-## Uploading
-
-You can upload the firmware you've compiled using the following command:
-**avrdude -c gpio -p m328p -U flash:w:.build/uno/firmware.hex**
-
-## Updating the firmware on your GrovePi
-If you don;t want to compile and upload, you can also run the firmware update script to update the firmware on your GrovePi to the latest version.
-
-First make the firmware update script executable:
-
-**sudo chmod +x firmware_update.sh**
-
-then run it:
-
-**sudo ./firmware_update.sh**
+Load the jetduino.ino sketch into an Arduino 1.6.7 or greater IDE and compile and upload it to the Arduino Due attached to the Jetduino.
 
 ## Learn More
 
-See more at the [GrovePi Site](http://www.GrovePi.com/)
-[Dexter Industries](http://www.dexterindustries.com)
+See more at the [Jetduino Site](https://github.com/NeuroRoboticTech/Products/Jetduino)
+[Neurorobotic Technologies](https://github.com/NeuroRoboticTech/)
 
 
 ## License
 
 The MIT License (MIT)
 
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
+Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
+Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

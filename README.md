@@ -22,7 +22,7 @@ We have an extensive library that covers most Grove sensors. You can find it on 
 Ask us in the [forums](http://neurorobotictech.com/Community/Forum). Want to use the Jetduino in a language not currently supported? [Ask and we will help](http://neurorobotictech.com/Community/Forum).
 
 ### Programming the Jetduino
-The Jetduino can be programmed in Python, C, and C++ on the Jetson.  Simply start with one of our [example projects](http://www.NeuroRoboticTech.com/Projects/Jetduino/projects-for-the-Jetson/) or [example code](https://github.com/NeuroRoboticTech/Jetduino).  
+The Jetduino can be programmed in Python, C, and C++ on the Jetson.  Simply start with one of our [example projects](http://www.NeuroRoboticTech.com/Projects/Jetduino/projects-for-the-Jetson/) or [example code](https://github.com/NeuroRoboticTech/Products/Jetduino).  
 
 ### Getting Help
 Need help? We [have a forum here where you can ask questions or make suggestions](http://neurorobotictech.com/Community/Forum).
