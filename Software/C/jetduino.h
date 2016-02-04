@@ -41,4 +41,5 @@ int digitalWrite(int pin,int value);
 int pinMode(int pin,int mode);
 int digitalRead(int pin);
 int analogWrite(int pin,int value);
+float temperatureRead(int pin, int model);
 #endif /*GROVEPI_H */

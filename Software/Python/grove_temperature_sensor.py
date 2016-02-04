@@ -57,7 +57,7 @@ sensor = 0
 
 while True:
     try:
-        temp = jetduino.temp(sensor,'1.1')
+        temp = jetduino.temp(sensor,'1.2')
         print ("temp =", temp)
         time.sleep(.5)
 

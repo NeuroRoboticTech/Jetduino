@@ -45,6 +45,7 @@ THE SOFTWARE.
 */
 
 #include "jetduino.h"
+#include <math.h>
 
 int fd;
 char *fileName = "/dev/i2c-1";
@@ -218,3 +219,22 @@ int servoRead(int pin)
 		return -1;
 	return data;
 }
+
+float temperatureRead(int pin, int model)
+{
+    float bValue;
+	if(model == 2) {
+		bValue = 4250.0f;  // sensor v1.2 uses thermistor ??? (assuming NCP18WF104F03RC until SeeedStudio clarifies)
+	}
+	else if(model == 1) {
+		bValue = 4250.0f;  // sensor v1.1 uses thermistor NCP18WF104F03RC
+	}
+	else {
+		bValue = 3975.0f;  // sensor v1.0 uses thermistor TTC3A103*39H
+	}
+	int a = analogRead(pin);
+	float resistance = (float)(1023 - a) * 10000.0f / a;
+	float t = (float)(1 / (log(resistance / 10000) / bValue + 1 / 298.15) - 273.15);
+	return t;
+}
+

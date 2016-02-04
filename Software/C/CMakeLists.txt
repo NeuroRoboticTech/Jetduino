@@ -54,21 +54,31 @@ project (jetduino)
 add_executable (jetduino_analog_read
                 jetduino_analog_read.c
 				jetduino.c)
+target_link_libraries(jetduino_analog_read m)
 
 add_executable (jetduino_analog_write
                 jetduino_analog_write.c
 				jetduino.c)
+target_link_libraries(jetduino_analog_write m)
 
 add_executable (jetduino_digital_read
                 jetduino_digital_read.c
 				jetduino.c)
+target_link_libraries(jetduino_digital_read m)
 
 add_executable (jetduino_digital_write
                 jetduino_digital_write.c
 				jetduino.c)
+target_link_libraries(jetduino_digital_write m)
 
 add_executable (jetduino_standard_servo
                 jetduino_standard_servo.c
 				jetduino.c)
+target_link_libraries(jetduino_standard_servo m)
                 
-                    
+add_executable (jetduino_temp_read
+                jetduino_temp_read.c
+				jetduino.c)
+target_link_libraries(jetduino_temp_read m)
+                
+
