@@ -41,13 +41,12 @@ THE SOFTWARE.
 
 import time
 import jetduino
+import pins
 
 # Connect the Grove Light Sensor to analog port A0
 # SIG,NC,VCC,GND
 
-#See Software/Readme.md for more pin details.
-#Sensor connected to A0 Port.  A0 => 54, A11 => 65
-light_sensor = 54		# Pin 54 is A0 Port.
+light_sensor = pins.ARD_A0
 
 # Connect the LED to digital port D4
 # SIG,NC,VCC,GND
@@ -56,7 +55,6 @@ led = 4
 # Turn on LED once sensor exceeds threshold resistance
 threshold = 10
 
-jetduino.pinMode(light_sensor,"INPUT")
 jetduino.pinMode(led,"OUTPUT")
 
 while True:
