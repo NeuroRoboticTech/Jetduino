@@ -22,6 +22,7 @@ extern unsigned long reg_addr;
 #define aRead_cmd 	3
 #define aWrite_cmd 	4
 #define pMode_cmd	5
+#define ultrasonic_read_cmd      7
 
 #define servo_attach_cmd    35
 #define servo_detach_cmd    36
@@ -42,4 +43,5 @@ int pinMode(int pin,int mode);
 int digitalRead(int pin);
 int analogWrite(int pin,int value);
 float temperatureRead(int pin, int model);
+int ultrasonicRead(int pin);
 #endif /*GROVEPI_H */

@@ -81,4 +81,9 @@ add_executable (jetduino_temp_read
 				jetduino.c)
 target_link_libraries(jetduino_temp_read m)
                 
+add_executable (jetduino_ultrasonic_read
+                jetduino_ultrasonic_read.c
+				jetduino.c)
+target_link_libraries(jetduino_ultrasonic_read m)
+                
 

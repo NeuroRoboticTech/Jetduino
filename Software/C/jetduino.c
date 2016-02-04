@@ -238,3 +238,16 @@ float temperatureRead(int pin, int model)
 	return t;
 }
 
+int ultrasonicRead(int pin)
+{
+	int data;
+	write_block(ultrasonic_read_cmd,pin,0,0);
+	usleep(1000);
+	read_block(3);
+	data=r_buf[1]* 256 + r_buf[2];
+	if (data==65535)
+		return -1;
+	return data;
+}
+
+
