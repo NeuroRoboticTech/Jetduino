@@ -52,7 +52,7 @@ import time
 import math
 import struct
 import sys
-import pins
+import jetduino_pins as pins
 from sysfs.gpio import Controller, OUTPUT, INPUT, RISING
 
 debug =0

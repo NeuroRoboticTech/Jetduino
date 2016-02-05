@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,12 +37,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 # To install the Jetduino library systemwide, use: sudo python setup.py install
+
 import setuptools
+
+__name__         = 'jetduino'
+__description__  = 'Drivers and examples for using the Jetduino in Python'
+__author__       = 'David Cofer'
+__version__      = '1.0.0'
+__author_email__ = 'dcofer@NeuroRoboticTech.com'
+__author_site__  = 'http://www.NeuroRoboticTech.com/Projects/Jetduino/'
+
+requirements = ['sysfs-gpio']
+
 setuptools.setup(
-	name="jetduino",
-	description="Drivers and examples for using the Jetduino in Python",
-	author="NeuroRobotic Technologies",
-	url="http://www.NeuroRoboticTech.com/Projects/Jetduino/",
-	py_modules=['jetduino'],
-	#install_requires=open('requirements.txt').readlines(),
+    name                 = __name__,
+    description          = __description__,
+    version              = __version__,
+    author               = __author__,
+    author_email         = __author_email__,
+    url                  = __author_site__,
+	py_modules=['jetduino', 'jetduino_pins'],
+
+    install_requires     = requirements,
+    include_package_data = True,
+
+    packages = setuptools.find_packages(),  # include all packages under src
 )

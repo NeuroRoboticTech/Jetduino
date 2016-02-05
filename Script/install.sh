@@ -49,10 +49,10 @@ echo " "
 echo "Install smbus for python"
 sudo apt-get install python-smbus
 
-#echo " "
-#echo "Making libraries global . . ."
-#echo "============================="
-#sudo cp /home/pi/Desktop/GrovePi/Script/grove.pth /usr/lib/python2.7/dist-packages/grove.pth
+echo "Install jetduino Python for global use "
+echo "============================="
+cd ..\Software\Python
+python setup.py install
 
 echo " "
 echo "Please restart to implement changes!"
