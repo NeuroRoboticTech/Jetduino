@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,24 +42,24 @@ import jetduino
 
 # Connect the Grove Buzzer to digital port D8
 # SIG,NC,VCC,GND
-buzzer = 8
+buzzer = ARD_D8
 
-jetduino.pinMode(buzzer,"OUTPUT")
+jetduino.pinMode(buzzer, OUTPUT_PIN)
 
 while True:
     try:
         # Buzz for 1 second
-        jetduino.digitalWrite(buzzer,1)
+        jetduino.digitalWrite(buzzer, HIGH)
         print ('start')
         time.sleep(1)
 
         # Stop buzzing for 1 second and repeat
-        jetduino.digitalWrite(buzzer,0)
+        jetduino.digitalWrite(buzzer, LOW)
         print ('stop')
         time.sleep(1)
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(buzzer,0)
+        jetduino.digitalWrite(buzzer, LOW)
         break
     except IOError:
         print ("Error")

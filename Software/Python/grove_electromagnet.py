@@ -17,6 +17,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,30 +40,31 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # The electromagnet can hold a 1KG weight
 
 # Connect the Grove Electromagnet to digital port D4
 # SIG,NC,VCC,GND
-electromagnet = 4
+electromagnet = ARD_D4
 
-jetduino.pinMode(electromagnet,"OUTPUT")
+jetduino.pinMode(electromagnet, OUTPUT_PIN)
 time.sleep(1)
 
 while True:
     try:
         # Switch on electromagnet
-        jetduino.digitalWrite(electromagnet,1)
+        jetduino.digitalWrite(electromagnet, HIGH)
         print ("on")
         time.sleep(2)
 
         # Switch off electromagnet
-        jetduino.digitalWrite(electromagnet,0)
+        jetduino.digitalWrite(electromagnet, LOW)
         print ("off")
         time.sleep(2)
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(electromagnet,0)
+        jetduino.digitalWrite(electromagnet, LOW)
         break
     except IOError:
         print ("Error")

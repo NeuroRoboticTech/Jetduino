@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +39,7 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Thumb Joystick to analog port A0
 
@@ -51,14 +53,11 @@ import jetduino
 
 # Uses two pins - one for the X axis and one for the Y axis
 # This configuration means you are using port A0
+xPin = ARD_A0
+yPin = ARD_A2
 
-#See Software/Readme.md for more pin details.
-#Sensor connected to A0 Port.  A0 => 54, A11 => 65
-xPin = 54		# Pin 54 is A0 Port.
-yPin = 56
-
-jetduino.pinMode(xPin,"INPUT")
-jetduino.pinMode(yPin,"INPUT")
+jetduino.pinMode(xPin, INPUT_PIN)
+jetduino.pinMode(yPin, INPUT_PIN)
 
 # The Grove Thumb Joystick is an analog device that outputs analog signal ranging from 0 to 1023
 # The X and Y axes are two ~10k potentiometers and a momentary push button which shorts the x axis

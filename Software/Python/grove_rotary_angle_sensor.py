@@ -19,6 +19,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,20 +43,18 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Rotary Angle Sensor to analog port A0
 # SIG,NC,VCC,GND
-
-#See Software/Readme.md for more pin details.
-#Sensor connected to A0 Port.  A0 => 54, A11 => 65
-potentiometer = 54		# Pin 54 is A0 Port.
+potentiometer = ARD_A0
 
 # Connect the LED to digital port D5
 # SIG,NC,VCC,GND
-led = 5
+led = ARD_D5
 
-jetduino.pinMode(potentiometer,"INPUT")
-jetduino.pinMode(led,"OUTPUT")
+jetduino.pinMode(potentiometer, INPUT_PIN)
+jetduino.pinMode(led, OUTPUT_PIN)
 time.sleep(1)
 
 # Reference voltage of ADC is 5v

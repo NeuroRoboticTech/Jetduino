@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,15 +40,13 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Piezo Vibration Sensor to analog port A0
 # OUT,NC,VCC,GND
+piezo = ARD_A0
 
-#See Software/Readme.md for more pin details.
-#Sensor connected to A0 Port.  A0 => 54, A11 => 65
-piezo = 54		# Pin 54 is A0 Port.
-
-jetduino.pinMode(piezo,"INPUT")
+jetduino.pinMode(piezo, INPUT_PIN)
 
 while True:
     try:

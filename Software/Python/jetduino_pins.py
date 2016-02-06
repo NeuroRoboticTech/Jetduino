@@ -117,7 +117,9 @@ JET_A1 = 101
 JET_A2 = 102
 JET_A3 = 103
 
-JET_PH1 = 57
+# This one has been increased by 100 to make 
+# it outside the range of the arduino pins.
+JET_PH1 = 157
 
 JET_PK1 = 81
 JET_PK2 = 82
@@ -130,4 +132,11 @@ JET_PU3 = 163
 JET_PU4 = 164
 JET_PU5 = 165
 JET_PU6 = 166
+
+OUTPUT_PIN = 1
+INPUT_PIN = 0
+
+HIGH = 1
+LOW = 0
+
 

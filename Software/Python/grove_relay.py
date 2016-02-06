@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,27 +39,28 @@ THE SOFTWARE.
 # NOTE: Relay is normally open. LED will illuminate when closed and you will hear a definitive click sound
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Relay to digital port D4
 # SIG,NC,VCC,GND
-relay = 4
+relay = ARD_D4
 
-jetduino.pinMode(relay,"OUTPUT")
+jetduino.pinMode(relay, OUTPUT_PIN)
 
 while True:
     try:
         # switch on for 5 seconds
-        jetduino.digitalWrite(relay,1)
+        jetduino.digitalWrite(relay, HIGH)
         print ("on")
         time.sleep(5)
 
         # switch off for 5 seconds
-        jetduino.digitalWrite(relay,0)
+        jetduino.digitalWrite(relay, LOW)
         print ("off")
         time.sleep(5)
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(relay,0)
+        jetduino.digitalWrite(relay, LOW)
         break
     except IOError:
         print ("Error")

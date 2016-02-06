@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,15 +41,16 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove 4 Digit Display to digital port D5
 # CLK,DIO,VCC,GND
-display = 5
-jetduino.pinMode(display,"OUTPUT")
+display = ARD_D5
+jetduino.pinMode(display, OUTPUT_PIN)
 
 # If you have an analog sensor connect it to A0 so you can monitor it below
-sensor = 0
-jetduino.pinMode(sensor,"INPUT")
+sensor = ARD_A0
+jetduino.pinMode(sensor, INPUT_PIN)
 
 time.sleep(.5)
 

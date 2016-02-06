@@ -17,6 +17,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,20 +40,18 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Slide Potentiometer to analog port A0
 # OUT,LED,VCC,GND
-
-#See Software/Readme.md for more pin details.
-#Sensor connected to A0 Port.  A0 => 54, A11 => 65
-slide = 54		# Pin 54 is A0 Port.
+slide = ARD_A0
 
 # The device has an onboard LED accessible as pin 2 on port A0
 # OUT,LED,VCC,GND
-led = 1     # pin 2 (white wire)
+led = ARD_D1     # pin 2 (white wire)
 
-jetduino.pinMode(slide,"INPUT")
-jetduino.pinMode(led,"OUTPUT")
+jetduino.pinMode(slide, INPUT_PIN)
+jetduino.pinMode(led, OUTPUT_PIN)
 time.sleep(1)
 
 while True:
@@ -62,9 +61,9 @@ while True:
 
         # Illuminate onboard LED
         if sensor_value > 500:
-            jetduino.digitalWrite(led,1)
+            jetduino.digitalWrite(led, HIGH)
         else:
-            jetduino.digitalWrite(led,0)
+            jetduino.digitalWrite(led, LOW)
 
         print ("sensor_value =", sensor_value)
 

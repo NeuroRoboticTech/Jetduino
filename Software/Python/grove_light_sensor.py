@@ -19,6 +19,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,16 +42,16 @@ THE SOFTWARE.
 
 import time
 import jetduino
-import pins
+from jetduino_pins import *
 
 # Connect the Grove Light Sensor to analog port A0
 # SIG,NC,VCC,GND
 
-light_sensor = pins.ARD_A0
+light_sensor = ARD_A0
 
 # Connect the LED to digital port D4
 # SIG,NC,VCC,GND
-led = 4
+led = ARD_D4
 
 # Turn on LED once sensor exceeds threshold resistance
 threshold = 10
@@ -67,10 +68,10 @@ while True:
 
         if resistance > threshold:
             # Send HIGH to switch on LED
-            jetduino.digitalWrite(led,1)
+            jetduino.digitalWrite(led, HIGH)
         else:
             # Send LOW to switch off LED
-            jetduino.digitalWrite(led,0)
+            jetduino.digitalWrite(led, LOW)
 
         print ("sensor_value =", sensor_value, " resistance =", resistance)
         time.sleep(.5)

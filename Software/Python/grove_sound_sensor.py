@@ -20,6 +20,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,18 +43,17 @@ THE SOFTWARE.
 
 import time
 import jetduino
-import pins
+from jetduino_pins import *
 
 # Connect the Grove Sound Sensor to analog port A0
 # SIG,NC,VCC,GND
-
-sound_sensor = pins.ARD_A0
+sound_sensor = ARD_A0
 
 # Connect the Grove LED to digital port D5
 # SIG,NC,VCC,GND
-led = 4
+led = LED_D4
 
-jetduino.pinMode(led,"OUTPUT")
+jetduino.pinMode(led, OUTPUT_PIN)
 
 # The threshold to turn the led on 400.00 * 5 / 1024 = 1.95v
 threshold_value = 600
@@ -65,9 +65,9 @@ while True:
 
         # If loud, illuminate LED, otherwise dim
         if sensor_value > threshold_value:
-            jetduino.digitalWrite(led,1)
+            jetduino.digitalWrite(led, HIGH)
         else:
-            jetduino.digitalWrite(led,0)
+            jetduino.digitalWrite(led, LOW)
 
         print ("sensor_value =", sensor_value)
         time.sleep(.5)

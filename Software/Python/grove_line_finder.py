@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,17 +39,18 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Line Finder to digital port D7
 # SIG,NC,VCC,GND
-line_finder = 7
+line_finder = ARD_D7
 
-jetduino.pinMode(line_finder,"INPUT")
+jetduino.pinMode(line_finder, INPUT_PIN)
 
 while True:
     try:
         # Return HIGH when black line is detected, and LOW when white line is detected
-        if jetduino.digitalRead(line_finder) == 1:
+        if jetduino.digitalRead(line_finder) == HIGH:
             print ("black line detected")
         else:
             print ("white line detected")

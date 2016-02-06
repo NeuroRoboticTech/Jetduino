@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,17 +49,18 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Infrared Reflective Sensor to digital port D4
 # SIG,NC,VCC,GND
-sensor = 4
+sensor = ARD_D4
 
-jetduino.pinMode(sensor,"INPUT")
+jetduino.pinMode(sensor, INPUT_PIN)
 
 while True:
     try:
         # Sensor returns HIGH on a black surface and LOW on a white surface
-        if jetduino.digitalRead(sensor) == 1:
+        if jetduino.digitalRead(sensor) == HIGH:
             print ("black surface detected")
         else:
             print ("white surface detected")

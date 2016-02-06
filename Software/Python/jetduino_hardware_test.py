@@ -18,6 +18,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,27 +40,29 @@ THE SOFTWARE.
 '''
 import time
 import jetduino
+from jetduino_pins import *
 
-# Connect the Grove Button to Analog Port 0.
-button = 14		# This is the A0 pin.
-buzzer = 8		# This is the D8 pin.
+# Connect the Grove Button to digital Port 4.
+button = ARD_D4		# This is the D4 pin.
+buzzer = ARD_D8		# This is the D8 pin.
 
-jetduino.pinMode(button,"INPUT")
+jetduino.pinMode(button, INPUT_PIN)
+jetduino.pinMode(buzzer, OUTPUT_PIN)
 
 print "GrovePi Basic Hardware Test."
-print "Setup:  Connect the button sensor to port A0.  Connect a Grove LED to port D8."
+print "Setup:  Connect the button sensor to port D4.  Connect a Grove LED to port D8."
 print "Press the button and the buzzer will buzz!"
 
 while True:
     try:
-		butt_val = jetduino.digitalRead(button)	# Each time we go through the loop, we read A0.
-		print (butt_val)						# Print the value of A0.
+		butt_val = jetduino.digitalRead(button)	# Each time we go through the loop, we read D4.
+		print (butt_val)						# Print the value of D4.
 		if butt_val > 0:
-			jetduino.digitalWrite(buzzer,1)
+			jetduino.digitalWrite(buzzer, HIGH)
 			print ('start')
 			time.sleep(1)
 		else:
-			jetduino.digitalWrite(buzzer,0)
+			jetduino.digitalWrite(buzzer, LOW)
 			time.sleep(.5)
 
     except IOError:

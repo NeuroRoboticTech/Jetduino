@@ -16,6 +16,7 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
+Copyright (C) 2016  NeuroRobotic Technologies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,27 +39,28 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
 # Connect the Grove Vibration Motor to digital port D8
 # SIG,NC,VCC,GND
-vibration_motor = 8
+vibration_motor = ARD_D8
 
-jetduino.pinMode(vibration_motor,"OUTPUT")
+jetduino.pinMode(vibration_motor, OUTPUT_PIN)
 
 while True:
     try:
         # Start vibrating for 1 second
-        jetduino.digitalWrite(vibration_motor,1)
+        jetduino.digitalWrite(vibration_motor, HIGH)
         print ('start')
         time.sleep(1)
 
         # Stop vibrating for 1 second, then repeat
-        jetduino.digitalWrite(vibration_motor,0)
+        jetduino.digitalWrite(vibration_motor, LOW)
         print ('stop')
         time.sleep(1)
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(vibration_motor,0)
+        jetduino.digitalWrite(vibration_motor, LOW)
         break
     except IOError:
         print ("Error")

@@ -52,7 +52,7 @@ import time
 import math
 import struct
 import sys
-import jetduino_pins as pins
+from jetduino_pins import *
 from sysfs.gpio import Controller, OUTPUT, INPUT, RISING
 
 debug =0
@@ -68,17 +68,17 @@ ard_address = 0x04
 #adc_address = 0x
 
 #Make the jetson pins available for use.
-Controller.available_pins = [pins.JET_PH1, 
-	pins.JET_PK1, 
-	pins.JET_PK2, 
-	pins.JET_PK4, 
-	pins.JET_PU0, 
-	pins.JET_PU1, 
-	pins.JET_PU2, 
-	pins.JET_PU3, 
-	pins.JET_PU4, 
-	pins.JET_PU5, 
-	pins.JET_PU6]
+Controller.available_pins = [JET_PH1, 
+	JET_PK1, 
+	JET_PK2, 
+	JET_PK4, 
+	JET_PU0, 
+	JET_PU1, 
+	JET_PU2, 
+	JET_PU3, 
+	JET_PU4, 
+	JET_PU5, 
+	JET_PU6]
 
 # Command Format
 # digitalRead() command format header
@@ -220,6 +220,10 @@ def digitalRead(pin):
 		n = read_i2c_byte(ard_address)
 		return n
 	else:
+		#reset the PH1 pin to the correct value.
+		if pin == JET_PH1:
+			pin = pin - 100
+
 		pin_name = "JET_" + str(pin)
 		if globals()[pin_name] is not None:
 			n = globals()[pin_name].read()		
@@ -234,6 +238,10 @@ def digitalWrite(pin, value):
 		write_i2c_block(ard_address, dWrite_cmd + [pin, value, unused])
 		return 1
 	else:
+		#reset the PH1 pin to the correct value.
+		if pin == JET_PH1:
+			pin = pin - 100
+
 		pin_name = "JET_" + str(pin)
 		if globals()[pin_name] is not None:
 			if value > 0:
@@ -245,19 +253,28 @@ def digitalWrite(pin, value):
 
 # Setting Up Pin mode on Arduino
 def pinMode(pin, mode):
-	if pin < 54:
+	if pin < JET_PK1:
 		#Set pin mode for Arduino pins
-		if mode == "OUTPUT":
+		if mode == OUTPUT_PIN:
 			write_i2c_block(ard_address, pMode_cmd + [pin, 1, unused])
-		elif mode == "INPUT":
+		elif mode == INPUT_PIN:
 			write_i2c_block(ard_address, pMode_cmd + [pin, 0, unused])
 		return 1
 	else:
+		#reset the PH1 pin to the correct value.
+		if pin == JET_PH1:
+			pin = pin - 100
+
 		pin_name = "JET_" + str(pin)
 		#Set pin mode for Jetson GPIO pins
-		if mode == "OUTPUT":
+		if mode == OUTPUT_PIN:
 			globals()[pin_name] = Controller.alloc_pin(pin, OUTPUT)
-		elif mode == "INPUT":
+		elif mode == INPUT_PIN:
+			if (pin == JET_PH1 or pin == JET_PK1 or 
+				pin == JET_PK2 or pin == JET_PK4):
+				print ("You cannot set the output only jetson pins to inputs.")
+				return -1
+
 			globals()[pin_name] = Controller.alloc_pin(pin, INPUT)
 		return 1	
 

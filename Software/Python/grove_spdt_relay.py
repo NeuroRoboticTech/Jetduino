@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+c#!/usr/bin/env python
 #
 # Jetduino Example for using the Grove SPDT Relay(30A) (http://www.seeedstudio.com/wiki/Grove_-_SPDT_Relay(30A))
 #
@@ -17,7 +17,8 @@ Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
-
+Copyright (C) 2016  NeuroRobotic Technologies
+c
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -44,27 +45,28 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *v
 
 # Connect the Grove SPDT Relay to digital port D4
 # SIG,NC,VCC,GND
-relay = 4
+relay = ARD_D4
 
-jetduino.pinMode(relay,"OUTPUT")
+jetduino.pinMode(relay, OUTPUT_PIN)
 
 while True:
     try:
         # switch on for 5 seconds
-        jetduino.digitalWrite(relay,1)
+        jetduino.digitalWrite(relay, HIGH)
         print ("on")
         time.sleep(5)
 
         # switch off for 5 seconds
-        jetduino.digitalWrite(relay,0)
+        jetduino.digitalWrite(relay, LOW)
         print ("off")
         time.sleep(5)
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(relay,0)
+        jetduino.digitalWrite(relay, LOW)
         break
     except IOError:
         print ("Error")
