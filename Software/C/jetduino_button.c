@@ -16,12 +16,10 @@ int main(void)
 	pinMode(led, OUTPUT_PIN);
 	for(i=0; i<2000; i++)
 	{
-		printf("i: %d\n", i+1);
         int val = digitalRead(button);
-		printf("LED: %d\n", val);
+		printf("i: %d, LED: %d\n", i+1, val);
 		digitalWrite(led, val);
 		jet_sleep(100);
-		printf("\n");
 	}
 
 	closeJetduino();
