@@ -4,17 +4,22 @@
 int main(void)
 {
 	int dval;
+    int i = 0;
+    int pin = ARD_D4;
 
 	//Exit on failure to start communications with the jetduino
-	if(init()==-1)
+	if(openJetduino()==-1)
 		exit(1);
 
-	while(1)
+	for(i=0; i<2000; i++)
 	{
-		dval=ultrasonicRead(4);
+		dval=ultrasonicRead(pin);
 		printf("Range: %d\n", dval);
 		//Sleep for 100ms
 		jet_sleep(100);
 	}
+
+	closeJetduino();
+
    	return 1;
 }

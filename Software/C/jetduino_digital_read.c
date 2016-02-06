@@ -4,19 +4,32 @@
 int main(void)
 {
 	int dval;
+    int i = 0;
+    int buttonPin = JET_PU2;
+    int ledPin = ARD_D4;
 
 	//Exit on failure to start communications with the jetduino
-	if(init()==-1)
+	if(openJetduino()==-1)
 		exit(1);
 
 	//Set pin mode to input
-	pinMode(4,0);
-	while(1)
+	pinMode(buttonPin, INPUT_PIN);
+	pinMode(ledPin, OUTPUT_PIN);
+
+	for(i=0; i<2000; i++)
 	{
-		dval=digitalRead(4);
+	    //Read from the digital input.
+		dval=digitalRead(buttonPin);
 		printf("Digital read %d\n", dval);
+
+        //Write that value back out to the led.
+		digitalWrite(ledPin, dval);
+
 		//Sleep for 50ms
 		jet_sleep(50);
 	}
+
+	closeJetduino();
+
    	return 1;
 }

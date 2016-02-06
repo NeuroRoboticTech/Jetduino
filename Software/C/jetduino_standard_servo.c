@@ -1,14 +1,14 @@
 //Jetduino Example for controlling and reading from a standard servo
 #include "jetduino.h"
 
-#define SERVO_PIN 4
+#define SERVO_PIN ARD_A4
 
 int main(void)
 {
 	int adata;
 
 	//Exit on failure to start communications with the Jetduino
-	if(init()==-1)
+	if(openJetduino()==-1)
 		exit(1);
 
     printf("Attaching to servo\n");
@@ -49,6 +49,8 @@ int main(void)
 
     printf("Detaching from servo\n");
     servoDetach(SERVO_PIN);
+
+	closeJetduino();
 
    	return 1;
 }
