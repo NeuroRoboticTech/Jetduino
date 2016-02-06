@@ -44,8 +44,52 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/*
+ * SimpleGPIO.h
+ *
+ * Copyright Derek Molloy, School of Electronic Engineering, Dublin City University
+ * www.eeng.dcu.ie/~molloyd/
+ *
+ * Based on Software by RidgeRun
+ * Copyright (c) 2011, RidgeRun
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *    This product includes software developed by the RidgeRun.
+ * 4. Neither the name of the RidgeRun nor the
+ *    names of its contributors may be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY RIDGERUN ''AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL RIDGERUN BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "jetduino.h"
 #include <math.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <poll.h>
 
 int fd;
 char *fileName = "/dev/i2c-1";
@@ -54,7 +98,7 @@ unsigned char w_buf[5],ptr,r_buf[32];
 unsigned long reg_addr=0;
 
 #define dbg 0
-int init(void)
+int openJetduino(void)
 {
 	if ((fd = open(fileName, O_RDWR)) < 0)
 	{					// Open port for reading and writing
@@ -67,8 +111,153 @@ int init(void)
 		printf("Unable to get bus access to talk to slave\n");
 		return -1;
 	}
+
+	if(gpio_export((unsigned int) (JET_PH1-100)) != 0) {
+		printf("Error exporting PH1\n");
+		return -1;
+    }
+    else {
+        if(gpio_set_dir((unsigned int) (JET_PH1-100),
+                        OUTPUT_PIN) != 0) {
+            printf("Error setting pin mode of PH1\n");
+        }
+    }
+
+	if(gpio_export(JET_PK1) != 0) {
+		printf("Error exporting PK1\n");
+		return -1;
+    }
+    else {
+        if(gpio_set_dir(JET_PK1, OUTPUT_PIN) != 0) {
+            printf("Error setting pin mode of PH1\n");
+        }
+    }
+
+	if(gpio_export(JET_PK2) != 0) {
+		printf("Error exporting PK2\n");
+		return -1;
+    }
+    else {
+        if(gpio_set_dir(JET_PK1, OUTPUT_PIN) != 0) {
+            printf("Error setting pin mode of PK2\n");
+        }
+    }
+
+	if(gpio_export(JET_PK4) != 0) {
+		printf("Error exporting PK4\n");
+		return -1;
+    }
+    else {
+        if(gpio_set_dir(JET_PK1, OUTPUT_PIN) != 0) {
+            printf("Error setting pin mode of PK4\n");
+        }
+    }
+
+	if(gpio_export(JET_PU0) != 0) {
+		printf("Error exporting PU0\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU1) != 0) {
+		printf("Error exporting PU1\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU2) != 0) {
+		printf("Error exporting PU2\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU3) != 0) {
+		printf("Error exporting PU3\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU4) != 0) {
+		printf("Error exporting PU4\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU5) != 0) {
+		printf("Error exporting PU5\n");
+		return -1;
+    }
+
+	if(gpio_export(JET_PU6) != 0) {
+		printf("Error exporting PU6\n");
+		return -1;
+    }
+
 	return 1;
 }
+
+int closeJetduino()
+{
+    int ret = 0;
+
+    if(close(fd) != 0) {
+		printf("Error closing I2C line.\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport((unsigned int) (JET_PH1-100)) != 0) {
+		printf("Error unexporting PH1\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PK1) != 0) {
+		printf("Error unexporting PK1\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PK2) != 0) {
+		printf("Error unexporting PK2\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PK4) != 0) {
+		printf("Error unexporting PK4\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU0) != 0) {
+		printf("Error unexporting PU0\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU1) != 0) {
+		printf("Error unexporting PU1\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU2) != 0) {
+		printf("Error unexporting PU2\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU3) != 0) {
+		printf("Error unexporting PU3\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU4) != 0) {
+		printf("Error unexporting PU4\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU5) != 0) {
+		printf("Error unexporting PU5\n");
+		ret = -1;
+    }
+
+	if(gpio_unexport(JET_PU6) != 0) {
+		printf("Error unexporting PU6\n");
+		ret = -1;
+    }
+
+	return ret;
+}
+
 //Write a register
 int write_block(char cmd,char v1,char v2,char v3)
 {
@@ -157,26 +346,60 @@ int analogRead(int pin)
 }
 
 //Write a digital value to a pin
-int digitalWrite(int pin,int value)
+int digitalWrite(int pin, PIN_VALUE value)
 {
-	return write_block(dWrite_cmd,pin,value,0);
+    if(pin < JET_PK1) {
+        return write_block(dWrite_cmd,pin,value,0);
+    }
+    else {
+        //If it is the PH1 pin then make it the correct value.
+        if(pin == JET_PH1) {
+            pin -= 100;
+        }
+
+        return gpio_set_value((unsigned int) pin, value);
+    }
 }
 
 //Set the mode of a pin
 //mode
 //	1: 	output
 //	0:	input
-int pinMode(int pin,int mode)
+int pinMode(int pin, PIN_DIRECTION mode)
 {
-	return write_block(pMode_cmd,pin,mode,0);
+    if(pin < JET_PK1) {
+        return write_block(pMode_cmd,pin,mode,0);
+    }
+    else {
+        if(pin == JET_PH1 || pin == JET_PK1 ||
+           pin == JET_PK2 || pin == JET_PK4) {
+            printf("Cannot set the pin mode for output only jetson GPIO lines.");
+            return -1;
+        }
+        else {
+            return gpio_set_dir((unsigned int) pin, mode);
+        }
+    }
 }
 
 //Read a digital value from a pin
 int digitalRead(int pin)
 {
-	write_block(dRead_cmd,pin,0,0);
-	usleep(10000);
-	return read_byte();
+    if(pin < JET_PK1) {
+        write_block(dRead_cmd,pin,0,0);
+        usleep(10000);
+        return read_byte();
+    }
+    else {
+        //If it is the PH1 pin then make it the correct value.
+        if(pin == JET_PH1) {
+            pin -= 100;
+        }
+
+        unsigned int val=0;
+        gpio_get_value((unsigned int) pin, &val);
+        return val;
+    }
 }
 
 //Write a PWM value to a pin
@@ -250,4 +473,191 @@ int ultrasonicRead(int pin)
 	return data;
 }
 
+/****************************************************************
+ * gpio_export
+ ****************************************************************/
+int gpio_export(unsigned int gpio)
+{
+	int fd, len;
+	char buf[MAX_BUF];
 
+	fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
+	if (fd < 0) {
+		perror("gpio/export");
+		return fd;
+	}
+
+	len = snprintf(buf, sizeof(buf), "%d", gpio);
+	write(fd, buf, len);
+	close(fd);
+
+	return 0;
+}
+
+/****************************************************************
+ * gpio_unexport
+ ****************************************************************/
+int gpio_unexport(unsigned int gpio)
+{
+	int fd, len;
+	char buf[MAX_BUF];
+
+	fd = open(SYSFS_GPIO_DIR "/unexport", O_WRONLY);
+	if (fd < 0) {
+		perror("gpio/export");
+		return fd;
+	}
+
+	len = snprintf(buf, sizeof(buf), "%d", gpio);
+	write(fd, buf, len);
+	close(fd);
+	return 0;
+}
+
+/****************************************************************
+ * gpio_set_dir
+ ****************************************************************/
+int gpio_set_dir(unsigned int gpio, PIN_DIRECTION out_flag)
+{
+	int fd;
+	char buf[MAX_BUF];
+
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);
+
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		perror("gpio/direction");
+		return fd;
+	}
+
+	if (out_flag == OUTPUT_PIN)
+		write(fd, "out", 4);
+	else
+		write(fd, "in", 3);
+
+	close(fd);
+	return 0;
+}
+
+/****************************************************************
+ * gpio_set_value
+ ****************************************************************/
+int gpio_set_value(unsigned int gpio, bool value)
+{
+	int fd;
+	char buf[MAX_BUF];
+
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		perror("gpio/set-value");
+		return fd;
+	}
+
+	if (value==false)
+		write(fd, "0", 2);
+	else
+		write(fd, "1", 2);
+
+	close(fd);
+	return 0;
+}
+
+/****************************************************************
+ * gpio_get_value
+ ****************************************************************/
+int gpio_get_value(unsigned int gpio, unsigned int *value)
+{
+	int fd;
+	char buf[MAX_BUF];
+	char ch;
+
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+
+	fd = open(buf, O_RDONLY);
+	if (fd < 0) {
+		perror("gpio/get-value");
+		return fd;
+	}
+
+	read(fd, &ch, 1);
+
+	if (ch != '0') {
+		*value = 1;
+	} else {
+		*value = 0;
+	}
+
+	close(fd);
+	return 0;
+}
+
+
+/****************************************************************
+ * gpio_set_edge
+ ****************************************************************/
+
+int gpio_set_edge(unsigned int gpio, char *edge)
+{
+	int fd;
+	char buf[MAX_BUF];
+
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio);
+
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		perror("gpio/set-edge");
+		return fd;
+	}
+
+	write(fd, edge, strlen(edge) + 1);
+	close(fd);
+	return 0;
+}
+
+/****************************************************************
+ * gpio_fd_open
+ ****************************************************************/
+
+int gpio_fd_open(unsigned int gpio)
+{
+	int fd;
+	char buf[MAX_BUF];
+
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+
+	fd = open(buf, O_RDONLY | O_NONBLOCK );
+	if (fd < 0) {
+		perror("gpio/fd_open");
+	}
+	return fd;
+}
+
+/****************************************************************
+ * gpio_fd_close
+ ****************************************************************/
+
+int gpio_fd_close(int fd)
+{
+	return close(fd);
+}
+
+
+/****************************************************************
+ * gpio_omap_mux_setup - Allow us to setup the omap mux mode for a pin
+ ****************************************************************/
+int gpio_omap_mux_setup(const char *omap_pin0_name, const char *mode)
+{
+	int fd;
+	char buf[MAX_BUF];
+	snprintf(buf, sizeof(buf), SYSFS_OMAP_MUX_DIR "%s", omap_pin0_name);
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		perror("failed to open OMAP_MUX");
+		return fd;
+	}
+	write(fd, mode, strlen(mode) + 1);
+	close(fd);
+	return 0;
+}
