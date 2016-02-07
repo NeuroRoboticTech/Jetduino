@@ -17,8 +17,8 @@ echo "   - python-smbus       Python bindings for Linux SMBus access through i2c
 echo "   - minicom            friendly menu driven serial communication program"
 echo " "
 echo "Special thanks to Joe Sanford at Tufts University. This script was derived from his work. Thank you Joe!"
-echo " "
-echo "Jetson wil reboot after completion."
+#echo " "
+#echo "Jetson wil reboot after completion."
 echo " "
 echo -e "Press \E[32mENTER\E[0m to begin... or \E[91mctrl+c\E[0m to abort"
 # read
