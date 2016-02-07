@@ -51,34 +51,39 @@ sudo apt-get install python-smbus
 
 echo "Install jetduino Python for global use "
 echo "============================="
-cd ..\Software\Python
+cd ../Software/Python
 python setup.py install
 
 echo " "
-echo "Please restart to implement changes!"
-echo "  _____  ______  _____ _______       _____ _______ "
-echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
-echo " | |__) | |__  | (___    | |  /  \  | |__) | | |   "
-echo " |  _  /|  __|  \___ \   | | / /\ \ |  _  /  | |   "
-echo " | | \ \| |____ ____) |  | |/ ____ \| | \ \  | |   "
-echo " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
-echo " "
-echo "Please restart to implement changes!"
-echo "To Restart type sudo reboot"
+echo "Jetduino install is complete."
+echo "You still need to install the Firmware sketch to the Arduino Due."
+echo "Then you can begin using the Jetduino! "
 
-echo "To finish changes, we will reboot the Jetson."
-echo "Pi must reboot for changes and updates to take effect."
-echo "If you need to abort the reboot, press Ctrl+C.  Otherwise, reboot!"
-echo "Rebooting in 5 seconds!"
-sleep 1
-echo "Rebooting in 4 seconds!"
-sleep 1
-echo "Rebooting in 3 seconds!"
-sleep 1
-echo "Rebooting in 2 seconds!"
-sleep 1
-echo "Rebooting in 1 seconds!"
-sleep 1
-echo "Rebooting now!  Your Jetduino wake up with a freshly updated Jetson!"
-sleep 1
-sudo reboot
+#echo " "
+#echo "Please restart to implement changes!"
+#echo "  _____  ______  _____ _______       _____ _______ "
+#echo " |  __ \|  ____|/ ____|__   __|/\   |  __ \__   __|"
+#echo " | |__) | |__  | (___    | |  /  \  | |__) | | |   "
+#echo " |  _  /|  __|  \___ \   | | / /\ \ |  _  /  | |   "
+#echo " | | \ \| |____ ____) |  | |/ ____ \| | \ \  | |   "
+#echo " |_|  \_\______|_____/   |_/_/    \_\_|  \_\ |_|   "
+#echo " "
+#echo "Please restart to implement changes!"
+#echo "To Restart type sudo reboot"
+
+#echo "To finish changes, we will reboot the Jetson."
+#echo "Pi must reboot for changes and updates to take effect."
+#echo "If you need to abort the reboot, press Ctrl+C.  Otherwise, reboot!"
+#echo "Rebooting in 5 seconds!"
+#sleep 1
+#echo "Rebooting in 4 seconds!"
+#sleep 1
+#echo "Rebooting in 3 seconds!"
+#sleep 1
+#echo "Rebooting in 2 seconds!"
+#sleep 1
+#echo "Rebooting in 1 seconds!"
+#sleep 1
+#echo "Rebooting now!  Your Jetduino wake up with a freshly updated Jetson!"
+#sleep 1
+#sudo reboot
