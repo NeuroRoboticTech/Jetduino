@@ -43,6 +43,7 @@ sudo apt-get install python-pip git libi2c-dev python-serial i2c-tools python-sm
 git clone https://github.com/derekstavis/python-sysfs-gpio.git
 cd python-sysfs-gpio
 python setup.py install
+cd ..
 echo "Dependencies Installed"
 
 echo " "
