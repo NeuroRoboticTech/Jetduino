@@ -1,7 +1,7 @@
 # Detects motion, triggers Buzzer, LED and Relay, takes picture from RPi Camera, sends as attachment via Gmail
-# http://www.dexterindustries.com/GrovePi/projects-for-the-raspberry-pi/whos-at-the-door/
+# http://NeuroRoboticTech/Products/GrovePi/JetduinoProjects/WhosAtTheDoor/
 
-# GrovePi + Ultrasonic Ranger + Buzzer + Switch + Relay + LED + RPi Camera
+# Jetduino + Ultrasonic Ranger + Buzzer + Switch + Relay + LED + RPi Camera
 # http://www.seeedstudio.com/wiki/Grove_-_Ultrasonic_Ranger
 # http://www.seeedstudio.com/wiki/Grove_-_Buzzer
 # http://www.seeedstudio.com/wiki/Grove_-_Switch(P)
