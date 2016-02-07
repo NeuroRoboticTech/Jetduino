@@ -42,8 +42,8 @@ from jetduino_pins import *
 
 # Connect the Grove Button to digital port D3
 # SIG,NC,VCC,GND
-button = JET_PU1
-led = JET_PU2
+button = ARD_D4
+led = ARD_D6
 
 jetduino.pinMode(button, INPUT_PIN)
 jetduino.pinMode(led, OUTPUT_PIN)
