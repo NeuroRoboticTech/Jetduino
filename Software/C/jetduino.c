@@ -259,7 +259,7 @@ int closeJetduino()
 }
 
 //Write a register
-int write_block(char cmd,char v1,char v2,char v3,char v4)
+int write_block(char cmd,char v1,char v2,char v3,char v4,char v5)
 {
 	int dg;
 	w_buf[0]=cmd;
@@ -267,13 +267,14 @@ int write_block(char cmd,char v1,char v2,char v3,char v4)
     w_buf[2]=v2;
     w_buf[3]=v3;
     w_buf[4]=v4;
+    w_buf[5]=v5;
 
-    dg=i2c_smbus_write_i2c_block_data(fd,1,5,w_buf);
+    dg=i2c_smbus_write_i2c_block_data(fd,1,6,w_buf);
 
 	if (dbg)
 		printf("wbk: %d\n",dg);
 
-    // if (i2c_smbus_write_i2c_block_data(fd,1,5,w_buf) != 5)
+    // if (i2c_smbus_write_i2c_block_data(fd,1,6,w_buf) != 7)
     // {
         // printf("Error writing to Jetduino\n");
         // return -1;
@@ -337,7 +338,7 @@ void jet_sleep(int t)
 int analogRead(int pin)
 {
 	int data;
-	write_block(aRead_cmd,pin,0,0,0);
+	write_block(aRead_cmd,pin,0,0,0,0);
 	usleep(1000);
 	read_block(3);
 	data=r_buf[1]* 256 + r_buf[2];
@@ -350,7 +351,7 @@ int analogRead(int pin)
 int digitalWrite(int pin, PIN_VALUE value)
 {
     if(pin < JET_PK1) {
-        return write_block(dWrite_cmd,pin,value,0,0);
+        return write_block(dWrite_cmd,pin,value,0,0,0);
     }
     else {
         //If it is the PH1 pin then make it the correct value.
@@ -369,7 +370,7 @@ int digitalWrite(int pin, PIN_VALUE value)
 int pinMode(int pin, PIN_DIRECTION mode)
 {
     if(pin < JET_PK1) {
-        return write_block(pMode_cmd,pin,mode,0,0);
+        return write_block(pMode_cmd,pin,mode,0,0,0);
     }
     else {
         if(pin == JET_PH1 || pin == JET_PK1 ||
@@ -387,7 +388,7 @@ int pinMode(int pin, PIN_DIRECTION mode)
 int digitalRead(int pin)
 {
     if(pin < JET_PK1) {
-        write_block(dRead_cmd,pin,0,0,0);
+        write_block(dRead_cmd,pin,0,0,0,0);
         usleep(10000);
         return read_byte();
     }
@@ -406,17 +407,17 @@ int digitalRead(int pin)
 //Write a PWM value to a pin
 int analogWrite(int pin,int value)
 {
-	return write_block(aWrite_cmd,pin,value,0,0);
+	return write_block(aWrite_cmd,pin,value,0,0,0);
 }
 
 int servoAttach(int pin)
 {
-	return write_block(servo_attach_cmd,pin,0,0,0);
+	return write_block(servo_attach_cmd,pin,0,0,0,0);
 }
 
 int servoDetach(int pin)
 {
-	return write_block(servo_detach_cmd,pin,0,0,0);
+	return write_block(servo_detach_cmd,pin,0,0,0,0);
 }
 
 int servoWrite(int pin, int angle)
@@ -428,14 +429,14 @@ int servoWrite(int pin, int angle)
 
     int byte1 = angle & 255;
     int byte2 = angle >> 8;
-	return write_block(servo_write_cmd,pin,byte1,byte2,0);
+	return write_block(servo_write_cmd,pin,byte1,byte2,0,0);
 }
 
 // Read servo value from Pin
 int servoRead(int pin)
 {
 	int data;
-	write_block(servo_read_cmd,pin,0,0,0);
+	write_block(servo_read_cmd,pin,0,0,0,0);
 	usleep(1000);
 	read_block(3);
 	data=r_buf[1]* 256 + r_buf[2];
@@ -465,13 +466,24 @@ float temperatureRead(int pin, int model)
 int ultrasonicRead(int pin)
 {
 	int data;
-	write_block(ultrasonic_read_cmd,pin,0,0,0);
+	write_block(ultrasonic_read_cmd,pin,0,0,0,0);
 	usleep(1000);
 	read_block(3);
 	data=r_buf[1]* 256 + r_buf[2];
 	if (data==65535)
 		return -1;
 	return data;
+}
+
+int dynamixelMove(int servo, int pos, int speed)
+{
+    int pos0 = pos & 255;
+    int pos1 = pos >> 8;
+
+    int speed0 = speed & 255;
+    int speed1 = speed >> 8;
+
+	return write_block(dyn_move_cmd,servo,pos0,pos1,speed0,speed1);
 }
 
 /****************************************************************

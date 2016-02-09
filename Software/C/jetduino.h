@@ -112,6 +112,16 @@ extern unsigned long reg_addr;
 #define servo_write_cmd     37
 #define servo_read_cmd      38
 
+#define dyn_set_register_cmd     100
+#define dyn_get_register_cmd     101
+#define dyn_move_cmd             102
+#define dyn_stop_cmd             103
+#define dyn_set_endless_cmd      104
+#define dyn_set_turn_speed_cmd   105
+#define dyn_start_synch_move_cmd 106
+#define dyn_add_servo_synch_cmd  107
+#define dyn_exec_synch_move_cmd  108
+
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
 #define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
 #define MAX_BUF 64
@@ -227,7 +237,7 @@ int openJetduino(void);
 int closeJetduino(void);
 
 //Write a register
-int write_block(char cmd,char v1,char v2,char v3,char v4);
+int write_block(char cmd,char v1,char v2,char v3,char v4,char v5);
 //Read 1 byte of data
 char read_byte(void);
 
@@ -239,6 +249,8 @@ int digitalRead(int pin);
 int analogWrite(int pin,int value);
 float temperatureRead(int pin, int model);
 int ultrasonicRead(int pin);
+
+int dynamixelMove(int servo, int pos, int speed);
 
 //Simple GPIO code
 int gpio_export(unsigned int gpio);
