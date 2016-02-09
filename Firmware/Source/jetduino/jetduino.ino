@@ -231,9 +231,12 @@ void dynamixelSetTurnSpeed()
 {
   byte servo = cmd[1];
   byte side = cmd[2];
-  byte speed = cmd[3];
+  byte speed0 = cmd[3];
+  byte speed1 = cmd[4];
 
-  Serial.print("Dynamixel Set Endless");
+  int speed = dynamixel.makeWord(speed0, speed1);
+
+  Serial.print("Dynamixel Set turn speed");
   Serial.print(", servo: "); Serial.print(servo);
   Serial.print(", side: "); Serial.print(side);
   Serial.print(", speed: "); Serial.println(speed);
@@ -298,7 +301,7 @@ int j;
 void loop()
 {
   long dur,RangeCm;
-  if(idx==4)
+  if(idx==6)
   {
     flag=1;
     //IR reciever pin set command
@@ -1033,9 +1036,12 @@ void loop()
 
 void receiveData(int byteCount)
 {
+    //Serial.print("Avail: "); 
+    //Serial.println(Wire.available());
+  
     while(Wire.available())
     {
-      if(Wire.available()==5)
+      if(Wire.available()==6)
       {
         flag=0; 
         idx=0;
