@@ -39,66 +39,66 @@ uint8_t DS1307::bcdToDec(uint8_t val)
 
 void DS1307::begin()
 {
-	Wire.begin();
+	Wire1.begin();
 }
 /*Function: The clock timing will start */
 void DS1307::startClock(void)        // set the ClockHalt bit low to start the rtc
 {
-  Wire.beginTransmission(DS1307_I2C_ADDRESS);
-  Wire.write((uint8_t)0x00);                      // Register 0x00 holds the oscillator start/stop bit
-  Wire.endTransmission();
-  Wire.requestFrom(DS1307_I2C_ADDRESS, 1);
-  second = Wire.read() & 0x7f;       // save actual seconds and AND sec with bit 7 (sart/stop bit) = clock started
-  Wire.beginTransmission(DS1307_I2C_ADDRESS);
-  Wire.write((uint8_t)0x00);
-  Wire.write((uint8_t)second);                    // write seconds back and start the clock
-  Wire.endTransmission();
+  Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+  Wire1.write((uint8_t)0x00);                      // Register 0x00 holds the oscillator start/stop bit
+  Wire1.endTransmission();
+  Wire1.requestFrom(DS1307_I2C_ADDRESS, 1);
+  second = Wire1.read() & 0x7f;       // save actual seconds and AND sec with bit 7 (sart/stop bit) = clock started
+  Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+  Wire1.write((uint8_t)0x00);
+  Wire1.write((uint8_t)second);                    // write seconds back and start the clock
+  Wire1.endTransmission();
 }
 /*Function: The clock timing will stop */
 void DS1307::stopClock(void)         // set the ClockHalt bit high to stop the rtc
 {
-  Wire.beginTransmission(DS1307_I2C_ADDRESS);
-  Wire.write((uint8_t)0x00);                      // Register 0x00 holds the oscillator start/stop bit
-  Wire.endTransmission();
-  Wire.requestFrom(DS1307_I2C_ADDRESS, 1);
-  second = Wire.read() | 0x80;       // save actual seconds and OR sec with bit 7 (sart/stop bit) = clock stopped
-  Wire.beginTransmission(DS1307_I2C_ADDRESS);
-  Wire.write((uint8_t)0x00);
-  Wire.write((uint8_t)second);                    // write seconds back and stop the clock
-  Wire.endTransmission();
+  Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+  Wire1.write((uint8_t)0x00);                      // Register 0x00 holds the oscillator start/stop bit
+  Wire1.endTransmission();
+  Wire1.requestFrom(DS1307_I2C_ADDRESS, 1);
+  second = Wire1.read() | 0x80;       // save actual seconds and OR sec with bit 7 (sart/stop bit) = clock stopped
+  Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+  Wire1.write((uint8_t)0x00);
+  Wire1.write((uint8_t)second);                    // write seconds back and stop the clock
+  Wire1.endTransmission();
 }
 /****************************************************************/
 /*Function: Read time and date from RTC	*/
 void DS1307::getTime()
 {
     // Reset the register pointer
-	Wire.beginTransmission(DS1307_I2C_ADDRESS);
-	Wire.write((uint8_t)0x00);
-	Wire.endTransmission();  
-	Wire.requestFrom(DS1307_I2C_ADDRESS, 7);
+	Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+	Wire1.write((uint8_t)0x00);
+	Wire1.endTransmission();  
+	Wire1.requestFrom(DS1307_I2C_ADDRESS, 7);
 	// A few of these need masks because certain bits are control bits
-	second	   = bcdToDec(Wire.read() & 0x7f);
-	minute	   = bcdToDec(Wire.read());
-	hour	   = bcdToDec(Wire.read() & 0x3f);// Need to change this if 12 hour am/pm
-	dayOfWeek  = bcdToDec(Wire.read());
-	dayOfMonth = bcdToDec(Wire.read());
-	month      = bcdToDec(Wire.read());
-	year	   = bcdToDec(Wire.read());
+	second	   = bcdToDec(Wire1.read() & 0x7f);
+	minute	   = bcdToDec(Wire1.read());
+	hour	   = bcdToDec(Wire1.read() & 0x3f);// Need to change this if 12 hour am/pm
+	dayOfWeek  = bcdToDec(Wire1.read());
+	dayOfMonth = bcdToDec(Wire1.read());
+	month      = bcdToDec(Wire1.read());
+	year	   = bcdToDec(Wire1.read());
 }
 /*******************************************************************/
 /*Frunction: Write the time that includes the date to the RTC chip */
 void DS1307::setTime()
 {
-	Wire.beginTransmission(DS1307_I2C_ADDRESS);
-	Wire.write((uint8_t)0x00);
-	Wire.write(decToBcd(second));// 0 to bit 7 starts the clock
-	Wire.write(decToBcd(minute));
-	Wire.write(decToBcd(hour));  // If you want 12 hour am/pm you need to set bit 6 
-	Wire.write(decToBcd(dayOfWeek));
-	Wire.write(decToBcd(dayOfMonth));
-	Wire.write(decToBcd(month));
-	Wire.write(decToBcd(year));
-	Wire.endTransmission();
+	Wire1.beginTransmission(DS1307_I2C_ADDRESS);
+	Wire1.write((uint8_t)0x00);
+	Wire1.write(decToBcd(second));// 0 to bit 7 starts the clock
+	Wire1.write(decToBcd(minute));
+	Wire1.write(decToBcd(hour));  // If you want 12 hour am/pm you need to set bit 6 
+	Wire1.write(decToBcd(dayOfWeek));
+	Wire1.write(decToBcd(dayOfMonth));
+	Wire1.write(decToBcd(month));
+	Wire1.write(decToBcd(year));
+	Wire1.endTransmission();
 }
 void DS1307::fillByHMS(uint8_t _hour, uint8_t _minute, uint8_t _second)
 {

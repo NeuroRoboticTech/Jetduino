@@ -10,6 +10,13 @@
 //#include "TimerOne.h"
 #include <Servo.h> 
 
+#define INCLUDE_DYNAMIXEL
+
+#ifdef INCLUDE_DYNAMIXEL
+  #include "DynamixelSerial.h"
+  DynamixelSerial dynamixel;
+#endif
+
 MMA7660 acc;
 DS1307 ds_clock;
 DHT dht;
@@ -78,6 +85,16 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define CMD_CLED_SET_MODULO      94
 #define CMD_CLED_SET_lEVEL       95
 
+#define CMD_DYN_SET_REGISTER     100
+#define CMD_DYN_GET_REGISTER     101
+#define CMD_DYN_MOVE             102
+#define CMD_DYN_STOP             103
+#define CMD_DYN_SET_ENDLESS      104
+#define CMD_DYN_SET_TURN_SPEED   105
+#define CMD_DYN_START_SYNCH_MOVE 106
+#define CMD_DYN_ADD_SERVO_SYNCH  107
+#define CMD_DYN_EXEC_SYNCH_MOVE  108
+
 //Servo pin numbers start at 2, but array starts at 0
 #define SERVO_PIN_OFFSET 2
 
@@ -86,7 +103,7 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 Servo *servos[11];
 int servoRead = 0;
 
-int cmd[5];
+int cmd[6];
 int idx=0;
 int flag=0;
 int i;
@@ -121,6 +138,142 @@ int flow_run_bk=0;
 long flow_read_start;
 byte flow_val[3];        //Given it's own I2C buffer so that it does not corrupt the data from other sensors when running in background 
 
+#ifdef INCLUDE_DYNAMIXEL
+
+void dynamixelSetRegister()
+{
+  byte servo = cmd[1];
+  byte reg = cmd[2];
+  byte length = cmd[3];
+  byte value0 = cmd[4];
+  byte value1 = cmd[5];
+
+  Serial.print("Set Dynamixel register");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", reg: "); Serial.print(reg);
+  Serial.print(", length: "); Serial.print(length);
+  Serial.print(", val0: "); Serial.print(value0);
+  Serial.print(", val1: "); Serial.println(value1);
+
+  if(length == 1) {
+    dynamixel.setRegister(servo, reg, value0);
+  }
+  else {
+    int value = dynamixel.makeWord(value0, value1);
+    dynamixel.setRegister2(servo, reg, value);
+  }
+}
+
+void dynamixelGetRegister()
+{
+  byte servo = cmd[1];
+  byte reg = cmd[2];
+  byte length = cmd[3];
+  int regVal = dynamixel.readRegister(servo, reg, length);
+
+  Serial.print("Get Dynamixel register");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", reg: "); Serial.print(reg);
+  Serial.print(", length: "); Serial.print(length);
+  Serial.print(", value: "); Serial.println(regVal);
+
+  if(length == 1) {
+    b[1] = regVal;
+  }
+  else {
+    b[1] = dynamixel.getLowByte(regVal);
+    b[2] = dynamixel.getHighByte(regVal);
+  }
+}
+
+void dynamixelMove()
+{
+  byte servo = cmd[1];
+  byte pos0 = cmd[2];
+  byte pos1 = cmd[3];
+  byte speed0 = cmd[4];
+  byte speed1 = cmd[5];
+
+  int pos = dynamixel.makeWord(pos0, pos1);
+  int speed = dynamixel.makeWord(speed0, speed1);
+
+  Serial.print("Dynamixel Move");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", pos: "); Serial.print(pos);
+  Serial.print(", speed: "); Serial.println(speed);
+  
+  dynamixel.moveSpeed(servo, pos, speed);
+}
+
+void dynamixelStop()
+{
+  byte servo = cmd[1];
+
+  Serial.print("Dynamixel Stop");
+  Serial.print(", servo: "); Serial.println(servo);
+  
+  dynamixel.stop(servo);
+}
+
+void dynamixelSetEndless()
+{
+  byte servo = cmd[1];
+  byte status = cmd[2];
+
+  Serial.print("Dynamixel Set Endless");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", status: "); Serial.println(status);
+
+  dynamixel.setEndless(servo, status);
+}
+
+void dynamixelSetTurnSpeed()
+{
+  byte servo = cmd[1];
+  byte side = cmd[2];
+  byte speed = cmd[3];
+
+  Serial.print("Dynamixel Set Endless");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", side: "); Serial.print(side);
+  Serial.print(", speed: "); Serial.println(speed);
+
+  dynamixel.turn(servo, side, speed);
+}
+
+void dynamixelStartSynchMove()
+{
+  Serial.println("Dynamixel Start Synch Move");
+
+  dynamixel.startSyncWrite(true);
+}
+
+void dynamixelAddToSynchMove()
+{
+  byte servo = cmd[1];
+  byte pos0 = cmd[2];
+  byte pos1 = cmd[3];
+  byte speed0 = cmd[4];
+  byte speed1 = cmd[5];
+
+  int pos = dynamixel.makeWord(pos0, pos1);
+  int speed = dynamixel.makeWord(speed0, speed1);
+
+  Serial.print("Dynamixel Add To Synch Move");
+  Serial.print(", servo: "); Serial.print(servo);
+  Serial.print(", pos: "); Serial.print(pos);
+  Serial.print(", speed: "); Serial.println(speed);
+  
+  dynamixel.addServoToSync(servo, pos, speed);
+}
+
+void dynamixelExecuteSynchMove()
+{
+  Serial.println("Dynamixel Execute Synch Move");
+
+  dynamixel.writeSyncData();
+}
+#endif
 
 void setup()
 {
@@ -133,7 +286,13 @@ void setup()
 	  attachInterrupt(0,readPulseDust,CHANGE);
 
     Serial.println("Finished Setup");
+
+#ifdef INCLUDE_DYNAMIXEL
+    dynamixel.begin(); 
+#endif    
 }
+
+
 int pin;
 int j;
 void loop()
@@ -448,6 +607,75 @@ void loop()
     }
 
     // end Grove LED Bar
+
+    //  start dynamixel control
+#ifdef INCLUDE_DYNAMIXEL
+
+    // Sets a register value in a Dynamixel servo
+    else if(cmd[0] == CMD_DYN_SET_REGISTER && run_once)
+    {
+      dynamixelSetRegister();
+      run_once = false;
+    }
+    
+    // Gets a register value from a Dynamixel servo
+    else if(cmd[0] == CMD_DYN_GET_REGISTER && run_once)
+    {
+      dynamixelGetRegister();
+      run_once = false;
+    }
+    
+    // Start a Dynamixel servo moving 
+    else if(cmd[0] == CMD_DYN_MOVE && run_once)
+    {
+      dynamixelMove();
+      run_once = false;
+    }
+
+    // Stop a Dynamixel servo moving 
+    else if(cmd[0] == CMD_DYN_STOP && run_once)
+    {
+      dynamixelStop();
+      run_once = false;
+    }
+
+    // Set the Dynamixel servo moving endlessly
+    else if(cmd[0] == CMD_DYN_SET_ENDLESS && run_once)
+    {
+      dynamixelSetEndless();
+      run_once = false;
+    }
+
+    // Set the Dynamixel endless turn speed
+    else if(cmd[0] == CMD_DYN_SET_TURN_SPEED && run_once)
+    {
+      dynamixelSetTurnSpeed();
+      run_once = false;
+    }
+
+    // Start a synch move command
+    else if(cmd[0] == CMD_DYN_START_SYNCH_MOVE && run_once)
+    {
+      dynamixelStartSynchMove();
+      run_once = false;
+    }
+
+    // Add a servo to a sync move command
+    else if(cmd[0] == CMD_DYN_ADD_SERVO_SYNCH && run_once)
+    {
+      dynamixelAddToSynchMove();
+      run_once = false;
+    }
+
+    // Execute a sync move command
+    else if(cmd[0] == CMD_DYN_EXEC_SYNCH_MOVE && run_once)
+    {
+      dynamixelExecuteSynchMove();
+      run_once = false;
+    }
+
+#endif
+    //  end dynamixel control
 
     // Grove 4 Digit Display (7 segment)
     // http://www.seeedstudio.com/wiki/Grove_-_4-Digit_Display
@@ -807,7 +1035,7 @@ void receiveData(int byteCount)
 {
     while(Wire.available())
     {
-      if(Wire.available()==4)
+      if(Wire.available()==5)
       {
         flag=0; 
         idx=0;

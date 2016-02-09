@@ -97,7 +97,7 @@ THE SOFTWARE.
 extern int fd;
 extern char *fileName;
 extern int  address;
-extern unsigned char w_buf[5],r_buf[32];
+extern unsigned char w_buf[6],r_buf[32];
 extern unsigned long reg_addr;
 
 #define dRead_cmd 	1
@@ -227,7 +227,7 @@ int openJetduino(void);
 int closeJetduino(void);
 
 //Write a register
-int write_block(char cmd,char v1,char v2,char v3);
+int write_block(char cmd,char v1,char v2,char v3,char v4);
 //Read 1 byte of data
 char read_byte(void);
 
