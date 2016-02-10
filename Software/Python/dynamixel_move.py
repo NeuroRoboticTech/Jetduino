@@ -40,15 +40,37 @@ from jetduino_pins import *
 
 servo = 1
 
+#set the dynamixel so it only returns back data for read commands.
+#print ("setting return status level to 1")
+#jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+
+print ("Move to 0 at fastest speed")
+jetduino.dynamixel_move(servo, 0, 0)
+time.sleep(1)
+
+print ("Move to 1023 slowly")
+jetduino.dynamixel_move(servo, 1023, 200)
+time.sleep(0.5)
+
+print ("stop the servo at its current position.")
+jetduino.dynamixel_stop(servo)
+time.sleep(1)
+
 while True:
     try:
         print ("Moving to 1023 at 100")
         jetduino.dynamixel_move(servo, 1023, 100)
-        time.sleep(2)
+        
+        for num in range(1, 20):
+            pos = jetduino.dynamixel_get_register(servo, jetduino.AX_PRESENT_POSITION_L, 2)
+            print ("Pos: %d" % pos)
 
         print ("Moving to 10 at 1000")
         jetduino.dynamixel_move(servo, 10, 1000)
-        time.sleep(2)
+
+        for num in range(1, 20):
+            pos = jetduino.dynamixel_get_register(servo, jetduino.AX_PRESENT_POSITION_L, 2)
+            print ("Pos: %d" % pos)
 
     except IOError:
         print ("Error")
