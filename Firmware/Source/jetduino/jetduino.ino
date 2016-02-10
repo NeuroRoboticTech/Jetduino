@@ -148,19 +148,22 @@ void dynamixelSetRegister()
   byte value0 = cmd[4];
   byte value1 = cmd[5];
 
-  Serial.print("Set Dynamixel register");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", reg: "); Serial.print(reg);
-  Serial.print(", length: "); Serial.print(length);
-  Serial.print(", val0: "); Serial.print(value0);
-  Serial.print(", val1: "); Serial.println(value1);
+  //Serial.print("Set Dynamixel register");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", reg: "); Serial.print(reg);
+  //Serial.print(", length: "); Serial.print(length);
+  //Serial.print(", val0: "); Serial.print(value0);
+  //Serial.print(", val1: "); Serial.print(value1);
 
   if(length == 1) {
     dynamixel.setRegister(servo, reg, value0);
+    //Serial.println("");
   }
   else {
     int value = dynamixel.makeWord(value0, value1);
     dynamixel.setRegister2(servo, reg, value);
+
+    //Serial.print(", val: "); Serial.println(value);
   }
 }
 
@@ -171,19 +174,24 @@ void dynamixelGetRegister()
   byte length = cmd[3];
   int regVal = dynamixel.readRegister(servo, reg, length);
 
-  Serial.print("Get Dynamixel register");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", reg: "); Serial.print(reg);
-  Serial.print(", length: "); Serial.print(length);
-  Serial.print(", value: "); Serial.println(regVal);
+  //Serial.print("Get Dynamixel register");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", reg: "); Serial.print(reg);
+  //Serial.print(", length: "); Serial.print(length);
+  //Serial.print(", value: "); Serial.print(regVal);
 
   if(length == 1) {
     b[1] = regVal;
+    b[2] = 0;
   }
   else {
     b[1] = dynamixel.getLowByte(regVal);
     b[2] = dynamixel.getHighByte(regVal);
   }
+
+  //Serial.print(", b0: "); Serial.print(b[0]);
+  //Serial.print(", b1: "); Serial.print(b[1]);
+  //Serial.print(", b2: "); Serial.println(b[2]);
 }
 
 void dynamixelMove()
@@ -197,10 +205,10 @@ void dynamixelMove()
   int pos = dynamixel.makeWord(pos0, pos1);
   int speed = dynamixel.makeWord(speed0, speed1);
 
-  Serial.print("Dynamixel Move");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", pos: "); Serial.print(pos);
-  Serial.print(", speed: "); Serial.println(speed);
+  //Serial.print("Dynamixel Move");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", pos: "); Serial.print(pos);
+  //Serial.print(", speed: "); Serial.println(speed);
   
   dynamixel.moveSpeed(servo, pos, speed);
 }
@@ -209,8 +217,8 @@ void dynamixelStop()
 {
   byte servo = cmd[1];
 
-  Serial.print("Dynamixel Stop");
-  Serial.print(", servo: "); Serial.println(servo);
+  //Serial.print("Dynamixel Stop");
+  //Serial.print(", servo: "); Serial.println(servo);
   
   dynamixel.stop(servo);
 }
@@ -220,9 +228,9 @@ void dynamixelSetEndless()
   byte servo = cmd[1];
   byte status = cmd[2];
 
-  Serial.print("Dynamixel Set Endless");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", status: "); Serial.println(status);
+  //Serial.print("Dynamixel Set Endless");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", status: "); Serial.println(status);
 
   dynamixel.setEndless(servo, status);
 }
@@ -236,17 +244,17 @@ void dynamixelSetTurnSpeed()
 
   int speed = dynamixel.makeWord(speed0, speed1);
 
-  Serial.print("Dynamixel Set turn speed");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", side: "); Serial.print(side);
-  Serial.print(", speed: "); Serial.println(speed);
+  //Serial.print("Dynamixel Set turn speed");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", side: "); Serial.print(side);
+  //Serial.print(", speed: "); Serial.println(speed);
 
   dynamixel.turn(servo, side, speed);
 }
 
 void dynamixelStartSynchMove()
 {
-  Serial.println("Dynamixel Start Synch Move");
+  //Serial.println("Dynamixel Start Synch Move");
 
   dynamixel.startSyncWrite(true);
 }
@@ -262,17 +270,17 @@ void dynamixelAddToSynchMove()
   int pos = dynamixel.makeWord(pos0, pos1);
   int speed = dynamixel.makeWord(speed0, speed1);
 
-  Serial.print("Dynamixel Add To Synch Move");
-  Serial.print(", servo: "); Serial.print(servo);
-  Serial.print(", pos: "); Serial.print(pos);
-  Serial.print(", speed: "); Serial.println(speed);
+  //Serial.print("Dynamixel Add To Synch Move");
+  //Serial.print(", servo: "); Serial.print(servo);
+  //Serial.print(", pos: "); Serial.print(pos);
+  //Serial.print(", speed: "); Serial.println(speed);
   
   dynamixel.addServoToSync(servo, pos, speed);
 }
 
 void dynamixelExecuteSynchMove()
 {
-  Serial.println("Dynamixel Execute Synch Move");
+  //Serial.println("Dynamixel Execute Synch Move");
 
   dynamixel.writeSyncData();
 }
@@ -1061,7 +1069,8 @@ void sendData()
   if(cmd[0] == CMD_ANALOG_READ || 
      cmd[0] == CMD_ULTRASONIC_READ || 
      cmd[0] == CMD_LED_BAR_RET_STATE ||
-     cmd[0] == CMD_SERVO_READ)
+     cmd[0] == CMD_SERVO_READ || 
+     cmd[0] == CMD_DYN_GET_REGISTER)
   {
     Wire.write(b, 3);
 
