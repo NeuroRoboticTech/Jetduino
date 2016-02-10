@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Jetduino Example for moving multiple dyanimxel smart servo at the same time using the Jetduino.
+# Jetduino Example for setting/getting the registers of a dyanimxel smart servo using the Jetduino.
 #
 # The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
@@ -38,32 +38,37 @@ import time
 import jetduino
 from jetduino_pins import *
 
-servo_a = 1
-servo_b = 2
+servo = 1
 
-#set the dynamixels so they only returns back data for read commands.
 print ("setting return status level to 1")
-jetduino.dynamixel_set_register(servo_a, jetduino.AX_RETURN_LEVEL, 1, 1)
-jetduino.dynamixel_set_register(servo_b, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
 
-while True:
-    try:
+ret_level = jetduino.dynamixel_get_register(servo, jetduino.AX_RETURN_LEVEL, 1)
+print ("return status level: %d" % (ret_level))
 
-        jetduino.dynamixel_start_synch_move()
-        print ("Moving 1 to 1023 at 100")
-        print ("Moving 2 to 10 at 1000")
-        jetduino.dynamixel_add_synch_move(servo_a, 812, 100)
-        jetduino.dynamixel_add_synch_move(servo_b, 212, 100)
-        jetduino.dynamixel_execute_synch_move()
-        time.sleep(4)
+#first get the angle limits
+cw_limit_orig = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit_orig = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+print ("Before: CW Limit: %d, CCW Limit: %d" % (cw_limit_orig, ccw_limit_orig))
 
-        jetduino.dynamixel_start_synch_move()
-        print ("Moving 1 to 10 at 1000")
-        print ("Moving 2 to 1023 at 100")
-        jetduino.dynamixel_add_synch_move(servo_a, 212, 100)
-        jetduino.dynamixel_add_synch_move(servo_b, 812, 100)
-        jetduino.dynamixel_execute_synch_move()
-        time.sleep(4)
+#now set them to something else
+print ("Setting cw=130, ccw=180")
+jetduino.dynamixel_set_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 130)
+jetduino.dynamixel_set_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 800)
 
-    except IOError:
-        print ("Error")
+#get the angle limits again to check
+cw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+print ("After: CW Limit: %d, CCW Limit: %d" % (cw_limit, ccw_limit))
+
+#now reset them back to the original values
+print ("Resetting angle limits to original values")
+jetduino.dynamixel_set_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 0)
+jetduino.dynamixel_set_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 1023)
+
+#get the angle limits again to check
+cw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+print ("Reset: CW Limit: %d, CCW Limit: %d" % (cw_limit, ccw_limit))
+
+
