@@ -41,8 +41,8 @@ from jetduino_pins import *
 servo = 1
 
 #set the dynamixel so it only returns back data for read commands.
-#print ("setting return status level to 1")
-#jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+print ("setting return status level to 1")
+jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
 
 print ("Move to 0 at fastest speed")
 jetduino.dynamixel_move(servo, 0, 0)

@@ -96,4 +96,14 @@ add_executable (jetduino_dynamixel_move
 				jetduino.c)
 target_link_libraries(jetduino_dynamixel_move m)
                 
+add_executable (jetduino_dynamixel_synch_move
+                jetduino_dynamixel_synch_move.c
+				jetduino.c)
+target_link_libraries(jetduino_dynamixel_synch_move m)
+                
+add_executable (jetduino_dynamixel_set_register
+                jetduino_dynamixel_set_register.c
+				jetduino.c)
+target_link_libraries(jetduino_dynamixel_set_register m)
+                
 

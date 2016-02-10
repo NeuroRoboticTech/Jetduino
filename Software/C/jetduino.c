@@ -475,6 +475,30 @@ int ultrasonicRead(int pin)
 	return data;
 }
 
+int dynamixelSetRegister(int servo, int reg, int length, int value)
+{
+    int val0 = value & 255;
+    int val1 = value >> 8;
+
+	int ret = write_block(dyn_set_register_cmd,servo,reg,length,val0,val1);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelGetRegister(int servo, int reg, int length)
+{
+	int data;
+	write_block(dyn_get_register_cmd,servo,reg,length,0,0);
+	usleep(1000);
+	read_block(3);
+	data=r_buf[2]* 256 + r_buf[1];
+	if (data==65535)
+		return -1;
+
+	jet_sleep(50);
+	return data;
+}
+
 int dynamixelMove(int servo, int pos, int speed)
 {
     int pos0 = pos & 255;
@@ -483,8 +507,62 @@ int dynamixelMove(int servo, int pos, int speed)
     int speed0 = speed & 255;
     int speed1 = speed >> 8;
 
-	return write_block(dyn_move_cmd,servo,pos0,pos1,speed0,speed1);
+	int ret = write_block(dyn_move_cmd,servo,pos0,pos1,speed0,speed1);
+	jet_sleep(50);
+	return ret;
 }
+
+int dynamixelStop(int servo)
+{
+	int ret = write_block(dyn_stop_cmd,servo,0,0,0,0);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelStartSynchMove()
+{
+	int ret = write_block(dyn_start_synch_move_cmd,0,0,0,0,0);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelAddSynchMove(int servo, int pos, int speed)
+{
+    int pos0 = pos & 255;
+    int pos1 = pos >> 8;
+
+    int speed0 = speed & 255;
+    int speed1 = speed >> 8;
+
+	int ret = write_block(dyn_add_servo_synch_cmd,servo,pos0,pos1,speed0,speed1);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelExecuteSynchMove()
+{
+	int ret = write_block(dyn_exec_synch_move_cmd,0,0,0,0,0);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelsetEndless(int servo, int status)
+{
+	int ret = write_block(dyn_set_endless_cmd,servo,status,0,0,0);
+	jet_sleep(50);
+	return ret;
+}
+
+int dynamixelSetTurnSpeed(int servo, int direction, int speed)
+{
+    int speed0 = speed & 255;
+    int speed1 = speed >> 8;
+
+	int ret = write_block(dyn_set_turn_speed_cmd,servo,direction,speed0,speed1,0);
+	jet_sleep(50);
+	return ret;
+}
+
 
 /****************************************************************
  * gpio_export
