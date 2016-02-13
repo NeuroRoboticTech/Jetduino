@@ -40,7 +40,7 @@ import time
 import jetduino
 from jetduino_pins import *
 
-# Connect the Grove Button to digital port D3
+# Connect the Grove Button to digital port D4
 # SIG,NC,VCC,GND
 button = ARD_D4
 led = ARD_D6
