@@ -36,6 +36,9 @@ See more at the [Jetduino Site](http://NeuroRoboticTech.com/Projects/Jetduino/)
 
 The MIT License (MIT)
 
+GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
+Copyright (C) 2015  Dexter Industries
+
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
 Copyright (C) 2016  NeuroRobotic Technologies, LLC
