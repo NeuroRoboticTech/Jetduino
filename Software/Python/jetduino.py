@@ -358,6 +358,7 @@ def analogRead(pin):
 
 # Write PWM
 def analogWrite(pin, value):
+	print aWrite_cmd + [pin, value, unused, unused, unused]
 	write_i2c_block(ard_address, aWrite_cmd + [pin, value, unused, unused, unused])
 	return 1
 
@@ -811,4 +812,16 @@ def dynamixel_turn_speed(servo, direction, speed):
 	write_i2c_block(ard_address, dyn_set_turn_speed_cmd + [servo, direction, speed0, speed1, unused])
 	time.sleep(.01)
 	return 1
+
+def mapValue(value, leftMin, leftMax, rightMin, rightMax):
+	# Figure out how 'wide' each range is
+	leftSpan = leftMax - leftMin
+	rightSpan = rightMax - rightMin
+
+	# Convert the left range into a 0-1 range (float)
+	valueScaled = float(value - leftMin) / float(leftSpan)
+
+	# Convert the 0-1 range into a value in the right range.
+	return rightMin + (valueScaled * rightSpan)
+
 

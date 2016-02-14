@@ -42,35 +42,39 @@ import time
 import jetduino
 from jetduino_pins import *
 
-# Connect the Grove LED to digital port D5
+# Connect the Grove LED to digital port D4, and potentiometer to A0
 # SIG,NC,VCC,GND
-led = ARD_D5
+pot = ARD_A0
+led = ARD_D4
 
 # Digital ports that support Pulse Width Modulation (PWM)
-# D3, D5, D6
+# D2-D13, DAC1, DAC2
 
 # Digital ports that do not support PWM
-# D2, D4, D7, D8
+# D14-D54
 
+jetduino.pinMode(pot, INPUT_PIN)
 jetduino.pinMode(led, OUTPUT_PIN)
 time.sleep(1)
-i = 0
+
+oldVal = -1
 
 while True:
     try:
-        # Reset
-        if i > 255:
-            i = 0
+        #Read in the value from the pot.
+        val = jetduino.analogRead(pot)
 
-        # Current brightness
-        print (i)
+        #convert to 8-bit
+        newVal = int(jetduino.mapValue(val, 0, 1023, 0, 255))
 
-        # Give PWM output to LED
-        jetduino.analogWrite(led,i)
+        # Give PWM output to LED if value changed.
+        if newVal <> oldVal:
+            jetduino.analogWrite(led, newVal)
+            oldVal = newVal
+            print ("LED: %d" % newVal)
 
-        # Increment brightness for next iteration
-        i = i + 20
-        time.sleep(.5)
+        # sleep
+        time.sleep(.25)
 
     except KeyboardInterrupt:
         jetduino.analogWrite(led,0)
