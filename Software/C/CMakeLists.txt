@@ -91,6 +91,11 @@ add_executable (jetduino_button
 				jetduino.c)
 target_link_libraries(jetduino_button m)
                 
+add_executable (jetduino_led_fade
+                jetduino_led_fade.c
+				jetduino.c)
+target_link_libraries(jetduino_led_fade m)
+                
 add_executable (jetduino_dynamixel_move
                 jetduino_dynamixel_move.c
 				jetduino.c)
