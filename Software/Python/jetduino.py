@@ -100,6 +100,10 @@ acc_xyz_cmd = [20]
 # RTC get time
 rtc_getTime_cmd = [30]
 
+# analog precision
+analog_read_prec_cmd = [31]
+analog_write_prec_cmd = [32]
+
 # servo attach
 servo_attach_cmd = [35]
 # servo detach
@@ -358,7 +362,7 @@ def analogRead(pin):
 
 # Write PWM
 def analogWrite(pin, value):
-	print aWrite_cmd + [pin, value, unused, unused, unused]
+	#print aWrite_cmd + [pin, value, unused, unused, unused]
 	write_i2c_block(ard_address, aWrite_cmd + [pin, value, unused, unused, unused])
 	return 1
 
@@ -420,6 +424,23 @@ def ultrasonicRead(pin):
 	number = read_i2c_block(ard_address)
 	return (number[1] * 256 + number[2])
 
+# Write analog read resolution
+def setAnalogReadResolution(bits):
+	if bits <= 0 or bits > 12:
+		print( "invalid bits specified for analog read resolution.")
+		return -1
+
+	write_i2c_block(ard_address, analog_read_prec_cmd + [bits, unused, unused, unused, unused])
+	return 1
+
+# Write analog write resolution
+def setAnalogWriteResolution(bits):
+	if bits <= 0 or bits > 12:
+		print( "invalid bits specified for analog write resolution.")
+		return -1
+
+        write_i2c_block(ard_address, analog_write_prec_cmd + [bits, unused, unused, unused, unused])
+	return 1
 
 # Read the firmware version
 def version():

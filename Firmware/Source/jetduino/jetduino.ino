@@ -51,6 +51,8 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 #define CMD_IR_RECV_PIN_SET      22
 
 #define CMD_RTC_TIME_READ        30
+#define CMD_ANALOG_READ_RES      31
+#define CMD_ANALOG_WRITE_RES     32
 
 #define CMD_SERVO_ATTACH         35
 #define CMD_SERVO_DETACH         36
@@ -438,6 +440,38 @@ void loop()
       b[6]=ds_clock.year;
       b[7]=ds_clock.dayOfMonth;
       b[8]=ds_clock.dayOfWeek;
+    }
+    else if(cmd[0]==CMD_ANALOG_READ_RES && run_once)
+    {
+      int bits = cmd[1];
+
+      Serial.print("Analog Read Res. Bits: ");
+      Serial.println(bits);
+
+      if(bits > 0 && bits <= 12) {
+        analogReadResolution(bits);              
+      }
+      else {
+        Serial.print("Invalid bits set for analog read resolution. Bits: ");
+        Serial.println(bits);
+      }
+      run_once = false;
+    }
+    else if(cmd[0]==CMD_ANALOG_WRITE_RES && run_once)
+    {
+      int bits = cmd[1];
+
+      Serial.print("Analog Write Res. Bits: ");
+      Serial.println(bits);
+
+      if(bits > 0 && bits <=12) {
+        analogWriteResolution(bits);              
+      }
+      else {
+        Serial.print("Invalid bits set for analog write resolution. Bits: ");
+        Serial.println(bits);
+      }
+      run_once = false;
     }
     else if(cmd[0]==CMD_SERVO_ATTACH && run_once)
     {

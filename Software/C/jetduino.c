@@ -475,6 +475,16 @@ int ultrasonicRead(int pin)
 	return data;
 }
 
+int setAnlogReadResolution(int bits)
+{
+	return write_block(analog_read_prec_cmd,bits,0,0,0,0);
+}
+
+int setAnlogWriteResolution(int bits)
+{
+	return write_block(analog_write_prec_cmd,bits,0,0,0,0);
+}
+
 int dynamixelSetRegister(int servo, int reg, int length, int value)
 {
     int val0 = value & 255;

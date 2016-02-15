@@ -39,6 +39,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+#You can find the original due pin mappings in this file on windows.
+#C:\Users\your_user_id\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.6\variant//s\arduino_due_x
+
 ARD_D0 = 0
 ARD_D1 = 1
 ARD_D2 = 2
@@ -111,6 +114,9 @@ ARD_A8 = 62
 ARD_A9 = 63
 ARD_A10 = 64
 ARD_A11 = 65
+
+ARD_DAC0 = 66
+ARD_DAC1 = 67
 
 JET_A0 = 100
 JET_A1 = 101

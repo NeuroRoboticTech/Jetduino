@@ -106,6 +106,9 @@ extern unsigned long reg_addr;
 #define aWrite_cmd 	4
 #define pMode_cmd	5
 #define ultrasonic_read_cmd      7
+ 
+#define analog_read_prec_cmd       31
+#define analog_write_prec_cmd      32
 
 #define servo_attach_cmd    35
 #define servo_detach_cmd    36
@@ -126,6 +129,9 @@ extern unsigned long reg_addr;
 #define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
 #define MAX_BUF 64
 #define SYSFS_OMAP_MUX_DIR "/sys/kernel/debug/omap_mux/"
+
+//You can find the original due pin mappings in this file on windows.
+//C:\Users\your_user_id\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.6\variant//s\arduino_due_x
 
 #define ARD_D0 0
 #define ARD_D1 1
@@ -199,6 +205,9 @@ extern unsigned long reg_addr;
 #define ARD_A9 63
 #define ARD_A10 64
 #define ARD_A11 65
+
+#define ARD_DAC0 66
+#define ARD_DAC1 67
 
 #define JET_A0 100
 #define JET_A1 101
@@ -304,6 +313,9 @@ int digitalRead(int pin);
 int analogWrite(int pin,int value);
 float temperatureRead(int pin, int model);
 int ultrasonicRead(int pin);
+
+int setAnlogReadResolution(int bits);
+int setAnlogWriteResolution(int bits);
 
 int dynamixelSetRegister(int servo, int reg, int length, int value);
 int dynamixelGetRegister(int servo, int reg, int length);
