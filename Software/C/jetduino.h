@@ -313,6 +313,7 @@ int digitalRead(int pin);
 int analogWrite(int pin,int value);
 float temperatureRead(int pin, int model);
 int ultrasonicRead(int pin);
+int mapValue(int val, int leftMin, int leftMax, int rightMin, int rightMax);
 
 int setAnlogReadResolution(int bits);
 int setAnlogWriteResolution(int bits);

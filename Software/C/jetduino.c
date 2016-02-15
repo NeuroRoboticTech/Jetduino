@@ -475,6 +475,19 @@ int ultrasonicRead(int pin)
 	return data;
 }
 
+int mapValue(int val, int leftMin, int leftMax, int rightMin, int rightMax)
+{
+    // Figure out how 'wide' each range is
+    leftSpan = leftMax - leftMin
+    rightSpan = rightMax - rightMin
+
+    // Convert the left range into a 0-1 range (float)
+    valueScaled = float(value - leftMin) / float(leftSpan)
+
+    // Convert the 0-1 range into a value in the right range.
+    return rightMin + (valueScaled * rightSpan)    
+}
+
 int setAnlogReadResolution(int bits)
 {
 	return write_block(analog_read_prec_cmd,bits,0,0,0,0);
