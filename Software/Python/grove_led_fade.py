@@ -63,18 +63,19 @@ while True:
     try:
         #Read in the value from the pot.
         val = jetduino.analogRead(pot)
+        print ("val: %d" % val)
 
         #convert to 8-bit
         newVal = int(jetduino.mapValue(val, 0, 1023, 0, 255))
 
         # Give PWM output to LED if value changed.
-        if newVal <> oldVal:
+        if val >= 0 and newVal <> oldVal:
             jetduino.analogWrite(led, newVal)
             oldVal = newVal
             print ("LED: %d" % newVal)
 
         # sleep
-        time.sleep(.25)
+        time.sleep(.1)
 
     except KeyboardInterrupt:
         jetduino.analogWrite(led,0)
