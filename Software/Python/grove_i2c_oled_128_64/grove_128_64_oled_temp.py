@@ -67,6 +67,8 @@ oldTemp = -1
 oled.setTextXY(0,0)
 oled.putString("Temperature") #Print the String
 
+jetduino.setAnalogReadResolution(10)
+
 while True:
     try:
         celsius = jetduino.temp(sensor,'1.2')

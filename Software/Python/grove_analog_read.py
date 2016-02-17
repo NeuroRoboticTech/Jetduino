@@ -44,11 +44,16 @@ from jetduino_pins import *
 sensor = ARD_A0
 
 jetduino.pinMode(sensor, INPUT_PIN)
+
+jetduino.setAnalogReadResolution(10)
+
 while True:
     try:
         sensor_value = jetduino.analogRead(sensor)
 
+        #if sensor_value >= 0:
         print ("sensor_value =", sensor_value)
+
         time.sleep(.5)
 
     except IOError:

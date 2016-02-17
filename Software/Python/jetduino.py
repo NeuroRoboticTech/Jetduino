@@ -359,7 +359,7 @@ def analogRead(pin):
 	time.sleep(.1)
 	num = number[1] * 256 + number[2]
 	if num <= 4095:
-		return number[1] * 256 + number[2]
+		return num
 	else:
 		return -1
 
