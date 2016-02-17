@@ -357,6 +357,7 @@ void loop()
       //Serial.print(cmd[1]);
       //Serial.print(", Value: ");
       //Serial.println(aRead);
+      //run_once = false;
     }
 
     //Set up Analog Write
