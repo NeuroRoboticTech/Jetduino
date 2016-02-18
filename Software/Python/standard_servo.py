@@ -36,8 +36,9 @@ THE SOFTWARE.
 
 import time
 import jetduino
+from jetduino_pins import *
 
-servo_pin = 4
+servo_pin = ARD_D4
 
 print("attaching to servo.")
 jetduino.servoAttach(servo_pin)
