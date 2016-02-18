@@ -357,8 +357,11 @@ def analogRead(pin):
 	bus.read_byte(ard_address)
 	number = bus.read_i2c_block_data(ard_address, 1)
 	time.sleep(.1)
-	return number[1] * 256 + number[2]
-
+	num = number[1] * 256 + number[2]
+	if num <= 4095:
+		return number[1] * 256 + number[2]
+	else:
+		return -1
 
 # Write PWM
 def analogWrite(pin, value):
@@ -411,9 +414,13 @@ def temp(pin, model = '1.0'):
 	else:
 		bValue = 3975  # sensor v1.0 uses thermistor TTC3A103*39H
 	a = analogRead(pin)
-	resistance = (float)(1023 - a) * 10000 / a
-	t = (float)(1 / (math.log(resistance / 10000) / bValue + 1 / 298.15) - 273.15)
-	return t
+	
+	if a >= 0 and a <= 1023:
+		resistance = (float)(1023 - a) * 10000 / a
+		t = (float)(1 / (math.log(resistance / 10000) / bValue + 1 / 298.15) - 273.15)
+		return t
+
+	return -1
 
 
 # Read value from Grove Ultrasonic

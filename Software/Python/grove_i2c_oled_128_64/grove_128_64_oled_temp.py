@@ -72,7 +72,7 @@ while True:
         celsius = jetduino.temp(sensor,'1.2')
 
         #if the temp changes write it out to the screen.
-        if math.fabs(oldTemp - celsius) > 0.01: 
+        if celsius > 0 and math.fabs(oldTemp - celsius) > 0.01: 
             print ("temp =", celsius)
             fahrenheit = (celsius * 1.8) + 32
             oled.setTextXY(0,1)
