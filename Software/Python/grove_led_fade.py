@@ -42,9 +42,9 @@ import time
 import jetduino
 from jetduino_pins import *
 
-# Connect the Grove LED to digital port D5
+# Connect the Grove LED to digital port D4
 # SIG,NC,VCC,GND
-led = ARD_D5
+led = ARD_D4
 
 # Digital ports that support Pulse Width Modulation (PWM)
 # D2-D13, DAC1, DAC2
