@@ -53,8 +53,9 @@ led = ARD_D4
 # D14-D54
 
 jetduino.pinMode(led, OUTPUT_PIN)
-time.sleep(1)
+time.sleep(0.1)
 i = 0
+
 
 while True:
     try:
@@ -69,8 +70,8 @@ while True:
         jetduino.analogWrite(led,i)
 
         # Increment brightness for next iteration
-        i = i + 20
-        time.sleep(.5)
+        i = i + 5
+        time.sleep(.05)
 
     except KeyboardInterrupt:
         jetduino.analogWrite(led,0)
