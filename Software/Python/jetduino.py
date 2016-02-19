@@ -766,7 +766,7 @@ def flowRead():
 		return [-1,-1]
 
 # Dynamixel set register. Sets a register on a Dynamixel smart servo.
-def dynamixel_set_register(servo, reg, length, value):
+def dynamixelSetRegister(servo, reg, length, value):
 	val0 = value & 255
 	val1 = value >> 8
 
@@ -775,7 +775,7 @@ def dynamixel_set_register(servo, reg, length, value):
 	return 1
 
 # Dynamixel get register. Gets a register on a Dynamixel smart servo.
-def dynamixel_get_register(servo, reg, length):
+def dynamixelGetRegister(servo, reg, length):
 	write_i2c_block(ard_address, dyn_get_register_cmd + [servo, reg, length, unused, unused])
 	time.sleep(.1)
 	bus.read_byte(ard_address)
@@ -785,7 +785,7 @@ def dynamixel_get_register(servo, reg, length):
 	return number[2] * 256 + number[1]
 
 # Dynamixel move command. Moves a smart servo to a given position at a specified speed.
-def dynamixel_move(servo, pos, speed):
+def dynamixelMove(servo, pos, speed):
 	pos0 = pos & 255
 	pos1 = pos >> 8
 
@@ -797,19 +797,19 @@ def dynamixel_move(servo, pos, speed):
 	return 1
 
 # Dynamixel stop synch move. Stops the servo from moving and maintains its current position.
-def dynamixel_stop(servo):
+def dynamixelStop(servo):
 	write_i2c_block(ard_address, dyn_stop_cmd + [servo, unused, unused, unused, unused])
 	time.sleep(.01)
 	return 1
 
 # Dynamixel start synch move. Starts a multiple servo move sequence.
-def dynamixel_start_synch_move():
+def dynamixelStartSynchMove():
 	write_i2c_block(ard_address, dyn_start_synch_move_cmd + [unused, unused, unused, unused, unused])
 	time.sleep(.01)
 	return 1
 
 # Dynamixel add servo to synch move. Adds a servo movement to a synch move command
-def dynamixel_add_synch_move(servo, pos, speed):
+def dynamixelAddSynchMove(servo, pos, speed):
 	pos0 = pos & 255
 	pos1 = pos >> 8
 
@@ -821,19 +821,19 @@ def dynamixel_add_synch_move(servo, pos, speed):
 	return 1
 
 # Dynamixel execute synch move. Signals the start of a multiple servo move sequence.
-def dynamixel_execute_synch_move():
+def dynamixelExecuteSynchMove():
 	write_i2c_block(ard_address, dyn_exec_synch_move_cmd + [unused, unused, unused, unused, unused])
 	time.sleep(.01)
 	return 1
 
 # Dynamixel set endless. Turns on/off the full rotation mode or servo mode
-def dynamixel_set_endless(servo, endless_on):
+def dynamixelSetEndless(servo, endless_on):
 	write_i2c_block(ard_address, dyn_set_endless_cmd + [servo, endless_on, unused, unused, unused])
 	time.sleep(.01)
 	return 1
 
 # Dynamixel turn speed.
-def dynamixel_turn_speed(servo, direction, speed):
+def dynamixelTurnSpeed(servo, direction, speed):
 	speed0 = speed & 255
 	speed1 = speed >> 8
 

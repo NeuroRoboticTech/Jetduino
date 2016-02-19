@@ -43,26 +43,26 @@ servo_b = 2
 
 #set the dynamixels so they only returns back data for read commands.
 print ("setting return status level to 1")
-jetduino.dynamixel_set_register(servo_a, jetduino.AX_RETURN_LEVEL, 1, 1)
-jetduino.dynamixel_set_register(servo_b, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixelSetRegister(servo_a, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixelSetRegister(servo_b, jetduino.AX_RETURN_LEVEL, 1, 1)
 
 while True:
     try:
 
-        jetduino.dynamixel_start_synch_move()
+        jetduino.dynamixelStartSynchMove()
         print ("Moving 1 to 1023 at 100")
         print ("Moving 2 to 10 at 1000")
-        jetduino.dynamixel_add_synch_move(servo_a, 1023, 100)
-        jetduino.dynamixel_add_synch_move(servo_b, 10, 100)
-        jetduino.dynamixel_execute_synch_move()
+        jetduino.dynamixelAddSynchMove(servo_a, 1023, 100)
+        jetduino.dynamixelAddSynchMove(servo_b, 10, 100)
+        jetduino.dynamixelExecuteSynchMove()
         time.sleep(4)
 
-        jetduino.dynamixel_start_synch_move()
+        jetduino.dynamixelStartSynchMove()
         print ("Moving 1 to 10 at 1000")
         print ("Moving 2 to 1023 at 100")
-        jetduino.dynamixel_add_synch_move(servo_a, 10, 100)
-        jetduino.dynamixel_add_synch_move(servo_b, 1023, 100)
-        jetduino.dynamixel_execute_synch_move()
+        jetduino.dynamixelAddSynchMove(servo_a, 10, 100)
+        jetduino.dynamixelAddSynchMove(servo_b, 1023, 100)
+        jetduino.dynamixelExecuteSynchMove()
         time.sleep(4)
 
     except IOError:

@@ -41,23 +41,23 @@ from jetduino_pins import *
 servo = 1
 
 print ("Setting servo 1 to be endless turns.")
-jetduino.dynamixel_set_endless(servo, 1)
+jetduino.dynamixelSetEndless(servo, True)
 
 for num in range(1,2):
     try:
         print ("Turning CW at 1000")
-        jetduino.dynamixel_turn_speed(servo, 0, 1000);
+        jetduino.dynamixelTurnSpeed(servo, CLOCKWISE, 1000);
         time.sleep(5)
 
         print ("Turning CCW at 500")
-        jetduino.dynamixel_turn_speed(servo, 1, 500);
+        jetduino.dynamixelTurnSpeed(servo, COUNTER_CLOCKWISE, 500);
         time.sleep(5)
 
     except IOError:
         print ("Error")
 
 print ("Setting servo 1 to back to regular servo.")
-jetduino.dynamixel_set_endless(servo, 0)
-jetduino.dynamixel_move(servo, 512, 1000);
+jetduino.dynamixelSetEndless(servo, False)
+jetduino.dynamixelMove(servo, 512, 1000);
 
 
