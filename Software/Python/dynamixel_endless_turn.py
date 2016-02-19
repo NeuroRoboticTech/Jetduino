@@ -40,8 +40,10 @@ from jetduino_pins import *
 
 servo = 1
 
+jetduino.dynamixelSetRegister(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+
 print ("Setting servo 1 to be endless turns.")
-jetduino.dynamixelSetEndless(servo, True)
+jetduino.dynamixelSetEndless(servo, 1)
 
 for num in range(1,2):
     try:
@@ -53,11 +55,14 @@ for num in range(1,2):
         jetduino.dynamixelTurnSpeed(servo, COUNTER_CLOCKWISE, 500);
         time.sleep(5)
 
+    except KeyboardInterrupt:
+        print("Exiting loop")
+        break
     except IOError:
         print ("Error")
 
 print ("Setting servo 1 to back to regular servo.")
-jetduino.dynamixelSetEndless(servo, False)
+jetduino.dynamixelSetEndless(servo, 0)
 jetduino.dynamixelMove(servo, 512, 1000);
 
 

@@ -65,5 +65,13 @@ while True:
         jetduino.dynamixelExecuteSynchMove()
         time.sleep(4)
 
+    except KeyboardInterrupt:
+        print("Exiting loop")
+        break
     except IOError:
         print ("Error")
+
+print ("stopping servos.")
+jetduino.dynamixelStop(servo_a)
+jetduino.dynamixelStop(servo_b)
+
