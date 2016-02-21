@@ -42,35 +42,45 @@ servo = 1
 
 #set the dynamixel so it only returns back data for read commands.
 print ("setting return status level to 1")
-jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 0)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 1023)
+jetduino.dynamixelSetEndless(servo, 0) 
 
 print ("Move to 0 at fastest speed")
-jetduino.dynamixel_move(servo, 0, 0)
-time.sleep(1)
+jetduino.dynamixelMove(servo, 0, 0)
+time.sleep(2)
 
 print ("Move to 1023 slowly")
-jetduino.dynamixel_move(servo, 1023, 200)
-time.sleep(0.5)
+jetduino.dynamixelMove(servo, 1023, 200)
+time.sleep(1)
 
 print ("stop the servo at its current position.")
-jetduino.dynamixel_stop(servo)
+jetduino.dynamixelStop(servo)
 time.sleep(1)
 
 while True:
     try:
         print ("Moving to 1023 at 100")
-        jetduino.dynamixel_move(servo, 1023, 100)
+        jetduino.dynamixelMove(servo, 1023, 100)
         
-        for num in range(1, 20):
-            pos = jetduino.dynamixel_get_register(servo, jetduino.AX_PRESENT_POSITION_L, 2)
+        for num in range(1, 30):
+            pos = jetduino.dynamixelGetRegister(servo, jetduino.AX_PRESENT_POSITION_L, 2)
             print ("Pos: %d" % pos)
 
         print ("Moving to 10 at 1000")
-        jetduino.dynamixel_move(servo, 10, 1000)
+        jetduino.dynamixelMove(servo, 10, 1000)
 
-        for num in range(1, 20):
-            pos = jetduino.dynamixel_get_register(servo, jetduino.AX_PRESENT_POSITION_L, 2)
+        for num in range(1, 30):
+            pos = jetduino.dynamixelGetRegister(servo, jetduino.AX_PRESENT_POSITION_L, 2)
             print ("Pos: %d" % pos)
 
+    except KeyboardInterrupt:
+        print("Exiting loop")
+        break
     except IOError:
         print ("Error")
+
+print ("stopping servo.")
+jetduino.dynamixelStop(servo)
+

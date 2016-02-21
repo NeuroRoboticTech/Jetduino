@@ -41,34 +41,34 @@ from jetduino_pins import *
 servo = 1
 
 print ("setting return status level to 1")
-jetduino.dynamixel_set_register(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_RETURN_LEVEL, 1, 1)
 
-ret_level = jetduino.dynamixel_get_register(servo, jetduino.AX_RETURN_LEVEL, 1)
+ret_level = jetduino.dynamixelGetRegister(servo, jetduino.AX_RETURN_LEVEL, 1)
 print ("return status level: %d" % (ret_level))
 
 #first get the angle limits
-cw_limit_orig = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
-ccw_limit_orig = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+cw_limit_orig = jetduino.dynamixelGetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit_orig = jetduino.dynamixelGetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
 print ("Before: CW Limit: %d, CCW Limit: %d" % (cw_limit_orig, ccw_limit_orig))
 
 #now set them to something else
 print ("Setting cw=130, ccw=180")
-jetduino.dynamixel_set_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 130)
-jetduino.dynamixel_set_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 800)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 130)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 800)
 
 #get the angle limits again to check
-cw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
-ccw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+cw_limit = jetduino.dynamixelGetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit = jetduino.dynamixelGetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
 print ("After: CW Limit: %d, CCW Limit: %d" % (cw_limit, ccw_limit))
 
 #now reset them back to the original values
 print ("Resetting angle limits to original values")
-jetduino.dynamixel_set_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 0)
-jetduino.dynamixel_set_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 1023)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2, 0)
+jetduino.dynamixelSetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2, 1023)
 
 #get the angle limits again to check
-cw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
-ccw_limit = jetduino.dynamixel_get_register(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
+cw_limit = jetduino.dynamixelGetRegister(servo, jetduino.AX_CW_ANGLE_LIMIT_L, 2)
+ccw_limit = jetduino.dynamixelGetRegister(servo, jetduino.AX_CCW_ANGLE_LIMIT_L, 2)
 print ("Reset: CW Limit: %d, CCW Limit: %d" % (cw_limit, ccw_limit))
 
 
