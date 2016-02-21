@@ -63,13 +63,19 @@ print ("angle =", cur_angle)
 time.sleep(1)
 
 for num in range(1,5):
-    print("Moving servo cycle %d." % num)
-    for angle in range(0,180):
-        #print("    angle %d" % angle)
-        jetduino.servoWrite(servo_pin, angle)
-        time.sleep(0.05)
-    
-    time.sleep(1)
+    try:
+        print("Moving servo cycle %d." % num)
+        for angle in range(0,180):
+            #print("    angle %d" % angle)
+            jetduino.servoWrite(servo_pin, angle)
+            time.sleep(0.05)
+        
+        time.sleep(1)
+    except KeyboardInterrupt:
+        print("Exiting loop")
+        break
+    except IOError:
+        print ("Error")
 
 print("detaching from servo")
 jetduino.servoDetach(servo_pin)
