@@ -723,6 +723,11 @@ void DynamixelSerial::setRegister(int id, int regstart, int data)
     sendData(checksum);
     delayus(TX_DELAY_TIME);
 	switchCom(Direction_Pin,Rx_MODE);
+
+  if(regstart == AX_RETURN_LEVEL) {
+    Status_Return_Level = data;
+    //Serial.println("Set return level: "); Serial.println(data);
+  }
 }
 
 /* Set the value of a double-byte register. */
