@@ -745,45 +745,69 @@ void loop()
 
     // initialise a 4 digit display
     // [70, pin, unused, unused]
-    else if(cmd[0] == CMD_4D_INIT)
+    else if(cmd[0] == CMD_4D_INIT && run_once)
     {
+      Serial.print("Init 4 digit. Pin: ");
+      Serial.println(cmd[1]);
+      
       // clock pin is always next to the data pin
-      fourdigit[cmd[1]-2].begin(cmd[1], cmd[1]+1);  // clock, data
+      fourdigit[cmd[1]-2].init(cmd[1], cmd[1]+1);  // clock, data
+      run_once = false;
     }
 
     // set brightness
     // [71, pin, brightness, unused]
-    else if(cmd[0] == CMD_4D_SET_BRIGHT && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_BRIGHT && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      fourdigit[cmd[1]-2].setBrightness(cmd[2]);  // setBrightness(brightness)
+      Serial.print("brightness 4 digit. Pin: ");
+      Serial.print(cmd[1]);
+      Serial.print(", val: ");
+      Serial.println(cmd[2]);
+      
+      fourdigit[cmd[1]-2].set(cmd[2]);  // setBrightness(brightness)
+      run_once = false;
     }
+
 
     // show right aligned decimal value without leading zeros
     // [72, pin, bits 1-8, bits 9-16]
-    else if(cmd[0] == CMD_4D_VAL_W_ZERO && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_VAL_W_ZERO && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      fourdigit[cmd[1]-2].showNumberDec(cmd[2] ^ (cmd[3] << 8), false);  // showNumberDec(number, leading_zero)
+      int val = cmd[2] ^ (cmd[3] << 8);
+      Serial.print("show dec no 0. 4 digit. Pin: ");
+      Serial.print(cmd[1]);
+      Serial.print(", val: ");
+      Serial.println(val);
+      
+      fourdigit[cmd[1]-2].showNumberDec(val, true);  // showNumberDec(number, leading_zero)
+      run_once = false;
     }
 
     // show right aligned decimal value with leading zeros
     // [73, pin, bits 1-8, bits 9-16]
-    else if(cmd[0] == CMD_4D_VAL_WO_ZERO && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_VAL_WO_ZERO && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      fourdigit[cmd[1]-2].showNumberDec(cmd[2] ^ (cmd[3] << 8), true);  // showNumberDec(number, leading_zero)
+      int val = cmd[2] ^ (cmd[3] << 8);
+      Serial.print("show dec with 0. 4 digit. Pin: ");
+      Serial.print(cmd[1]);
+      Serial.print(", val: ");
+      Serial.println(val);
+
+      fourdigit[cmd[1]-2].showNumberDec(val, false);  // showNumberDec(number, leading_zero)
+      run_once = false;
     }
 
     // set individual digit
     // [74, pin, index, dec]
-    else if(cmd[0] == CMD_4D_SET_DIGIT && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_DIGIT && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      uint8_t data[] = {};
-      data[0] = fourdigit[cmd[1]-2].encodeDigit(cmd[3]);  // encodeDigit(number)
-      fourdigit[cmd[1]-2].setSegments(data, 1, cmd[2]);  // setSegments(segments[], length, position)
+      fourdigit[cmd[1]-2].display(cmd[2], cmd[3]);  // displaySegments(segments[], length, position)
+      run_once = false;
     }
 
     // set individual segment
     // [75, pin, index, binary]
-    else if(cmd[0] == CMD_4D_SET_SEGMENT && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_SEGMENT && fourdigit[cmd[1]-2].ready() && run_once)
     {
       // 0xFF = 0b11111111 = Colon,G,F,E,D,C,B,A
       // Colon only works on 2nd segment (index 1)
@@ -792,28 +816,27 @@ void loop()
       //     -G-
       //  E |   | C
       //     -D-
-      uint8_t data[] = {};
-      data[0] = cmd[3];  // byte
-      fourdigit[cmd[1]-2].setSegments(data, 1, cmd[2]);  // setSegments(segments[], length, position)
+      fourdigit[cmd[1]-2].displaySegment(cmd[2], cmd[3]);  // setSegments(segments[], length, position)
+      run_once = false;
     }
 
     // set left and right with colon separator
     // [76, pin, left, right]
-    else if(cmd[0] == CMD_4D_SET_COLON && fourdigit[cmd[1]-2].ready())
+    else if(cmd[0] == CMD_4D_SET_COLON && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      uint8_t data[] = {};
+      int8_t data[] = {};
       // 1st segment
-      data[0] = fourdigit[cmd[1]-2].encodeDigit(cmd[2] / 10);  // encodeDigit(number)
+      data[0] = cmd[2] / 10;  // encodeDigit(number)
       // 2nd segment
-      data[1] = fourdigit[cmd[1]-2].encodeDigit(cmd[2] % 10);  // encodeDigit(number)
-      // colon
-      data[1] |= 0x80;
+      data[1] = cmd[2] % 10;  // encodeDigit(number)
       // 3rd segment
-      data[2] = fourdigit[cmd[1]-2].encodeDigit(cmd[3] / 10);  // encodeDigit(number)
+      data[2] = cmd[3] / 10;  // encodeDigit(number)
       // 4th segment
-      data[3] = fourdigit[cmd[1]-2].encodeDigit(cmd[3] % 10);  // encodeDigit(number)
+      data[3] = cmd[3] % 10;  // encodeDigit(number)
       // send
-      fourdigit[cmd[1]-2].setSegments(data, 4, 0);  // setSegments(segments[], length, position)
+      fourdigit[cmd[1]-2].point(true);
+      fourdigit[cmd[1]-2].display(data);
+      run_once = false;
     }
 
     // analog read
@@ -834,16 +857,16 @@ void loop()
     // [78, pin, unused, unused]
     else if(cmd[0] == CMD_4D_DISPLAY_ON && fourdigit[cmd[1]-2].ready())
     {
-      uint8_t data[] = { 0xFF, 0xFF, 0xFF, 0xFF };
-      fourdigit[cmd[1]-2].setSegments(data, 4, 0);  // setSegments(segments[], length, position)
+      int8_t data[] = { 0xFF, 0xFF, 0xFF, 0xFF };
+      fourdigit[cmd[1]-2].displaySegments(data);  // setSegments(segments[], length, position)
     }
 
     // display off
     // [79, pin, unused, unused]
     else if(cmd[0] == CMD_4D_DISPLAY_OFF && fourdigit[cmd[1]-2].ready())
     {
-      uint8_t data[] = { 0x00, 0x00, 0x00, 0x00 };
-      fourdigit[cmd[1]-2].setSegments(data, 4, 0);  // setSegments(segments[], length, position)
+      int8_t data[] = { 0x00, 0x00, 0x00, 0x00 };
+      fourdigit[cmd[1]-2].displaySegments(data);  // displaySegments(segments[], length, position)
     }
 
     // end Grove 4 Digit Display
@@ -1185,3 +1208,4 @@ void readPulseDust()
     pulse_end = 0;    // If you don't reset this, you'll keep adding the pulse length over and over.
   }
 }
+

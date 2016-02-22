@@ -1,4 +1,5 @@
-//  Author: avishorp@gmail.com
+//  Author:Frankie.Chu
+//  Date:9 April,2012
 //
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -13,95 +14,200 @@
 //  You should have received a copy of the GNU Lesser General Public
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-extern "C" {
-  #include <stdlib.h>
-  #include <string.h>
-  #include <inttypes.h>
-}
-
+//
+//  Modified record:
+//
+/*******************************************************************************/
 #include "TM1637.h"
 #include <Arduino.h>
+static int8_t TubeTab[] = {0x3f,0x06,0x5b,0x4f,
+                           0x66,0x6d,0x7d,0x07,
+                           0x7f,0x6f,0x77,0x7c,
+                           0x39,0x5e,0x79,0x71};//0~9,A,b,C,d,E,F                        
 
-#define TM1637_I2C_COMM1    0x40
-#define TM1637_I2C_COMM2    0xC0
-#define TM1637_I2C_COMM3    0x80
-
-//
-//      A
-//     ---
-//  F |   | B
-//     -G-
-//  E |   | C
-//     ---
-//      D
-const uint8_t digitToSegment[] = {
-  //XGFEDCBA     <- one bit for each segment above and X is the colon
-  0b00111111,    // 0
-  0b00000110,    // 1
-  0b01011011,    // 2
-  0b01001111,    // 3
-  0b01100110,    // 4
-  0b01101101,    // 5
-  0b01111101,    // 6
-  0b00000111,    // 7
-  0b01111111,    // 8
-  0b01101111,    // 9
-  0b01110111,    // A
-  0b01111100,    // b
-  0b00111001,    // C
-  0b01011110,    // d
-  0b01111001,    // E
-  0b01110001     // F
-};
-
-
-//TM1637::TM1637(uint8_t pinClk, uint8_t pinDIO)
-void TM1637::begin(uint8_t pinClk, uint8_t pinDIO)
+TM1637::TM1637()
 {
-  // Copy the pin numbers
-  m_pinClk = pinClk;
-  m_pinDIO = pinDIO;
-
-  // Set the pin direction and default value.
-  // Both pins are set as inputs, allowing the pull-up resistors to pull them up
-  pinMode(m_pinClk, INPUT);
-  pinMode(m_pinDIO, INPUT);
-  digitalWrite(m_pinClk, LOW);
-  digitalWrite(m_pinDIO, LOW);
+  Clkpin = 0;
+  Datapin = 0;
+  Cmd_SetData = 0x40;
+  Cmd_SetAddr = 0xc0;
 }
 
-void TM1637::setBrightness(uint8_t brightness)
+void TM1637::init(uint8_t Clk, uint8_t Data)
 {
-  m_brightness = constrain(brightness, 0, 7) + 8;
+  Clkpin = Clk;
+  Datapin = Data;
+  Cmd_SetData = 0x40;
+  Cmd_SetAddr = 0xc0;
+
+  pinMode(Clkpin,OUTPUT);
+  pinMode(Datapin,OUTPUT);
+
+  clearDisplay();
 }
 
-void TM1637::setSegments(const uint8_t segments[], uint8_t length, uint8_t pos)
+void TM1637::writeByte(int8_t wr_data)
 {
-  // Write COMM1
-  start();
-  writeByte(TM1637_I2C_COMM1);
-  stop();
+  uint8_t i,count1;   
+  for(i=0;i<8;i++)        //sent 8bit data
+  {
+    digitalWrite(Clkpin,LOW);      
+    if(wr_data & 0x01)digitalWrite(Datapin,HIGH);//LSB first
+    else digitalWrite(Datapin,LOW);
+    wr_data >>= 1;      
+    digitalWrite(Clkpin,HIGH);
+      
+  }  
+  digitalWrite(Clkpin,LOW); //wait for the ACK
+  digitalWrite(Datapin,HIGH);
+  digitalWrite(Clkpin,HIGH);     
+  pinMode(Datapin,INPUT);
+  while(digitalRead(Datapin))    
+  { 
+    count1 +=1;
+    if(count1 == 200)//
+    {
+     pinMode(Datapin,OUTPUT);
+     digitalWrite(Datapin,LOW);
+     count1 =0;
+    }
+    pinMode(Datapin,INPUT);
+  }
+  pinMode(Datapin,OUTPUT);
+  
+}
+//send start signal to TM1637
+void TM1637::start(void)
+{
+  digitalWrite(Clkpin,HIGH);//send start signal to TM1637
+  digitalWrite(Datapin,HIGH); 
+  digitalWrite(Datapin,LOW); 
+  digitalWrite(Clkpin,LOW); 
+} 
+//End of transmission
+void TM1637::stop(void)
+{
+  digitalWrite(Clkpin,LOW);
+  digitalWrite(Datapin,LOW);
+  digitalWrite(Clkpin,HIGH);
+  digitalWrite(Datapin,HIGH); 
+}
+//display function.Write to full-screen.
+void TM1637::display(int8_t DispData[])
+{
+  int8_t SegData[4];
+  uint8_t i;
 
-  // Write COMM2 + first digit address
-  start();
-  writeByte(TM1637_I2C_COMM2 + (pos & 0x03));
+  Serial.println("display start");
+  for(i = 0;i < 4;i ++)
+  {
+    SegData[i] = DispData[i];    
+    Serial.println(DispData[i]);
+  }
+  coding(SegData);
 
-  // Write the data bytes
-  for (uint8_t k = 0; k < length; k++)
-    writeByte(segments[k]);
+  displaySegments(SegData);
+}
 
-  stop();
+void TM1637::displaySegments(int8_t SegData[4])
+{
+  uint8_t i;
 
-  // Write COMM3 + brightness
-  start();
-  writeByte(TM1637_I2C_COMM3 + m_brightness);
-  stop();
+  start();          //start signal sent to TM1637 from MCU
+  writeByte(ADDR_AUTO);//
+  stop();           //
+  start();          //
+  writeByte(Cmd_SetAddr);//
+  for(i=0;i < 4;i ++)
+  {
+    writeByte(SegData[i]);        //
+  }
+  stop();           //
+  start();          //
+  writeByte(Cmd_DispCtrl);//
+  stop();           //
+}
+
+//******************************************
+void TM1637::display(uint8_t BitAddr,int8_t DispData)
+{
+  int8_t SegData;
+  SegData = coding(DispData);
+  start();          //start signal sent to TM1637 from MCU
+  writeByte(ADDR_FIXED);//
+  stop();           //
+  start();          //
+  writeByte(BitAddr|0xc0);//
+  writeByte(SegData);//
+  stop();            //
+  start();          //
+  writeByte(Cmd_DispCtrl);//
+  stop();           //
+}
+
+void TM1637::displaySegment(uint8_t BitAddr,int8_t DispData)
+{
+  int8_t SegData;
+  SegData = DispData;
+  start();          //start signal sent to TM1637 from MCU
+  writeByte(ADDR_FIXED);//
+  stop();           //
+  start();          //
+  writeByte(BitAddr|0xc0);//
+  writeByte(SegData);//
+  stop();            //
+  start();          //
+  writeByte(Cmd_DispCtrl);//
+  stop();           //
+}
+
+void TM1637::clearDisplay(void)
+{
+  display(0x00,0x7f);
+  display(0x01,0x7f);
+  display(0x02,0x7f);
+  display(0x03,0x7f);  
+}
+//To take effect the next time it displays.
+void TM1637::set(uint8_t brightness,uint8_t SetData,uint8_t SetAddr)
+{
+  Cmd_SetData = SetData;
+  Cmd_SetAddr = SetAddr;
+  Cmd_DispCtrl = 0x88 + brightness;//Set the brightness and it takes effect the next time it displays.
+}
+
+//Whether to light the clock point ":".
+//To take effect the next time it displays.
+void TM1637::point(boolean PointFlag)
+{
+  _PointFlag = PointFlag;
+}
+void TM1637::coding(int8_t DispData[])
+{
+  uint8_t PointData;
+  if(_PointFlag == POINT_ON)PointData = 0x80;
+  else PointData = 0; 
+  for(uint8_t i = 0;i < 4;i ++)
+  {
+    if(DispData[i] == 0x7f)DispData[i] = 0x00;
+    else DispData[i] = TubeTab[DispData[i]] + PointData;
+
+    Serial.println(DispData[i]);
+  }
+}
+int8_t TM1637::coding(int8_t DispData)
+{
+  uint8_t PointData;
+  if(_PointFlag == POINT_ON)PointData = 0x80;
+  else PointData = 0; 
+  if(DispData == 0x7f) DispData = 0x00 + PointData;//The bit digital tube off
+  else DispData = TubeTab[DispData] + PointData;
+  return DispData;
 }
 
 void TM1637::showNumberDec(int num, bool leading_zero, uint8_t length, uint8_t pos, bool colon)
 {
-  uint8_t digits[4];
+  int8_t digits[4];
   const static int divisors[] = { 1, 10, 100, 1000 };
   bool leading = true;
 
@@ -111,95 +217,25 @@ void TM1637::showNumberDec(int num, bool leading_zero, uint8_t length, uint8_t p
 
     if (d == 0) {
       if (leading_zero || !leading || (k == 3))
-        digits[k] = encodeDigit(d);
+        digits[k] = d;
       else
-        digits[k] = 0;
+        digits[k] = 0x7f;
     }
     else {
-      digits[k] = encodeDigit(d);
+      digits[k] = d;
       num -= d * divisor;
       leading = false;
     }
-    if (colon && k == 1) {
-      digits[k] |= 0x80;
-    }
   }
 
-  setSegments(digits + (4 - length), length, pos);
+  _PointFlag = colon;
+  
+  display(digits);
 }
 
-void TM1637::bitDelay()
-{
-  delayMicroseconds(50);
-}
-
-void TM1637::start()
-{
-  pinMode(m_pinDIO, OUTPUT);
-  bitDelay();
-}
-
-void TM1637::stop()
-{
-  pinMode(m_pinDIO, OUTPUT);
-  bitDelay();
-  pinMode(m_pinClk, INPUT);
-  bitDelay();
-  pinMode(m_pinDIO, INPUT);
-  bitDelay();
-}
-
-bool TM1637::writeByte(uint8_t b)
-{
-  uint8_t data = b;
-
-  // 8 Data Bits
-  for (uint8_t i = 0; i < 8; i++) {
-    // CLK low
-    pinMode(m_pinClk, OUTPUT);
-    bitDelay();
-
-    // Set data bit
-    if (data & 0x01)
-      pinMode(m_pinDIO, INPUT);
-    else
-      pinMode(m_pinDIO, OUTPUT);
-
-    bitDelay();
-
-    // CLK high
-    pinMode(m_pinClk, INPUT);
-    bitDelay();
-    data = data >> 1;
-  }
-
-  // Wait for acknowledge
-  // CLK to zero
-  pinMode(m_pinClk, OUTPUT);
-  pinMode(m_pinDIO, INPUT);
-  bitDelay();
-
-  // CLK to high
-  pinMode(m_pinClk, INPUT);
-  bitDelay();
-  uint8_t ack = digitalRead(m_pinDIO);
-  if (ack == 0)
-    pinMode(m_pinDIO, OUTPUT);
-
-  bitDelay();
-  pinMode(m_pinClk, OUTPUT);
-  bitDelay();
-
-  return ack;
-}
-
-uint8_t TM1637::encodeDigit(uint8_t digit)
-{
-  return digitToSegment[digit & 0x0f];
-}
 
 // Has this instance been initialised?
 bool TM1637::ready()
 {
-  return m_pinClk != 0;
+  return Clkpin != 0;
 }
