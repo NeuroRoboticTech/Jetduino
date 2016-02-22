@@ -232,9 +232,11 @@ void dynamixelSetEndless()
 
   //Serial.print("Dynamixel Set Endless");
   //Serial.print(", servo: "); Serial.print(servo);
-  //Serial.print(", status: "); Serial.println(status);
+  //Serial.print(", status: "); Serial.print(status);
 
-  dynamixel.setEndless(servo, status);
+  int ret = dynamixel.setEndless(servo, status);
+  
+  //Serial.print(", ret: "); Serial.println(ret);
 }
 
 void dynamixelSetTurnSpeed()
@@ -249,9 +251,11 @@ void dynamixelSetTurnSpeed()
   //Serial.print("Dynamixel Set turn speed");
   //Serial.print(", servo: "); Serial.print(servo);
   //Serial.print(", side: "); Serial.print(side);
-  //Serial.print(", speed: "); Serial.println(speed);
+  //Serial.print(", speed: "); Serial.print(speed);
 
-  dynamixel.turn(servo, side, speed);
+  int ret = dynamixel.turn(servo, side, speed);
+  
+  //Serial.print(", ret: "); Serial.println(ret);
 }
 
 void dynamixelStartSynchMove()
