@@ -68,7 +68,7 @@ ard_address = 0x04
 #adc_address = 0x
 
 #Make the jetson pins available for use.
-Controller.available_pins = [JET_PH1, 
+Controller.available_pins = [(JET_PH1-100), 
 	JET_PK1, 
 	JET_PK2, 
 	JET_PK4, 
@@ -342,7 +342,7 @@ def pinMode(pin, mode):
 		if mode == OUTPUT_PIN:
 			globals()[pin_name] = Controller.alloc_pin(pin, OUTPUT)
 		elif mode == INPUT_PIN:
-			if (pin == JET_PH1 or pin == JET_PK1 or 
+			if (pin == (JET_PH1-100) or pin == JET_PK1 or 
 				pin == JET_PK2 or pin == JET_PK4):
 				print ("You cannot set the output only jetson pins to inputs.")
 				return -1
