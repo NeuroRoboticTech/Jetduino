@@ -361,7 +361,7 @@ void loop()
       //Serial.print(cmd[1]);
       //Serial.print(", Value: ");
       //Serial.println(aRead);
-      //run_once = false;
+      run_once = false;
     }
 
     //Set up Analog Write
@@ -450,8 +450,8 @@ void loop()
     {
       int bits = cmd[1];
 
-      Serial.print("Analog Read Res. Bits: ");
-      Serial.println(bits);
+      //Serial.print("Analog Read Res. Bits: ");
+      //Serial.println(bits);
 
       if(bits > 0 && bits <= 12) {
         analogReadResolution(bits);              
@@ -466,8 +466,8 @@ void loop()
     {
       int bits = cmd[1];
 
-      Serial.print("Analog Write Res. Bits: ");
-      Serial.println(bits);
+      //Serial.print("Analog Write Res. Bits: ");
+      //Serial.println(bits);
 
       if(bits > 0 && bits <=12) {
         analogWriteResolution(bits);              
