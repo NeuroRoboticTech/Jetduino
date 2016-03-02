@@ -45,8 +45,9 @@ from jetduino_pins import *
 
 # Connect the Grove 4 Digit Display to digital port D5
 # CLK,DIO,VCC,GND
-display = ARD_D5
+display = ARD_D4
 jetduino.pinMode(display, OUTPUT_PIN)
+jetduino.pinMode(display+1, OUTPUT_PIN)
 
 # If you have an analog sensor connect it to A0 so you can monitor it below
 sensor = ARD_A0
