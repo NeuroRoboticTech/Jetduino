@@ -1,4 +1,5 @@
-//  Author: avishorp@gmail.com
+//  Author:Frankie.Chu
+//  Date:9 April,2012
 //
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -13,87 +14,67 @@
 //  You should have received a copy of the GNU Lesser General Public
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+//
+//  Modified record:
+//
+/*******************************************************************************/
 
-#ifndef __TM1637__
-#define __TM1637__
-
+#ifndef TM1637_h
+#define TM1637_h
 #include <inttypes.h>
+#include <Arduino.h>
+//************definitions for TM1637*********************
+#define ADDR_AUTO  0x40
+#define ADDR_FIXED 0x44
 
-#define SEG_A   0b00000001
-#define SEG_B   0b00000010
-#define SEG_C   0b00000100
-#define SEG_D   0b00001000
-#define SEG_E   0b00010000
-#define SEG_F   0b00100000
-#define SEG_G   0b01000000
+#define STARTADDR  0xc0 
+/**** definitions for the clock point of the digit tube *******/
+#define POINT_ON   1
+#define POINT_OFF  0
+/**************definitions for brightness***********************/
+#define  BRIGHT_DARKEST 0
+#define  BRIGHT_TYPICAL 2
+#define  BRIGHTEST      7
 
-class TM1637 {
+class TM1637
+{
+  public:
+    uint8_t Cmd_SetData;
+    uint8_t Cmd_SetAddr;
+    uint8_t Cmd_DispCtrl;
+    boolean _PointFlag;     //_PointFlag=1:the clock point on
+    TM1637();
+    void init(uint8_t, uint8_t);        //To clear the display
+    void writeByte(int8_t wr_data);//write 8bit data to tm1637
+    void start(void);//send start bits
+    void stop(void); //send stop bits
+    void display(int8_t DispData[]);
+    void display(uint8_t BitAddr,int8_t DispData);
+    void displaySegment(uint8_t BitAddr,int8_t DispData);
+    void displaySegments(int8_t SegData[4]);
+    void clearDisplay(void);
+    void set(uint8_t = BRIGHT_TYPICAL,uint8_t = 0x40,uint8_t = 0xc0);//To take effect the next time it displays.
+    void point(boolean PointFlag);//whether to light the clock point ":".To take effect the next time it displays.
+    void coding(int8_t DispData[]); 
+    int8_t coding(int8_t DispData); 
 
-public:
-  //! Initialize a TM1637 object, setting the clock and data pins.
-  //!
-  //! @param pinClk - The number of the digital pin connected to the clock pin of the module
-  //! @param pinDIO - The number of the digital pin connected to the DIO pin of the module
-  //TM1637(uint8_t pinClk, uint8_t pinDIO);
-  void begin(uint8_t pinClk, uint8_t pinDIO);
+    //! Displays a decimal number
+    //!
+    //! Displays the given argument as a decimal number
+    //!
+    //! @param num The number to be shown
+    //! @param leading_zero When true, leading zeros are displayed. Otherwise unnecessary digits are blank
+    //! @param length The number of digits to set. The user must ensure that the number to be shown
+    //!        fits to the number of digits requested (for example, if two digits are to be displayed,
+    //!        the number must be between 0 to 99)
+    //! @param pos The position least significant digit (0 - leftmost, 3 - rightmost)
+    //! @param colon When true, displays two dots between the 2nd and 3rd segments
+    void showNumberDec(int num, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0, bool colon = false);
 
-  //! Sets the brightness of the display.
-  //!
-  //! The setting takes effect when a command is given to change the data being displayed.
-  //!
-  //! @param brightness A number from 0 (lowest brightness) to 7 (highest brightness)
-  void setBrightness(uint8_t brightness);
+    bool ready();
 
-  //! Display arbitrary data on the module
-  //!
-  //! This function receives raw segment values as input and displays them. The segment data
-  //! is given as a byte array, each byte corresponding to a single digit. Within each byte,
-  //! bit 0 is segment A, bit 1 is segment B etc.
-  //! The function may either set the entire display or any desirable part on its own. The first
-  //! digit is given by the @ref pos argument with 0 being the leftmost digit. The @ref length
-  //! argument is the number of digits to be set. Other digits are not affected.
-  //!
-  //! @param segments An array of size @ref length containing the raw segment values
-  //! @param length The number of digits to be modified
-  //! @param pos The position from which to start the modification (0 - leftmost, 3 - rightmost)
-  void setSegments(const uint8_t segments[], uint8_t length = 4, uint8_t pos = 0);
-
-  //! Displays a decimal number
-  //!
-  //! Displays the given argument as a decimal number
-  //!
-  //! @param num The number to be shown
-  //! @param leading_zero When true, leading zeros are displayed. Otherwise unnecessary digits are blank
-  //! @param length The number of digits to set. The user must ensure that the number to be shown
-  //!        fits to the number of digits requested (for example, if two digits are to be displayed,
-  //!        the number must be between 0 to 99)
-  //! @param pos The position least significant digit (0 - leftmost, 3 - rightmost)
-  //! @param colon When true, displays two dots between the 2nd and 3rd segments
-  void showNumberDec(int num, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0, bool colon = false);
-
-  //! Translate a single digit into 7 segment code
-  //!
-  //! The method accepts a number between 0 - 15 and converts it to the
-  //! code required to display the number on a 7 segment display.
-  //! Numbers between 10-15 are converted to hexadecimal digits (A-F)
-  //!
-  //! @param digit A number between 0 to 15
-  //! @return A code representing the 7 segment image of the digit (LSB - segment A;
-  //!         bit 6 - segment G; bit 7 - always zero)
-  uint8_t encodeDigit(uint8_t digit);
-
-  bool ready();
-
-protected:
-  void bitDelay();
-  void start();
-  void stop();
-  bool writeByte(uint8_t b);
-
-private:
-  uint8_t m_pinClk;
-  uint8_t m_pinDIO;
-  uint8_t m_brightness;
+  private:
+    uint8_t Clkpin;
+    uint8_t Datapin;
 };
-
-#endif // __TM1637__
+#endif
