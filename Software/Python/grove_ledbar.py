@@ -42,9 +42,9 @@ import jetduino
 from jetduino_pins import *
 import random
 
-# Connect the Grove LED Bar to digital port D5
+# Connect the Grove LED Bar to digital port D4
 # DI,DCKI,VCC,GND
-ledbar = ARD_D5
+ledbar = ARD_D10
 
 jetduino.pinMode(ledbar, OUTPUT_PIN)
 time.sleep(1)

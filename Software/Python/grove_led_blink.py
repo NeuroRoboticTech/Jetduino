@@ -41,7 +41,7 @@ import time
 from jetduino import *
 
 # Connect the Grove LED to digital port D4
-led = ARD_D4
+led = ARD_D11
 
 pinMode(led, OUTPUT_PIN)
 time.sleep(1)
@@ -55,11 +55,11 @@ while True:
         #Blink the LED
         digitalWrite(led, HIGH)		# Send HIGH to switch on LED
         print "LED ON!"
-        time.sleep(1)
+        time.sleep(2)
 
         digitalWrite(led, LOW)		# Send LOW to switch off LED
         print "LED OFF!"
-        time.sleep(1)
+        time.sleep(2)
 
     except KeyboardInterrupt:	# Turn LED off before stopping
         digitalWrite(led, LOW)

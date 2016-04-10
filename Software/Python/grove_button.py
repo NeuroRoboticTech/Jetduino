@@ -40,9 +40,8 @@ import time
 import jetduino
 from jetduino_pins import *
 
-# Connect the Grove Button to digital port D4
 # SIG,NC,VCC,GND
-button = ARD_D6
+button = ARD_D2
 led = ARD_D4
 
 jetduino.pinMode(button, INPUT_PIN)
@@ -53,7 +52,7 @@ while True:
         val = jetduino.digitalRead(button)
         print ("LED %d" % val)
         jetduino.digitalWrite(led, val)
-        time.sleep(.1)
+        time.sleep(1)
 
     except IOError:
         print ("Error")
