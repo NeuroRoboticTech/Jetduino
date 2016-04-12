@@ -40,9 +40,9 @@ THE SOFTWARE.
 import jetduino
 from jetduino_pins import *
 
-# Connect the Grove Ultrasonic Ranger to digital port D4
+# Connect the Grove Ultrasonic Ranger to digital port D2
 # SIG,NC,VCC,GND
-ultrasonic_ranger = ARD_D4
+ultrasonic_ranger = ARD_D2
 
 while True:
     try:

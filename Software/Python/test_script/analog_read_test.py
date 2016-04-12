@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Jetduino test of reading from the GPIO lines
+# Jetduino test of reading from the analog lines
 #
 # The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
@@ -37,56 +37,44 @@ import time
 import jetduino
 from jetduino_pins import *
  
-jetduino.pinMode(JET_PU0, INPUT_PIN)
-jetduino.pinMode(JET_PU1, INPUT_PIN)
-jetduino.pinMode(JET_PU2, INPUT_PIN)
-jetduino.pinMode(JET_PU3, INPUT_PIN)
-jetduino.pinMode(JET_PU4, INPUT_PIN)
-jetduino.pinMode(JET_PU5, INPUT_PIN)
-jetduino.pinMode(JET_PU6, INPUT_PIN)
+jetduino.pinMode(ARD_A0, INPUT_PIN)
+jetduino.pinMode(ARD_A1, INPUT_PIN)
+jetduino.pinMode(ARD_A2, INPUT_PIN)
+jetduino.pinMode(ARD_A3, INPUT_PIN)
+jetduino.pinMode(ARD_A4, INPUT_PIN)
+jetduino.pinMode(ARD_A5, INPUT_PIN)
+jetduino.pinMode(ARD_A6, INPUT_PIN)
+jetduino.pinMode(ARD_A7, INPUT_PIN)
+jetduino.pinMode(ARD_A8, INPUT_PIN)
+jetduino.pinMode(ARD_A9, INPUT_PIN)
+jetduino.pinMode(ARD_A10, INPUT_PIN)
+jetduino.pinMode(ARD_A11, INPUT_PIN)
 
-jetduino.pinMode(ARD_D2, INPUT_PIN)
-jetduino.pinMode(ARD_D3, INPUT_PIN)
-jetduino.pinMode(ARD_D4, INPUT_PIN)
-jetduino.pinMode(ARD_D5, INPUT_PIN)
-jetduino.pinMode(ARD_D6, INPUT_PIN)
-jetduino.pinMode(ARD_D7, INPUT_PIN)
-jetduino.pinMode(ARD_D8, INPUT_PIN)
-jetduino.pinMode(ARD_D9, INPUT_PIN)
-jetduino.pinMode(ARD_D10, INPUT_PIN)
-jetduino.pinMode(ARD_D11, INPUT_PIN)
-jetduino.pinMode(ARD_D12, INPUT_PIN)
-jetduino.pinMode(ARD_D13, INPUT_PIN)
+jetduino.setAnalogReadResolution(10)
 
 def readDigital():
-    pu0 = jetduino.digitalRead(JET_PU0)
-    pu1 = jetduino.digitalRead(JET_PU1)
-    pu2 = jetduino.digitalRead(JET_PU2)
-    pu3 = jetduino.digitalRead(JET_PU3)
-    pu4 = jetduino.digitalRead(JET_PU4)
-    pu5 = jetduino.digitalRead(JET_PU5)
-    pu6 = jetduino.digitalRead(JET_PU6)
+    ar0 = jetduino.analogRead(ARD_A0)
+    ar1 = jetduino.analogRead(ARD_A1)
+    ar2 = jetduino.analogRead(ARD_A2)
+    ar3 = jetduino.analogRead(ARD_A3)
+    ar4 = jetduino.analogRead(ARD_A4)
+    ar5 = jetduino.analogRead(ARD_A5)
+    ar6 = jetduino.analogRead(ARD_A6)
+    ar7 = jetduino.analogRead(ARD_A7)
+    ar8 = jetduino.analogRead(ARD_A8)
+    ar9 = jetduino.analogRead(ARD_A9)
+    ar10 = jetduino.analogRead(ARD_A10)
+    ar11 = jetduino.analogRead(ARD_A11)
 
-    ar2 = jetduino.digitalRead(ARD_D2)
-    ar3 = jetduino.digitalRead(ARD_D3)
-    ar4 = jetduino.digitalRead(ARD_D4)
-    ar5 = jetduino.digitalRead(ARD_D5)
-    ar6 = jetduino.digitalRead(ARD_D6)
-    ar7 = jetduino.digitalRead(ARD_D7)
-    ar8 = jetduino.digitalRead(ARD_D8)
-    ar9 = jetduino.digitalRead(ARD_D9)
-    ar10 = jetduino.digitalRead(ARD_D10)
-    ar11 = jetduino.digitalRead(ARD_D11)
-    ar12 = jetduino.digitalRead(ARD_D12)
-    ar13 = jetduino.digitalRead(ARD_D13)
+    #print("%f, %f, %f, %f, %f, %f" % (ar0, ar1, ar2, ar3, ar4, ar5)) 
 
-    print("JET: %d, %d, %d, %d, %d, %d, %d ARD: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d" % (pu0, pu1, pu2, pu3, pu4, pu5, pu6, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11, ar12, ar13)) 
+    print("%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f" % (ar0, ar1, ar2, ar3, ar4, ar5, ar6, ar7, ar8, ar9, ar10, ar11)) 
     print("")
 
 while True:
     try:
         readDigital()
-        time.sleep(2)
+        time.sleep(0.5)
 
     except KeyboardInterrupt:
         print("Exiting loop")

@@ -2,3 +2,7 @@
 *~
 build
 build_cb
+Software/Python/jetduino.egg-info
+Software/Python/dist
+Script/python-sysfs-gpio
+Script/index.html

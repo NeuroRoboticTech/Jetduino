@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Jetduino Example for using the Grove Relay (http://www.seeedstudio.com/wiki/Grove_-_Relay)
+# Jetduino test of writing to the GPIO lines
 #
 # The Jetduino connects the Jetson and Grove sensors.  You can learn more about the Jetduino here:  http://www.NeuroRoboticTech.com/Projects/Jetduino
 #
@@ -10,9 +10,6 @@
 ## License
 
 The MIT License (MIT)
-
-GrovePi for the Raspberry Pi: an open source platform for connecting Grove Sensors to the Raspberry Pi.
-Copyright (C) 2015  Dexter Industries
 
 Jetduino for the Jetson TK1/TX1: an open source platform for connecting 
 Grove Sensors to the Jetson embedded supercomputers.
@@ -36,31 +33,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-# NOTE: Relay is normally open. LED will illuminate when closed and you will hear a definitive click sound
 import time
 import jetduino
 from jetduino_pins import *
+ 
+pin = ARD_D4
 
-# Connect the Grove Relay to digital port D4
-# SIG,NC,VCC,GND
-relay = ARD_D2
+jetduino.pinMode(pin, OUTPUT_PIN)
 
-jetduino.pinMode(relay, OUTPUT_PIN)
+def writeDigital(val):
+    jetduino.digitalWrite(pin, val)
 
 while True:
     try:
-        # switch on for 5 seconds
-        jetduino.digitalWrite(relay, HIGH)
-        print ("on")
-        time.sleep(5)
+        print ("High")
+        writeDigital(HIGH)
+        time.sleep(2)
 
-        # switch off for 5 seconds
-        jetduino.digitalWrite(relay, LOW)
-        print ("off")
-        time.sleep(5)
+        print ("Low")
+        writeDigital(LOW)
+        time.sleep(2)
+
 
     except KeyboardInterrupt:
-        jetduino.digitalWrite(relay, LOW)
+        print("Exiting loop")
         break
     except IOError:
         print ("Error")
+
+

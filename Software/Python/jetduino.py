@@ -59,7 +59,7 @@ debug =0
 
 #The Jetduino should always use SMBus 1 for GEN2_I2C
 p_version=3
-bus = smbus.SMBus(1) #GEN2_I2C
+bus = smbus.SMBus(0) #GEN1_I2C
 
 # I2C Address of Arduino
 ard_address = 0x04
