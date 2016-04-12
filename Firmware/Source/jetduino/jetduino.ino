@@ -1,6 +1,5 @@
 #include <Wire.h>
 #include "MMA7660.h"
-#include "DS1307.h"
 #include "DHT.h"
 #include "Grove_LED_Bar.h"
 #include "TM1637.h"
@@ -10,15 +9,23 @@
 //#include "TimerOne.h"
 #include <Servo.h> 
 
-#define INCLUDE_DYNAMIXEL
+#if defined(__SAM3X8E__)
+  #define TWO_I2C_FORM_FACTOR
+#endif
+
+//#define INCLUDE_DYNAMIXEL
 
 #ifdef INCLUDE_DYNAMIXEL
   #include "DynamixelSerial.h"
   DynamixelSerial dynamixel;
 #endif
 
+#ifdef TWO_I2C_FORM_FACTOR
+  #include "DS1307.h"
+  DS1307 ds_clock;
+#endif
+
 MMA7660 acc;
-DS1307 ds_clock;
 DHT dht;
 Grove_LED_Bar ledbar[6];  // 7 instances for D2-D8, however, max 4 bars, you can't use adjacent sockets, 4 pin display
 TM1637 fourdigit[6];      // 7 instances for D2-D8, however, max 4 displays, you can't use adjacent sockets, 4 pin display
@@ -99,6 +106,8 @@ ChainableLED rgbled[6];   // 7 instances for D2-D8
 
 //Servo pin numbers start at 2, but array starts at 0
 #define SERVO_PIN_OFFSET 2
+
+TwoWire *wire = NULL;
 
 //Array of pointers to servos 
 //used for attaching with and controlling servos.
@@ -292,14 +301,33 @@ void dynamixelExecuteSynchMove()
 }
 #endif
 
+//Uno vs. Mega has the analog pins at different starting 
+//addresses. I am using the A0 pin number here and just
+//adding an offset relative to the A0=54 coming from the
+//jetduino scripts.
+int convertAnalogPinMapping(int pin)
+{
+  if(pin >= 54) {
+    return (A0 + (pin - 54 ));  
+  }
+
+  return pin;
+}
+
 void setup()
 {
     Serial.begin(57600);         // start serial for output
-    
-    Wire.begin(SLAVE_ADDRESS);
 
-    Wire.onReceive(receiveData);
-    Wire.onRequest(sendData);
+#ifdef TWO_I2C_FORM_FACTOR
+  wire = &Wire1;
+#else
+  wire = &Wire;
+#endif
+    
+    wire->begin(SLAVE_ADDRESS);
+
+    wire->onReceive(receiveData);
+    wire->onRequest(sendData);
 	  attachInterrupt(0,readPulseDust,CHANGE);
 
     Serial.println("Finished Setup");
@@ -347,13 +375,26 @@ void loop()
       //Serial.println(val);
     }
     //Digital Write
-    else if(cmd[0]==CMD_DIGITAL_WRITE)
-      digitalWrite(cmd[1],cmd[2]);
+    else if(cmd[0]==CMD_DIGITAL_WRITE && run_once)
+    {
+      if(cmd[2] == 0) {
+        digitalWrite(cmd[1], LOW);
+      }
+      else {
+        digitalWrite(cmd[1], HIGH);
+      }
 
+      //Serial.print("Digital Write. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", Value: ");
+      //Serial.println(cmd[2]);
+      run_once = false;
+    }
     //Analog Read
     else if(cmd[0]==CMD_ANALOG_READ)
     {
-      aRead=analogRead(cmd[1]);
+      int pin = convertAnalogPinMapping(cmd[1]);
+      aRead=analogRead(pin);
       b[1]=aRead/256;
       b[2]=aRead%256;
 
@@ -376,14 +417,21 @@ void loop()
       run_once = false;
     }
     //Set up pinMode
-    else if(cmd[0]==CMD_PIN_MODE)
+    else if(cmd[0]==CMD_PIN_MODE && run_once)
     {
-      pinMode(cmd[1],cmd[2]);
+      int pin = convertAnalogPinMapping(cmd[1]);
+      if(cmd[2] == 0) {
+        pinMode(pin, INPUT);
+      }
+      else {
+        pinMode(pin, OUTPUT);      
+      }
       
       //Serial.print("Set pin mode. Pin: ");
-      //Serial.print(cmd[1]);
+      //Serial.print(pin);
       //Serial.print(", Mode: ");
       //Serial.println(cmd[2]);
+      run_once = false;
     }
     //Ultrasonic Read
     else if(cmd[0]==CMD_ULTRASONIC_READ)
@@ -400,8 +448,8 @@ void loop()
       RangeCm = dur/29/2;
       b[1]=RangeCm/256;
       b[2]=RangeCm%256;
-      //Serial.println(b[1]);
-      //Serial.println(b[2]);
+      Serial.println(b[1]);
+      Serial.println(b[2]);
     }
     //Firmware version
     else if(cmd[0]==CMD_FIRMWARE_VERSION)
@@ -426,28 +474,33 @@ void loop()
     //RTC tine read
     else if(cmd[0]==CMD_RTC_TIME_READ)
     {
-      if(clkFlag==0)
-      {
-        ds_clock.begin();
-        //Set time the first time
-        //ds_clock.fillByYMD(2013,1,19);
-        //ds_clock.fillByHMS(15,28,30);//15:28 30"
-        //ds_clock.fillDayOfWeek(SAT);//Saturday
-        //ds_clock.setTime();//write time to the RTC chip
-        clkFlag=1;
-      }
-      ds_clock.getTime();
-      b[1]=ds_clock.hour;
-      b[2]=ds_clock.minute;
-      b[3]=ds_clock.second;
-      b[4]=ds_clock.month;
-      b[5]=ds_clock.dayOfMonth;
-      b[6]=ds_clock.year;
-      b[7]=ds_clock.dayOfMonth;
-      b[8]=ds_clock.dayOfWeek;
+      //If not a mega form factor then ignore.
+      #ifdef TWO_I2C_FORM_FACTOR
+        if(clkFlag==0)
+        {
+          ds_clock.begin();
+          //Set time the first time
+          //ds_clock.fillByYMD(2013,1,19);
+          //ds_clock.fillByHMS(15,28,30);//15:28 30"
+          //ds_clock.fillDayOfWeek(SAT);//Saturday
+          //ds_clock.setTime();//write time to the RTC chip
+          clkFlag=1;
+        }
+        ds_clock.getTime();
+        b[1]=ds_clock.hour;
+        b[2]=ds_clock.minute;
+        b[3]=ds_clock.second;
+        b[4]=ds_clock.month;
+        b[5]=ds_clock.dayOfMonth;
+        b[6]=ds_clock.year;
+        b[7]=ds_clock.dayOfMonth;
+        b[8]=ds_clock.dayOfWeek;
+      #endif
     }
     else if(cmd[0]==CMD_ANALOG_READ_RES && run_once)
     {
+#ifdef defined(ARDUINO_ARCH_SAM) || ARDUINO_ARCH_SAMD)
+      
       int bits = cmd[1];
 
       //Serial.print("Analog Read Res. Bits: ");
@@ -460,10 +513,12 @@ void loop()
         Serial.print("Invalid bits set for analog read resolution. Bits: ");
         Serial.println(bits);
       }
+#endif      
       run_once = false;
     }
     else if(cmd[0]==CMD_ANALOG_WRITE_RES && run_once)
     {
+#ifdef defined(ARDUINO_ARCH_SAM) || ARDUINO_ARCH_SAMD)
       int bits = cmd[1];
 
       //Serial.print("Analog Write Res. Bits: ");
@@ -476,6 +531,8 @@ void loop()
         Serial.print("Invalid bits set for analog write resolution. Bits: ");
         Serial.println(bits);
       }
+#endif      
+
       run_once = false;
     }
     else if(cmd[0]==CMD_SERVO_ATTACH && run_once)
@@ -1107,17 +1164,23 @@ void loop()
 void receiveData(int byteCount)
 {
     //Serial.print("Avail: "); 
-    //Serial.println(Wire.available());
+    //Serial.println(wire->available());
   
-    while(Wire.available())
+    while(wire->available())
     {
-      if(Wire.available()==6)
+      if(wire->available()==6)
       {
         flag=0; 
         idx=0;
 		    run_once=1;
+
+       //for(int j=0; j<6; j++) {
+       //  Serial.print((int) cmd[j]);
+       //  Serial.print(", ");
+       //}
+       //Serial.println("");
       }
-        cmd[idx++] = Wire.read();
+        cmd[idx++] = wire->read();
     }
 }
 
@@ -1127,14 +1190,14 @@ void sendData()
   //Serial.println("sendData");
   
   if(cmd[0] == CMD_DIGITAL_READ)
-    Wire.write(val);
+    wire->write(val);
   if(cmd[0] == CMD_ANALOG_READ || 
      cmd[0] == CMD_ULTRASONIC_READ || 
      cmd[0] == CMD_LED_BAR_RET_STATE ||
      cmd[0] == CMD_SERVO_READ || 
      cmd[0] == CMD_DYN_GET_REGISTER)
   {
-    Wire.write(b, 3);
+    wire->write(b, 3);
 
     //Serial.print("Sending data 3,7,56: ");
     //Serial.print(b[0]);
@@ -1145,32 +1208,32 @@ void sendData()
   }
   if(cmd[0] == CMD_FIRMWARE_VERSION || 
      cmd[0] == CMD_ACCEl_XYZ_READ)
-    Wire.write(b, 4);
+    wire->write(b, 4);
   if(cmd[0] == CMD_RTC_TIME_READ) 
-    Wire.write(b, 9);
+    wire->write(b, 9);
   if(cmd[0] == CMD_TEMP_HUMIDITY_READ) 
-    Wire.write(dht_b, 9);
+    wire->write(dht_b, 9);
   
   if(cmd[0]==CMD_IR_RECV)
   {
-    Wire.write(b,CMD_IR_RECV);     
+    wire->write(b,CMD_IR_RECV);     
     b[0]=0;
   }
   if(cmd[0]==CMD_DUST_SENSOR_READ)
   {
-    Wire.write(b,4);     
+    wire->write(b,4);     
 	dust_latest=0;
 	cmd[0]=0;
   }
   if(cmd[0]==CMD_ENCODER_READ)
   {
-    Wire.write(enc_val,2);     
+    wire->write(enc_val,2);     
     enc_val[0]=0;
 	cmd[0]=0;
   }
   if(cmd[0]==CMD_FLOW_READ)
   {
-    Wire.write(flow_val,3);     
+    wire->write(flow_val,3);     
     flow_val[0]=0;
 	cmd[0]=0;
   }

@@ -23,6 +23,13 @@
 //
 /****************************************************************************/
 
+
+#if defined(__SAM3X8E__)
+  #define TWO_I2C_FORM_FACTOR
+#endif
+
+#ifdef TWO_I2C_FORM_FACTOR
+
 #include <Wire.h>
 #include "DS1307.h"
 
@@ -118,3 +125,4 @@ void DS1307::fillDayOfWeek(uint8_t _dow)
 	dayOfWeek = _dow;
 }
 
+#endif

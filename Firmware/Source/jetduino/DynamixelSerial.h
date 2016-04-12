@@ -204,7 +204,7 @@
     void SetSystemCoreClockFor1Mbaud();
 #endif
 
-#ifdef __SAMD21G18A__ || __SAMD21G18A__
+#ifdef define(__SAMD21G18A__) || defined(__SAMD21G18A__)
     #define DYN_CTRL_PIN 2
 #else
     #define DYN_CTRL_PIN 22

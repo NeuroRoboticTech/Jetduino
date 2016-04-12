@@ -66,13 +66,13 @@
  Web:     http://NeuroRoboticTech.com/
  Co-Author:  David Cofer
  */
-
 #if defined(ARDUINO) && ARDUINO >= 100  // Arduino IDE Version
 #include "Arduino.h"
 #else
 #include "WProgram.h"
 #endif
 
+#include <cstdarg>
 #include "DynamixelSerial.h"
 
 // Macro for Timing
@@ -112,10 +112,6 @@ DynamixelSerial::DynamixelSerial(HardwareSerial *ss){
 #ifdef __SAM3X8E__
     SetSystemCoreClockFor1Mbaud();
 #endif        
-
-    if(stream == NULL) {
-        stream = &Serial1;
-    }
 }
 
 void DynamixelSerial::sendData(const uint8_t data)
