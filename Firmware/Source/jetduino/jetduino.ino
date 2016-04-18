@@ -804,8 +804,8 @@ void loop()
     // [70, pin, unused, unused]
     else if(cmd[0] == CMD_4D_INIT && run_once)
     {
-      Serial.print("Init 4 digit. Pin: ");
-      Serial.println(cmd[1]);
+      //Serial.print("Init 4 digit. Pin: ");
+      //Serial.println(cmd[1]);
       
       // clock pin is always next to the data pin
       fourdigit[cmd[1]-2].init(cmd[1], cmd[1]+1);  // clock, data
@@ -816,10 +816,10 @@ void loop()
     // [71, pin, brightness, unused]
     else if(cmd[0] == CMD_4D_SET_BRIGHT && fourdigit[cmd[1]-2].ready() && run_once)
     {
-      Serial.print("brightness 4 digit. Pin: ");
-      Serial.print(cmd[1]);
-      Serial.print(", val: ");
-      Serial.println(cmd[2]);
+      //Serial.print("brightness 4 digit. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", val: ");
+      //Serial.println(cmd[2]);
       
       fourdigit[cmd[1]-2].set(cmd[2]);  // setBrightness(brightness)
       run_once = false;
@@ -831,10 +831,10 @@ void loop()
     else if(cmd[0] == CMD_4D_VAL_W_ZERO && fourdigit[cmd[1]-2].ready() && run_once)
     {
       int val = cmd[2] ^ (cmd[3] << 8);
-      Serial.print("show dec no 0. 4 digit. Pin: ");
-      Serial.print(cmd[1]);
-      Serial.print(", val: ");
-      Serial.println(val);
+      //Serial.print("show dec no 0. 4 digit. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", val: ");
+      //Serial.println(val);
       
       fourdigit[cmd[1]-2].showNumberDec(val, true);  // showNumberDec(number, leading_zero)
       run_once = false;
@@ -845,10 +845,10 @@ void loop()
     else if(cmd[0] == CMD_4D_VAL_WO_ZERO && fourdigit[cmd[1]-2].ready() && run_once)
     {
       int val = cmd[2] ^ (cmd[3] << 8);
-      Serial.print("show dec with 0. 4 digit. Pin: ");
-      Serial.print(cmd[1]);
-      Serial.print(", val: ");
-      Serial.println(val);
+      //Serial.print("show dec with 0. 4 digit. Pin: ");
+      //Serial.print(cmd[1]);
+      //Serial.print(", val: ");
+      //Serial.println(val);
 
       fourdigit[cmd[1]-2].showNumberDec(val, false);  // showNumberDec(number, leading_zero)
       run_once = false;

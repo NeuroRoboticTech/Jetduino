@@ -98,11 +98,11 @@ void TM1637::display(int8_t DispData[])
   int8_t SegData[4];
   uint8_t i;
 
-  Serial.println("display start");
+  //Serial.println("display start");
   for(i = 0;i < 4;i ++)
   {
     SegData[i] = DispData[i];    
-    Serial.println(DispData[i]);
+    //Serial.println(DispData[i]);
   }
   coding(SegData);
 
@@ -192,7 +192,7 @@ void TM1637::coding(int8_t DispData[])
     if(DispData[i] == 0x7f)DispData[i] = 0x00;
     else DispData[i] = TubeTab[DispData[i]] + PointData;
 
-    Serial.println(DispData[i]);
+    //Serial.println(DispData[i]);
   }
 }
 int8_t TM1637::coding(int8_t DispData)

@@ -205,6 +205,10 @@ extern unsigned long reg_addr;
 #define ARD_A9 63
 #define ARD_A10 64
 #define ARD_A11 65
+#define ARD_A12 66
+#define ARD_A13 67
+#define ARD_A14 68
+#define ARD_A15 69
 
 #define ARD_DAC0 66
 #define ARD_DAC1 67

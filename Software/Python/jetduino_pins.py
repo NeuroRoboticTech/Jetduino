@@ -40,7 +40,7 @@ THE SOFTWARE.
 '''
 
 #You can find the original due pin mappings in this file on windows.
-#C:\Users\your_user_id\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.6\variant//s\arduino_due_x
+#C:\Users\your_user_id\AppData\Local\Arduino15\packages\arduino\hardware\sam\1.6.6\variants\arduino_due_x\pins_arduino.h
 
 ARD_D0 = 0
 ARD_D1 = 1
@@ -114,6 +114,10 @@ ARD_A8 = 62
 ARD_A9 = 63
 ARD_A10 = 64
 ARD_A11 = 65
+ARD_A12 = 66
+ARD_A13 = 67
+ARD_A14 = 68
+ARD_A15 = 69
 
 ARD_DAC0 = 66
 ARD_DAC1 = 67
